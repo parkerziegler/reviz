@@ -1,0 +1,4 @@
+node_modules
+www/js
+.DS_Store
+.vscode

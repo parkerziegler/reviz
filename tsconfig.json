@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "lib": ["esnext", "dom"],
+      "noUnusedLocals": true,
+      "module": "es2015",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "noUnusedParameters": true,
+      "pretty": true,
+      "skipLibCheck": true,
+      "sourceMap": true,
+      "strict": true,
+      "target": "esnext"
+    },
+    "include": [
+      "src/**/*"
+    ]
+  }
