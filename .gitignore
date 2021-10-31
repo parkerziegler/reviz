@@ -1,4 +1,6 @@
 node_modules
-www/js
+dist
 .DS_Store
 .vscode
+.next
+tsconfig.tsbuildinfo

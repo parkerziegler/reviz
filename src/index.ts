@@ -1,1 +1,1 @@
-console.warn('Hello, reviz!');
+export { walk } from './walk';
