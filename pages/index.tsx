@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as React from 'react';
+import Head from 'next/head';
 
 interface Props {
   examples: string[];
@@ -17,15 +18,20 @@ function normalizeExampleName(name: string): string {
 
 const Index: React.FC<Props> = ({ examples }) => {
   return (
-    <ul className="example-list">
-      {examples.map((example) => (
-        <li key={example} className="example-list__item">
-          <a href={`examples/${example}`} className="example-list__link">
-            {normalizeExampleName(example)}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <>
+      <Head>
+        <title>reviz: Examples</title>
+      </Head>
+      <ul className="example-list">
+        {examples.map((example) => (
+          <li key={example} className="example-list__item">
+            <a href={`examples/${example}`} className="example-list__link">
+              {normalizeExampleName(example)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
 

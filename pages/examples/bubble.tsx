@@ -5,8 +5,6 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { analyzeVisualization } from '../../src';
-
 interface Car {
   name: string;
   'economy (mpg)': number;
@@ -22,21 +20,26 @@ interface Props {
   data: Car[];
 }
 
-const Scatterplot: React.FC<Props> = ({ data }) => {
+const BubbleChart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const plot = Plot.plot({
       grid: true,
+      r: {
+        range: [0, 8],
+      },
       marks: [
-        Plot.dot(data, { x: 'economy (mpg)', y: 'power (hp)', fill: 'orange' }),
+        Plot.dot(data, {
+          x: '0-60 mph (s)',
+          y: 'power (hp)',
+          stroke: 'orange',
+          r: 'economy (mpg)',
+        }),
       ],
     });
 
     root.current.appendChild(plot);
-
-    // Begin visualization analysis.
-    analyzeVisualization(plot);
 
     return (): void => {
       root.current.removeChild(plot);
@@ -46,7 +49,7 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
-        <title>reviz: Scatterplot</title>
+        <title>reviz: Bubble Chart</title>
       </Head>
       <div ref={root}></div>
     </>
@@ -66,4 +69,4 @@ export async function getStaticProps(): Promise<{ props: Props }> {
   };
 }
 
-export default Scatterplot;
+export default BubbleChart;
