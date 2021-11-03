@@ -14,11 +14,11 @@ interface Props {
   data: DeathRecord[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Histogram: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    // legend? @d3/color-legend doesn't work... 
     const plot = Plot.plot({
       x: {
         tickFormat: (d: string) => new Date(d).toLocaleString("en", {month: "narrow"}),
