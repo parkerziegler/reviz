@@ -1,9 +1,8 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
+
+import { readData } from '../helpers';
 
 interface Letter {
   letter: string,
@@ -37,7 +36,7 @@ const Histogram: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
-        <title>reviz: Histogram</title>
+        <title>reviz: Bar Chart</title>
       </Head>
       <div ref={root}></div>
     </>
@@ -45,14 +44,9 @@ const Histogram: React.FC<Props> = ({ data }) => {
 };
 
 export async function getStaticProps(): Promise<{ props: Props }> {
-  const json = fs
-    .readFileSync(path.join(process.cwd(), 'data/alphabet.json'))
-    .toString();
-  const data = JSON.parse(json);
-
   return {
     props: {
-      data,
+      data: readData<Letter[]>('alphabet'),
     },
   };
 }
