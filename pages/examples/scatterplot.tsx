@@ -1,11 +1,9 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { analyzeVisualization } from '../../src';
+import { readData } from '../helpers';
 
 interface Car {
   name: string;
@@ -54,14 +52,9 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
 };
 
 export async function getStaticProps(): Promise<{ props: Props }> {
-  const json = fs
-    .readFileSync(path.join(process.cwd(), 'data/cars.json'))
-    .toString();
-  const data = JSON.parse(json);
-
   return {
     props: {
-      data,
+      data: readData<Car[]>('cars'),
     },
   };
 }
