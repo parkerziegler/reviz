@@ -23,7 +23,7 @@ const Histogram: React.FC<Props> = ({ data }) => {
         label: 'frequency (%)'
       },
       marks: [
-        Plot.barY(data, {x: "letter", y: "frequency"})
+        Plot.barY(data, {x: "letter", y: (d: Letter): number => d.frequency * 100})
       ]
     })
 
@@ -49,10 +49,6 @@ export async function getStaticProps(): Promise<{ props: Props }> {
     .readFileSync(path.join(process.cwd(), 'data/alphabet.json'))
     .toString();
   const data = JSON.parse(json);
-
-  for (const obj of data) {
-    obj.frequency *= 100;
-  }
 
   return {
     props: {
