@@ -1,4 +1,6 @@
-export function walk(subtree: Node): Node[] {
+type Callback = (element: Node) => void;
+
+export function walk(subtree: Node, cbs: Callback[] = []): Node[] {
   const treeWalker = document.createTreeWalker(
     subtree,
     NodeFilter.SHOW_ELEMENT,
@@ -11,7 +13,8 @@ export function walk(subtree: Node): Node[] {
   let currentNode: Node | null = treeWalker.currentNode;
 
   while (currentNode) {
-    nodeList.push(currentNode);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    cbs.forEach((cb) => cb(currentNode!));
     currentNode = treeWalker.nextNode();
   }
 

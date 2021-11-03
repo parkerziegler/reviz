@@ -16,11 +16,11 @@ brew install yarn
 
 ### Building `reviz`
 
-To build `reviz`, run `yarn build`. This will type check the codebase and emit JavaScript to the `www/js` folder.
+To build `reviz`, run `yarn build`. This will type check the codebase and emit JavaScript to the `dist` folder.
 
 ### Running the development server
 
-To run `reviz` locally, run `yarn dev`. This will open a local development server at `localhost:8000`, which serves `www/index.html`. When you make a change to the source, just refresh the page to see your changes take effect. [`esbuild` runs a fresh build on every HTTP request](https://esbuild.github.io/api/#serve-everything), ensuring we don't have any stale build artifacts across page reloads.
+To run `reviz` locally, run `yarn dev`. This will open a local development server at `localhost:3000`, which serves the [Next.js](https://nextjs.org/) build. We use Next.js purely as a local development server for testing examples.
 
 ### Linting and Formatting
 
