@@ -46,7 +46,7 @@ const Histogram: React.FC<Props> = ({ data }) => {
 export async function getStaticProps(): Promise<{ props: Props }> {
   return {
     props: {
-      data: readData<Letter[]>('alphabet'),
+      data: readData<Letter>('alphabet'),
     },
   };
 }

@@ -54,7 +54,7 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
 export async function getStaticProps(): Promise<{ props: Props }> {
   return {
     props: {
-      data: readData<Car[]>('cars'),
+      data: readData<Car>('cars'),
     },
   };
 }
