@@ -1,26 +1,26 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 import * as React from 'react';
 // import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-// function collatz(n: number, stoppingTime = 0): number {
-//   // Base case, n has reached 1.
-//   if (n === 1) {
-//     return stoppingTime;
-//   }
+interface Letter {
+  letter: string,
+  frequency: number,
+}
 
-//   // Recursive case: n is even.
-//   if (n % 2 === 0) {
-//     return collatz(n / 2, stoppingTime + 1);
-//   }
+interface Props {
+  data: Letter[]
+}
 
-//   // Recursive case: n is odd.
-//   return collatz(3 * n + 1, stoppingTime + 1);
-// }
-
-const Histogram: React.FC = () => {
+const Histogram: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(data.length);
+    
     // const data = new Array(1000).fill(0).map((_, i) => collatz(i + 1, 0));
 
     // const plot = Plot.plot({
@@ -56,5 +56,18 @@ const Histogram: React.FC = () => {
     </>
   );
 };
+
+export async function getStaticProps(): Promise<{ props: Props }> {
+  const json = fs
+    .readFileSync(path.join(process.cwd(), 'data/alphabet.json'))
+    .toString();
+  const data = JSON.parse(json);
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
 
 export default Histogram;
