@@ -20,13 +20,15 @@ const Histogram: React.FC<Props> = ({ data }) => {
 
   React.useEffect(() => {
     const plot = Plot.plot({
-      // y: {
-      //   label: 'frequency (%)'
-      // },
-      // marks: [
-      //   Plot.barY(data, {x: "letter", y: (d: Letter): number => d.frequency * 100})
-      // ]
-    })
+      x: {
+        tickFormat: (d: string) => new Date(d).toLocaleString("en", {month: "narrow"}),
+        label: null
+      },
+      marks: [
+        Plot.barY(data, {x: "date", y: "deaths", fill: "cause"}),
+        Plot.ruleY([0])
+      ]
+    });
 
     root.current.appendChild(plot);
 
