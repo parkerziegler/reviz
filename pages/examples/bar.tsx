@@ -18,25 +18,14 @@ const Histogram: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(data.length);
-    
     const plot = Plot.plot({
-      x: {
-        label: 'Stopping Time',
-      },
       y: {
-        label: 'Frequency',
-        grid: true,
+        label: 'frequency (%)'
       },
       marks: [
-        Plot.rectY(data, {
-          ...Plot.binX({ y: 'count' }, { x: (d: number) => d }),
-          fill: 'steelblue',
-        }),
-        Plot.ruleY([0]),
-      ],
-    });
+        Plot.barY(data, {x: "letter", y: "frequency"})
+      ]
+    })
 
     root.current.appendChild(plot);
 
@@ -60,6 +49,10 @@ export async function getStaticProps(): Promise<{ props: Props }> {
     .readFileSync(path.join(process.cwd(), 'data/alphabet.json'))
     .toString();
   const data = JSON.parse(json);
+
+  for (const obj of data) {
+    obj.frequency *= 100;
+  }
 
   return {
     props: {
