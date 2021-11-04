@@ -42,7 +42,7 @@ interface Props {
   stateAges: StateAge[],
 }
 
-const Histogram: React.FC<Props> = ({ stateAges }) => {
+const StripPlot: React.FC<Props> = ({ stateAges }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
