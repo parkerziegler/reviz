@@ -13,7 +13,7 @@ interface Props {
   data: Letter[]
 }
 
-const Histogram: React.FC<Props> = ({ data }) => {
+const BarChart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
