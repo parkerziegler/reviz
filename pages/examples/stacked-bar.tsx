@@ -14,7 +14,7 @@ interface Props {
   data: DeathRecord[]
 }
 
-const Histogram: React.FC<Props> = ({ data }) => {
+const StackedBarChart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
