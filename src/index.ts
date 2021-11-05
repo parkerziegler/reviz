@@ -1,9 +1,11 @@
-import { collectElementTypes } from './element-types';
+import { collectAttributes, RevizDatum } from './attributes';
 import { walk } from './walk';
 
 export function analyzeVisualization(root: SVGElement): void {
-  const elementTypes = new Map<string, number>();
+  const data: RevizDatum[] = [];
+  const collectElementAttributes = collectAttributes(data);
 
-  const collectElement = collectElementTypes(elementTypes);
-  walk(root, [collectElement]);
+  walk(root, [collectElementAttributes]);
+
+  console.log({ data });
 }
