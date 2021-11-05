@@ -3,7 +3,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { analyzeVisualization } from '../../src';
-import { readData } from '../helpers';
+import { readData } from '../../helpers';
 
 interface Car {
   name: string;

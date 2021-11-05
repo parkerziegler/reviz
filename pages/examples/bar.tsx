@@ -2,15 +2,15 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { readData } from '../helpers';
+import { readData } from '../../helpers';
 
 interface Letter {
-  letter: string,
-  frequency: number,
+  letter: string;
+  frequency: number;
 }
 
 interface Props {
-  data: Letter[]
+  data: Letter[];
 }
 
 const BarChart: React.FC<Props> = ({ data }) => {
@@ -19,12 +19,15 @@ const BarChart: React.FC<Props> = ({ data }) => {
   React.useEffect(() => {
     const plot = Plot.plot({
       y: {
-        label: 'frequency (%)'
+        label: 'frequency (%)',
       },
       marks: [
-        Plot.barY(data, {x: "letter", y: (d: Letter): number => d.frequency * 100})
-      ]
-    })
+        Plot.barY(data, {
+          x: 'letter',
+          y: (d: Letter): number => d.frequency * 100,
+        }),
+      ],
+    });
 
     root.current.appendChild(plot);
 
@@ -51,4 +54,4 @@ export async function getStaticProps(): Promise<{ props: Props }> {
   };
 }
 
-export default Histogram;
+export default BarChart;

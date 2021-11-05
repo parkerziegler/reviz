@@ -19,8 +19,8 @@
     "build": "yarn check:ts && esbuild src/index.ts --bundle --outdir=dist",
     "check:ts": "tsc --noEmit",
     "dev": "next dev",
-    "format": "prettier --write **/*{.ts,.tsx} **/*.json",
-    "lint": "eslint . --ext .ts"
+    "format": "prettier --write **/*.{ts,tsx} **/*.json",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {},
   "devDependencies": {
