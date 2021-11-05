@@ -2,39 +2,35 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { analyzeVisualization } from '../../src';
 import { readData } from '../helpers';
 
-interface Car {
-  name: string;
-  'economy (mpg)': number;
-  cylinders: number;
-  'displacement (cc)': number;
-  'power (hp)': number;
-  'weight (lb)': number;
-  '0-60 mph (s)': number;
-  year: number;
+interface DeathRecord {
+  date: string,
+  cause: string,
+  deaths: number,
 }
 
 interface Props {
-  data: Car[];
+  data: DeathRecord[]
 }
 
-const Scatterplot: React.FC<Props> = ({ data }) => {
+const StackedBarChart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    // legend? @d3/color-legend doesn't work... 
     const plot = Plot.plot({
-      grid: true,
+      x: {
+        tickFormat: (d: string) => new Date(d).toLocaleString("en", {month: "narrow"}),
+        label: null
+      },
       marks: [
-        Plot.dot(data, { x: 'economy (mpg)', y: 'power (hp)', fill: 'orange' }),
-      ],
+        Plot.barY(data, {x: "date", y: "deaths", fill: "cause"}),
+        Plot.ruleY([0])
+      ]
     });
 
     root.current.appendChild(plot);
-
-    // Begin visualization analysis.
-    analyzeVisualization(plot);
 
     return (): void => {
       root.current.removeChild(plot);
@@ -44,7 +40,7 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
-        <title>reviz: Scatterplot</title>
+        <title>reviz: Stacked Bar Chart</title>
       </Head>
       <div ref={root}></div>
     </>
@@ -54,9 +50,9 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
 export async function getStaticProps(): Promise<{ props: Props }> {
   return {
     props: {
-      data: readData<Car>('cars'),
+      data: readData<DeathRecord>('crimea'),
     },
   };
 }
 
-export default Scatterplot;
+export default Histogram;
