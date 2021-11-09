@@ -5,6 +5,8 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
+import { analyzeVisualization } from '../../src';
+
 interface Car {
   name: string;
   'economy (mpg)': number;
@@ -40,6 +42,8 @@ const BubbleChart: React.FC<Props> = ({ data }) => {
     });
 
     root.current.appendChild(plot);
+
+    analyzeVisualization(plot);
 
     return (): void => {
       root.current.removeChild(plot);

@@ -1,3 +1,9 @@
+import {
+  CIRCLE_ATTR_NAMES,
+  PRES_ATTR_NAMES,
+  RECT_ATTR_NAMES,
+} from './constants';
+
 export interface RevizDatum {
   nodeName: string;
   geomAttrs: Record<string, string>;
@@ -32,41 +38,32 @@ function aggregateAttributes(
   }, {} as Record<string, string>);
 }
 
-const presAttrNames = [
-  'fill',
-  'fill-opacity',
-  'stroke',
-  'stroke-opacity',
-  'stroke-width',
-];
-
-const circleAttrNames = ['cx', 'cy', 'r'];
-const rectAttrNames = ['x', 'y', 'width', 'height'];
-
 /**
+ * collectAttributes aggregates all geometric and presentational attributes of all
+ * element in the svg subtree into a normalized schema, RevizDatum.
  *
- * @param data – an array in which to store normalized RevizData.
- * @returns – a function to collect attributes of interest off a given element.
+ * @param elements – the array of elements obtained from walking the svg subtree.
+ * @returns – the array of normalized RevizDatum elements.
  */
-export function collectAttributes(data: RevizDatum[]) {
-  return function collectElementAttributes(element: Element): void {
+export function collectAttributes(elements: Element[]): RevizDatum[] {
+  return elements.map((element) => {
     const nodeName = element.nodeName;
 
     let geomAttrNames: string[] = [];
 
     switch (nodeName) {
       case 'circle':
-        geomAttrNames = circleAttrNames;
+        geomAttrNames = CIRCLE_ATTR_NAMES;
         break;
       case 'rect':
-        geomAttrNames = rectAttrNames;
+        geomAttrNames = RECT_ATTR_NAMES;
         break;
       default:
         break;
     }
 
     const geomAttrs = aggregateAttributes(element, geomAttrNames);
-    const presAttrs = aggregateAttributes(element, presAttrNames);
+    const presAttrs = aggregateAttributes(element, PRES_ATTR_NAMES);
 
     const datum = {
       nodeName,
@@ -74,6 +71,6 @@ export function collectAttributes(data: RevizDatum[]) {
       presAttrs,
     };
 
-    data.push(datum);
-  };
+    return datum;
+  });
 }

@@ -3,6 +3,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { readData } from '../../helpers';
+import { analyzeVisualization } from '../../src';
 
 enum AgeRange {
   '<10',
@@ -73,6 +74,8 @@ const StripPlot: React.FC<Props> = ({ stateAges }) => {
     });
 
     root.current.appendChild(plot);
+
+    analyzeVisualization(plot);
 
     return (): void => {
       root.current.removeChild(plot);

@@ -3,6 +3,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { readData } from '../../helpers';
+import { analyzeVisualization } from '../../src';
 
 interface Letter {
   letter: string;
@@ -30,6 +31,8 @@ const BarChart: React.FC<Props> = ({ data }) => {
     });
 
     root.current.appendChild(plot);
+
+    analyzeVisualization(plot);
 
     return (): void => {
       root.current.removeChild(plot);

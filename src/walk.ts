@@ -1,5 +1,3 @@
-type Callback = (element: Element) => void;
-
 /**
  * A TypeScript type guard that tests a node to see if it's of type Element.
  *
@@ -11,13 +9,12 @@ function isElement(node: Node): node is Element {
 }
 
 /**
- * A function to walk a DOM subtree and run an array of callbacks
- * on each visited node. This implementation only visits Nodes of type Element.
+ * A function to walk a DOM subtree and return an array of Elements in the subtree.
+ * This implementation only visits Nodes of type Element.
  *
  * @param subtree – a DOM subtree.
- * @param cbs – an array of callbacks to execute on each visited node.
  */
-export function walk(subtree: Node, cbs: Callback[]): void {
+export function walk(subtree: Node): Element[] {
   const treeWalker = document.createTreeWalker(
     subtree,
     NodeFilter.SHOW_ELEMENT,
@@ -33,12 +30,14 @@ export function walk(subtree: Node, cbs: Callback[]): void {
   );
 
   let currentNode: Node | null = treeWalker.currentNode;
+  const elements: Element[] = [];
 
   while (currentNode) {
     if (isElement(currentNode)) {
-      const element = currentNode;
-      cbs.forEach((cb) => cb(element));
+      elements.push(currentNode);
     }
     currentNode = treeWalker.nextNode();
   }
+
+  return elements;
 }
