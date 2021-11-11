@@ -94,3 +94,32 @@ export const inferPresentationalAttributes = (
     return acc;
   }, initializeAttrSets<string | number>(PRES_ATTR_NAMES));
 };
+
+export interface VizAttrs {
+  markType: 'circle' | 'rect';
+  geomAttrs: Record<string, Set<number>>;
+  presAttrs: Record<string, Set<string | number>>;
+  data: RevizDatum[];
+}
+
+/**
+ * inferVizAttributes takes in an array of elements from an svg subtree and
+ * produces a normalized schema outlining all unique geometric and presentational
+ * attributes of the subtree.
+ *
+ * @param data – the normalized RevizData derived from elements.
+ * @returns - an object representing the normalized schema of a visualization.
+ */
+export const inferVizAttributes = (data: RevizDatum[]): VizAttrs => {
+  const markType = inferMarkType(data);
+  const filteredData = data.filter((d) => d.nodeName === markType);
+  const geomAttrs = inferGeometricAttributes(filteredData, markType);
+  const presAttrs = inferPresentationalAttributes(filteredData);
+
+  return {
+    markType,
+    geomAttrs,
+    presAttrs,
+    data: filteredData,
+  };
+};

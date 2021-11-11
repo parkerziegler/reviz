@@ -61,15 +61,17 @@ const StripPlot: React.FC<Props> = ({ stateAges }) => {
       },
       marks: [
         Plot.ruleX([0]),
-        Plot.tickX(
-          stateAges,
-          Plot.normalizeX({
+        Plot.dotX(stateAges, {
+          ...Plot.normalizeX({
             basis: 'sum',
             z: 'state',
             x: 'population',
             y: 'age',
-          })
-        ),
+          }),
+          fill: 'dodgerblue',
+          fillOpacity: 0.5,
+          stroke: 'dodgerblue',
+        }),
       ],
     });
 
