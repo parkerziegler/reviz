@@ -1,12 +1,12 @@
-import { collectAttributes } from './attributes';
+import { collectAllAttributes } from './attributes';
 import { inferVizAttributes } from './inference';
-import { determineVizType } from './spec';
+import { buildVizSpec } from './spec';
 import { walk } from './walk';
 
 export function analyzeVisualization(root: SVGElement): void {
   const elements = walk(root);
-  const data = collectAttributes(elements);
+  const data = collectAllAttributes(elements);
   const vizAttrs = inferVizAttributes(data);
-  const vizType = determineVizType(vizAttrs);
-  console.log({ vizType });
+  const vizSpec = buildVizSpec(vizAttrs);
+  console.log({ vizSpec });
 }

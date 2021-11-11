@@ -2,13 +2,14 @@ import overEvery from 'lodash.overevery';
 import groupBy from 'lodash.groupby';
 
 import type { VizAttrs } from './inference';
+import { PRES_ATTR_NAMES } from './constants';
 
 interface PresAttrs {
-  fill: string;
-  stroke: string;
-  ['fill-opacity']: number;
-  ['stroke-opacity']: number;
-  ['stroke-width']: number;
+  fill: string[];
+  stroke: string[];
+  ['fill-opacity']: string[];
+  ['stroke-opacity']: string[];
+  ['stroke-width']: string[];
 }
 
 interface Scatterplot extends PresAttrs {
@@ -40,7 +41,7 @@ interface Histogram extends PresAttrs {
   width: number;
 }
 
-type Visualization =
+type VizSpec =
   | Scatterplot
   | BubbleChart
   | StripPlot
@@ -66,8 +67,21 @@ const hasMarkType =
 // geomAttr predicates.
 const hasConsistentGeomAttr =
   (attr: 'r' | 'width') =>
-  (viz: VizAttrs): boolean =>
-    viz.geomAttrs[attr] && viz.geomAttrs[attr].size === 1;
+  (viz: VizAttrs): boolean => {
+    if (viz.geomAttrs[attr] && viz.geomAttrs[attr].size === 1) {
+      return true;
+    } else if (viz.geomAttrs[attr]) {
+      const approxValueSet = new Set<string>();
+      viz.geomAttrs[attr].forEach((val) => {
+        approxValueSet.add(Number(val).toFixed(3));
+      });
+
+      return approxValueSet.size === 1;
+    }
+
+    return false;
+  };
+
 const hasDivergentGeomAttr =
   (attr: 'r' | 'width') =>
   (viz: VizAttrs): boolean =>
@@ -137,6 +151,8 @@ const vizTypeToPredicates = {
   ),
 };
 
+type VizType = keyof typeof vizTypeToPredicates;
+
 /**
  * determineVizType takes in a normalized schema containing visualization attributes
  * and checks this schema against the composed predicates associated with each visualization
@@ -145,17 +161,19 @@ const vizTypeToPredicates = {
  * @param viz – the schema of visualization attributes.
  * @returns – the visualization type of the svg subtree.
  */
-export const determineVizType = (viz: VizAttrs): string => {
-  const possibleVizTypes = Object.entries(vizTypeToPredicates).reduce<string[]>(
-    (acc, [type, predicate]) => {
-      if (predicate(viz)) {
-        acc.push(type);
-      }
+const determineVizType = (viz: VizAttrs): VizType => {
+  const possibleVizTypes = Object.entries(vizTypeToPredicates).reduce<
+    VizType[]
+  >((acc, [type, predicate]) => {
+    if (predicate(viz)) {
+      // This cast is safe. We are getting `type` here from the keys of vizTypeToPredicates,
+      // so we can guarantee that type must be one of those keys. TS does not provide a mechanism
+      // for inferring this because it cannot prove that even constant objects are "closed".
+      acc.push(type as VizType);
+    }
 
-      return acc;
-    },
-    []
-  );
+    return acc;
+  }, []);
 
   if (possibleVizTypes.length === 0) {
     throw new Error('No matching visualization type found.');
@@ -166,4 +184,44 @@ export const determineVizType = (viz: VizAttrs): string => {
   }
 
   return possibleVizTypes[0];
+};
+
+/**
+ * buildVizSpec generates the visualization specification from a normalized schema
+ * containing visualization attributes.
+ *
+ * @param viz – the schema of visualization attributes.
+ * @returns – the visualization specification for the svg subtree.
+ */
+export const buildVizSpec = (viz: VizAttrs): VizSpec => {
+  const vizType = determineVizType(viz);
+
+  const presAttrs = PRES_ATTR_NAMES.reduce((acc, attr) => {
+    acc[attr as keyof PresAttrs] = Array.from(viz.presAttrs[attr]);
+
+    return acc;
+  }, {} as Record<keyof PresAttrs, string[]>);
+
+  switch (vizType) {
+    case 'Scatterplot':
+    case 'StripPlot':
+      return {
+        type: vizType,
+        r: Number(Array.from(viz.geomAttrs['r'])[0]),
+        ...presAttrs,
+      };
+    case 'BubbleChart':
+      return {
+        type: vizType,
+        ...presAttrs,
+      };
+    case 'BarChart':
+    case 'StackedBarChart':
+    case 'Histogram':
+      return {
+        type: vizType,
+        width: Number(Array.from(viz.geomAttrs['width'])[0]),
+        ...presAttrs,
+      };
+  }
 };

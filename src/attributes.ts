@@ -11,14 +11,14 @@ export interface RevizDatum {
 }
 
 /**
- * aggregateAttributes will collect a set of attributes off an Element,
+ * collectAttributes will collect a set of attributes off an Element,
  * checking both attributes from the DOM and computed styles.
  *
  * @param element – the element to inspect.
- * @param attrs
+ * @param attrs – the names of attributes to aggregate
  * @returns
  */
-function aggregateAttributes(
+function collectAttributes(
   element: Element,
   attrs: string[]
 ): Record<string, string> {
@@ -39,13 +39,13 @@ function aggregateAttributes(
 }
 
 /**
- * collectAttributes aggregates all geometric and presentational attributes of all
+ * collectAllAttributes aggregates all geometric and presentational attributes of all
  * element in the svg subtree into a normalized schema, RevizDatum.
  *
  * @param elements – the array of elements obtained from walking the svg subtree.
  * @returns – the array of normalized RevizDatum elements.
  */
-export function collectAttributes(elements: Element[]): RevizDatum[] {
+export function collectAllAttributes(elements: Element[]): RevizDatum[] {
   return elements.map((element) => {
     const nodeName = element.nodeName;
 
@@ -62,8 +62,8 @@ export function collectAttributes(elements: Element[]): RevizDatum[] {
         break;
     }
 
-    const geomAttrs = aggregateAttributes(element, geomAttrNames);
-    const presAttrs = aggregateAttributes(element, PRES_ATTR_NAMES);
+    const geomAttrs = collectAttributes(element, geomAttrNames);
+    const presAttrs = collectAttributes(element, PRES_ATTR_NAMES);
 
     const datum = {
       nodeName,

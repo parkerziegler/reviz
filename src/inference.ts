@@ -31,12 +31,12 @@ export const inferMarkType = (elements: RevizDatum[]): 'rect' | 'circle' => {
  * @param attrs – the attributes to use as keys in the dictionary.
  * @returns – a dictionary with all attributes mapped to their own empty sets.
  */
-const initializeAttrSets = <T>(attrs: string[]): Record<string, Set<T>> => {
+const initializeAttrSets = (attrs: string[]): Record<string, Set<string>> => {
   return attrs.reduce((acc, presAttr) => {
     acc[presAttr] = new Set();
 
     return acc;
-  }, {} as Record<string, Set<T>>);
+  }, {} as Record<string, Set<string>>);
 };
 
 /**
@@ -52,24 +52,24 @@ const initializeAttrSets = <T>(attrs: string[]): Record<string, Set<T>> => {
 export const inferGeometricAttributes = (
   elements: RevizDatum[],
   elementType: 'rect' | 'circle'
-): Record<string, Set<number>> => {
+): Record<string, Set<string>> => {
   switch (elementType) {
     case 'rect':
       return elements.reduce((acc, el) => {
         RECT_ATTR_NAMES.forEach((rectAttr) => {
-          acc[rectAttr].add(Number(el.geomAttrs[rectAttr]));
+          acc[rectAttr].add(el.geomAttrs[rectAttr]);
         });
 
         return acc;
-      }, initializeAttrSets<number>(RECT_ATTR_NAMES));
+      }, initializeAttrSets(RECT_ATTR_NAMES));
     case 'circle':
       return elements.reduce((acc, el) => {
         CIRCLE_ATTR_NAMES.forEach((circleAttr) => {
-          acc[circleAttr].add(Number(el.geomAttrs[circleAttr]));
+          acc[circleAttr].add(el.geomAttrs[circleAttr]);
         });
 
         return acc;
-      }, initializeAttrSets<number>(CIRCLE_ATTR_NAMES));
+      }, initializeAttrSets(CIRCLE_ATTR_NAMES));
     default:
       return {};
   }
@@ -85,20 +85,20 @@ export const inferGeometricAttributes = (
  */
 export const inferPresentationalAttributes = (
   elements: RevizDatum[]
-): Record<string, Set<string | number>> => {
+): Record<string, Set<string>> => {
   return elements.reduce((acc, el) => {
     PRES_ATTR_NAMES.forEach((presAttr) => {
       acc[presAttr].add(el.presAttrs[presAttr]);
     });
 
     return acc;
-  }, initializeAttrSets<string | number>(PRES_ATTR_NAMES));
+  }, initializeAttrSets(PRES_ATTR_NAMES));
 };
 
 export interface VizAttrs {
   markType: 'circle' | 'rect';
-  geomAttrs: Record<string, Set<number>>;
-  presAttrs: Record<string, Set<string | number>>;
+  geomAttrs: Record<string, Set<string>>;
+  presAttrs: Record<string, Set<string>>;
   data: RevizDatum[];
 }
 
