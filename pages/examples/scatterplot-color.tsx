@@ -6,6 +6,8 @@ import * as d3 from 'd3';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
+import { analyzeVisualization } from '../../src';
+
 interface Props {
   data: d3.DSVRowArray<string>;
 }
@@ -21,6 +23,8 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
     }).plot();
 
     root.current.appendChild(plot);
+
+    analyzeVisualization(plot);
 
     return (): void => {
       root.current.removeChild(plot);
