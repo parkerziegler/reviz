@@ -225,3 +225,139 @@ export const buildVizSpec = (viz: VizAttrs): VizSpec => {
       };
   }
 };
+
+/*
+Scatterplot
+{
+  grid: true,
+  marks: [
+    Plot.dot(data, { x: 'economy (mpg)', y: 'power (hp)', fill: 'orange' }),
+  ],
+}
+
+
+Bubble
+{
+  grid: true,
+  r: {
+    range: [0, 8],
+  },
+  marks: [
+    Plot.dot(data, {
+      x: '0-60 mph (s)',
+      y: 'power (hp)',
+      stroke: 'orange',
+      r: 'economy (mpg)',
+    }),
+  ],
+}
+*/
+
+interface CoordData {
+  x: string;
+  y: string;
+}
+
+interface WidthData {
+  width: number;
+}
+
+interface PlotPresData {
+  grid?: boolean;
+}
+
+type Template<T> = (data: T) => string;
+
+export function generate(spec: VizSpec): Template<CoordData & WidthData> {
+  switch (spec.type) {
+    case 'BarChart':
+      return generateBar(spec);
+    case 'Histogram':
+      return generateHistogram(spec);
+    default:
+      throw new Error('Unkown type: ' + spec.type);
+  }
+}
+
+function generateBar(spec: BarChart): Template<CoordData> {
+  const unbound = plot(barMark);
+  const p_bound: Template<PlotPresData & CoordData> = partial(spec, unbound);
+  return partial({ grid: true }, p_bound);
+}
+
+function generateHistogram(spec: Histogram): Template<CoordData> {
+  const unbound = plot(histogramMark);
+  const p_bound: Template<PlotPresData & CoordData> = partial(spec, unbound);
+  return partial({ grid: true }, p_bound);
+}
+
+function partial<S, T>(
+  data: S,
+  template: Template<S & T>,
+  override = true
+): Template<T> {
+  return (d: T): string =>
+    template(override ? { ...d, ...data } : { ...data, ...d });
+}
+
+function plot<T>(markTemplate: Template<T>): Template<PlotPresData & T> {
+  return (data): string =>
+    `const plot = Plot.plot({ grid: ${Boolean(
+      data.grid
+    )}, marks: [ ${markTemplate(data)} ] })`;
+}
+
+const coordFields: Template<CoordData> = fields('x', 'y');
+
+const barMark: Template<PresAttrs & CoordData> = partial(
+  { mark: 'barY' },
+  mark(coordFields)
+);
+
+const histogramMark: Template<PresAttrs & CoordData> = partial(
+  { mark: 'rectY' },
+  withRuleY(
+    mark(
+      (data) => `...Plot.binX({ ${field('y')(data)} }, { ${field('x')(data)} })`
+    ),
+    0
+  )
+);
+
+function mark<T>(
+  fieldsTemplate: Template<T>
+): Template<{ mark: string } & PresAttrs & T> {
+  return (data): string => {
+    let markData = presAttrsFields(data);
+    if (markData) markData += ', ';
+    markData += fieldsTemplate(data);
+
+    return `Plot.${data.mark}(data, { ${markData} })`;
+  };
+}
+
+function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
+  return (data: T): string => `${t(data)}, Plot.ruleY(${xs})`;
+}
+
+const presAttrsFields: Template<PresAttrs> = fields(
+  'fill',
+  'stroke',
+  'fill-opacity',
+  'stroke-opacity',
+  'stroke-width'
+);
+
+function fields<T>(...field_names: (keyof T)[]): Template<T> {
+  return (data: T): string =>
+    field_names.map((f_name) => field(f_name)(data)).join(', ');
+}
+
+function field<T>(field_name: keyof T): Template<T> {
+  return (data: T): string => {
+    const f_data = data[field_name];
+    // if data is a number, don't surround with quotes.
+    const f_data_str = !isNaN(+f_data) ? f_data : `'${f_data}'`;
+    return `'${field_name}': ` + f_data_str;
+  };
+}
