@@ -274,21 +274,27 @@ export function generate(spec: VizSpec): Template<CoordData & WidthData> {
       return generateBar(spec);
     case 'Histogram':
       return generateHistogram(spec);
+    case 'Scatterplot':
+      return generateScatterplot(spec);
     default:
       throw new Error('Unkown type: ' + spec.type);
   }
 }
 
-function generateBar(spec: BarChart): Template<CoordData> {
-  const unbound = plot(barMark);
-  const p_bound: Template<PlotPresData & CoordData> = partial(spec, unbound);
-  return partial({ grid: true }, p_bound);
-}
+const generateBar = (spec: BarChart): Template<CoordData> =>
+  partial({ grid: true }, fromSpec(spec, barMark));
 
-function generateHistogram(spec: Histogram): Template<CoordData> {
-  const unbound = plot(histogramMark);
-  const p_bound: Template<PlotPresData & CoordData> = partial(spec, unbound);
-  return partial({ grid: true }, p_bound);
+const generateHistogram = (spec: Histogram): Template<CoordData> =>
+  fromSpec(spec, histogramMark);
+
+const generateScatterplot = (spec: Scatterplot): Template<CoordData> =>
+  partial({ grid: true }, fromSpec(spec, scatterplotMark));
+
+function fromSpec<S extends PresAttrs, T>(
+  spec: S,
+  markTemplate: Template<S & T>
+): Template<PlotPresData & T> {
+  return partial(spec, plot(markTemplate));
 }
 
 function partial<S, T>(
@@ -324,16 +330,16 @@ const histogramMark: Template<PresAttrs & CoordData> = partial(
   )
 );
 
-function mark<T>(
-  fieldsTemplate: Template<T>
-): Template<{ mark: string } & PresAttrs & T> {
-  return (data): string => {
-    let markData = presAttrsFields(data);
-    if (markData) markData += ', ';
-    markData += fieldsTemplate(data);
+const scatterplotMark: Template<PresAttrs & CoordData> = partial(
+  { mark: 'dot' },
+  mark(coordFields)
+);
 
-    return `Plot.${data.mark}(data, { ${markData} })`;
-  };
+function mark<T>(
+  fields: Template<T>
+): Template<{ mark: string } & PresAttrs & T> {
+  return (data): string =>
+    `Plot.${data.mark}(data, { ${presAttrsFields(data)}, ${fields(data)} })`;
 }
 
 function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
