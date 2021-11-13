@@ -226,49 +226,24 @@ export const buildVizSpec = (viz: VizAttrs): VizSpec => {
   }
 };
 
-/*
-Scatterplot
-{
-  grid: true,
-  marks: [
-    Plot.dot(data, { x: 'economy (mpg)', y: 'power (hp)', fill: 'orange' }),
-  ],
-}
-
-
-Bubble
-{
-  grid: true,
-  r: {
-    range: [0, 8],
-  },
-  marks: [
-    Plot.dot(data, {
-      x: '0-60 mph (s)',
-      y: 'power (hp)',
-      stroke: 'orange',
-      r: 'economy (mpg)',
-    }),
-  ],
-}
-*/
-
 interface CoordData {
   x: string;
   y: string;
-}
-
-interface WidthData {
-  width: number;
 }
 
 interface PlotPresData {
   grid?: boolean;
 }
 
+interface RadiusData {
+  r: number;
+}
+
 type Template<T> = (data: T) => string;
 
-export function generate(spec: VizSpec): Template<CoordData & WidthData> {
+export function generate(
+  spec: VizSpec
+): Template<CoordData> | Template<CoordData & RadiusData> {
   switch (spec.type) {
     case 'BarChart':
       return generateBar(spec);
@@ -276,6 +251,8 @@ export function generate(spec: VizSpec): Template<CoordData & WidthData> {
       return generateHistogram(spec);
     case 'Scatterplot':
       return generateScatterplot(spec);
+    case 'BubbleChart':
+      return generateBubble(spec);
     default:
       throw new Error('Unkown type: ' + spec.type);
   }
@@ -289,6 +266,9 @@ const generateHistogram = (spec: Histogram): Template<CoordData> =>
 
 const generateScatterplot = (spec: Scatterplot): Template<CoordData> =>
   partial({ grid: true }, fromSpec(spec, scatterplotMark));
+
+const generateBubble = (spec: BubbleChart): Template<CoordData & RadiusData> =>
+  fromSpec(spec, bubbleMark);
 
 function fromSpec<S extends PresAttrs, T>(
   spec: S,
@@ -314,6 +294,14 @@ function plot<T>(markTemplate: Template<T>): Template<PlotPresData & T> {
 }
 
 const coordFields: Template<CoordData> = fields('x', 'y');
+const bubbleFields: Template<CoordData & RadiusData> = fields('x', 'y', 'r');
+const presAttrsFields: Template<PresAttrs> = fields(
+  'fill',
+  'stroke',
+  'fill-opacity',
+  'stroke-opacity',
+  'stroke-width'
+);
 
 const barMark: Template<PresAttrs & CoordData> = partial(
   { mark: 'barY' },
@@ -335,6 +323,11 @@ const scatterplotMark: Template<PresAttrs & CoordData> = partial(
   mark(coordFields)
 );
 
+const bubbleMark: Template<PresAttrs & CoordData & RadiusData> = partial(
+  { mark: 'dot' },
+  mark(bubbleFields)
+);
+
 function mark<T>(
   fields: Template<T>
 ): Template<{ mark: string } & PresAttrs & T> {
@@ -345,14 +338,6 @@ function mark<T>(
 function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
   return (data: T): string => `${t(data)}, Plot.ruleY(${xs})`;
 }
-
-const presAttrsFields: Template<PresAttrs> = fields(
-  'fill',
-  'stroke',
-  'fill-opacity',
-  'stroke-opacity',
-  'stroke-width'
-);
 
 function fields<T>(...field_names: (keyof T)[]): Template<T> {
   return (data: T): string =>

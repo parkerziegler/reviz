@@ -12,5 +12,13 @@ export function analyzeVisualization(root: SVGElement): void {
   const template = generate(vizSpec);
   console.log({ vizSpec, template });
   // console.log(template({ x: 'stopping time', y: 'frequency (%)' })); // histogram
-  console.log(template({ x: 'economy (mpg)', y: 'power (hp)' }));
+  // console.log(template({ x: 'economy (mpg)', y: 'power (hp)' })); // scatterplot
+  console.log(
+    template({
+      x: '0-60 mph (s)',
+      y: 'power (hp)',
+      // stroke: 'orange',
+      r: 'economy (mpg)',
+    })
+  ); // bubble
 }
