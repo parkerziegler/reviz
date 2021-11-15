@@ -282,7 +282,7 @@ const generateHistogram = (spec: Histogram): Template<CoordData> =>
   fromSpec(spec, histogramMark);
 
 const generateScatterplot = (spec: Scatterplot): Template<CoordData> =>
-  withGrid(fromSpec(spec, scatterplotMark));
+  withGrid(fromSpec(spec, scatterMark));
 
 const generateBubble = (spec: BubbleChart): Template<BubbleData> =>
   fromSpec(spec, bubbleMark);
@@ -290,23 +290,29 @@ const generateBubble = (spec: BubbleChart): Template<BubbleData> =>
 const generateStrip = (spec: StripPlot): Template<StripData> =>
   fromSpec(spec, stripMark);
 
-function withGrid<T>(t: Template<{ grid?: boolean } & T>): Template<T> {
-  return partial({ grid: true }, t);
-}
+const withGrid = <T>(t: Template<{ grid?: boolean } & T>): Template<T> =>
+  partial({ grid: true }, t);
 
-function fromSpec<S extends PresAttrs, T>(
+const fromSpec = <S extends PresAttrs, T>(
   spec: S,
   markTemplate: Template<S & T>
-): Template<PlotPresData & T> {
-  return partial(spec, plot(markTemplate));
-}
+): Template<PlotPresData & T> => partial(spec, plot(markTemplate));
 
-function plot<T>(markTemplate: Template<T>): Template<PlotPresData & T> {
-  return wrap(
+const plot = <T>(markTemplate: Template<T>): Template<PlotPresData & T> =>
+  wrap(
     'const plot = Plot.plot(',
-    json(comma(plotPresFields, wrap('marks: [ ', markTemplate, ' ]'))),
+    json(plotPresFields, wrap('marks: [ ', markTemplate, ' ]')),
     ');'
   );
+
+const json = <S, T>(s: Template<S>, t?: Template<T>): Template<S & T> =>
+  wrap('{ ', t ? comma(s, t) : s, ' }');
+
+const splat = <T>(fn_name: string, t: Template<T>): Template<T> =>
+  wrap(`...${fn_name}(`, t, ')');
+
+function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
+  return (data: S & T): string => `${s(data)}, ${t(data)}`;
 }
 
 function wrap<S, T>(
@@ -327,18 +333,9 @@ function partial<S, T>(
     template(override ? { ...d, ...data } : { ...data, ...d });
 }
 
-function json<T>(t: Template<T>): Template<T> {
-  return wrap('{ ', t, ' }');
-}
-
-function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
-  return (data: S & T): string => `${s(data)}, ${t(data)}`;
-}
-
 function fields<T>(...field_names: (keyof T)[]): Template<T> {
-  const fs = [...new Set(field_names)];
   return (data: T): string =>
-    fs.map((f_name) => field(f_name)(data)).join(', ');
+    field_names.map((f_name) => field(f_name)(data)).join(', ');
 }
 
 function field<T>(field_name: keyof T): Template<T> {
@@ -363,41 +360,29 @@ const presAttrsFields: Template<PresAttrs> = fields(
   'stroke-width'
 );
 
-function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
-  return comma(t, () => `Plot.ruleY(${xs})`);
-}
+const withRuleY = <T>(t: Template<T>, ...xs: number[]): Template<T> =>
+  comma(t, () => `Plot.ruleY(${xs})`);
+
+const mark = <S extends PresAttrs, T>(
+  markType: string,
+  specialFields: Template<T>
+): Template<S & T> =>
+  wrap(`Plot.${markType}(data, `, json(presAttrsFields, specialFields), ')');
 
 const barMark: Template<PresAttrs & CoordData> = withRuleY(
   mark('barY', coordFields),
   0
 );
 const histogramMark: Template<PresAttrs & CoordData> = withRuleY(
-  mark(
-    'rectY',
-    wrap('...Plot.binX(', comma(json(field('y')), json(field('x'))), ')')
-  ),
+  mark('rectY', splat('Plot.binX', comma(json(field('y')), json(field('x'))))),
   0
 );
 
-const scatterplotMark: Template<PresAttrs & CoordData> = mark(
-  'dot',
-  coordFields
-);
+const scatterMark: Template<PresAttrs & CoordData> = mark('dot', coordFields);
 
 const bubbleMark: Template<PresAttrs & BubbleData> = mark('dot', bubbleFields);
 
 const stripMark: Template<PresAttrs & StripData> = mark(
   'dotX',
-  wrap('...Plot.normalizeX(', json(stripFields), ')')
+  splat('Plot.normalizeX', json(stripFields))
 );
-
-function mark<S extends PresAttrs, T>(
-  markType: string,
-  specialFields: Template<T>
-): Template<S & T> {
-  return wrap(
-    `Plot.${markType}(data, `,
-    json(comma(presAttrsFields, specialFields)),
-    ')'
-  );
-}
