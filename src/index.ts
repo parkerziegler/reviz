@@ -10,9 +10,9 @@ export function analyzeVisualization(root: SVGElement): void {
   const vizSpec = buildVizSpec(vizAttrs);
   // vizSpec.type = 'Histogram'; // doesn't catch histogram vs bar chart!
   const template = generate(vizSpec);
+  // eslint-disable-next-line no-console
   console.log({ vizSpec, template });
-  // console.log(template({ x: 'stopping time', y: 'frequency (%)' })); // histogram
-  // console.log(template({ x: 'economy (mpg)', y: 'power (hp)' })); // scatterplot
+  // eslint-disable-next-line no-console
   console.log(
     template({
       x: '0-60 mph (s)',
@@ -21,4 +21,6 @@ export function analyzeVisualization(root: SVGElement): void {
       r: 'economy (mpg)',
     })
   ); // bubble
+  // console.log(template({ x: 'stopping time', y: 'frequency (%)' })); // histogram
+  // console.log(template({ x: 'economy (mpg)', y: 'power (hp)' })); // scatterplot
 }

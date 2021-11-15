@@ -236,7 +236,7 @@ interface PlotPresData {
 }
 
 interface RadiusData {
-  r: number;
+  r: string;
 }
 
 type Template<T> = (data: T) => string;
