@@ -58,21 +58,23 @@ type VizSpec =
  * particular type if it returns true for all of that visualization's associated predicates.
  */
 
+type Predicate = (vizAttrs: VizAttrs) => boolean;
+
 // markType predicates.
 const hasMarkType =
-  (markType: 'rect' | 'circle') =>
-  (viz: VizAttrs): boolean =>
-    viz.markType === markType;
+  (markType: 'rect' | 'circle'): Predicate =>
+  (vizAttrs): boolean =>
+    vizAttrs.markType === markType;
 
 // geomAttr predicates.
 const hasConsistentGeomAttr =
-  (attr: 'r' | 'width') =>
-  (viz: VizAttrs): boolean => {
-    if (viz.geomAttrs[attr] && viz.geomAttrs[attr].size === 1) {
+  (attr: 'r' | 'width'): Predicate =>
+  (vizAttrs): boolean => {
+    if (vizAttrs.geomAttrs[attr] && vizAttrs.geomAttrs[attr].size === 1) {
       return true;
-    } else if (viz.geomAttrs[attr]) {
+    } else if (vizAttrs.geomAttrs[attr]) {
       const approxValueSet = new Set<string>();
-      viz.geomAttrs[attr].forEach((val) => {
+      vizAttrs.geomAttrs[attr].forEach((val) => {
         approxValueSet.add(Number(val).toFixed(3));
       });
 
@@ -83,18 +85,18 @@ const hasConsistentGeomAttr =
   };
 
 const hasDivergentGeomAttr =
-  (attr: 'r' | 'width') =>
-  (viz: VizAttrs): boolean =>
-    viz.geomAttrs[attr] && viz.geomAttrs[attr].size > 1;
+  (attr: 'r' | 'width'): Predicate =>
+  (vizAttrs): boolean =>
+    vizAttrs.geomAttrs[attr] && vizAttrs.geomAttrs[attr].size > 1;
 
 // Element predicates.
-const hasSiblingsWithConsistentCyAttr = (viz: VizAttrs): boolean => {
-  const lanes = Object.values(groupBy(viz.data, (d) => d.geomAttrs['cy']));
+const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
+  const lanes = Object.values(groupBy(vizAttrs.data, (d) => d.geomAttrs['cy']));
 
-  const siblingCount = viz.data.reduce((acc, datum, i) => {
+  const siblingCount = vizAttrs.data.reduce((acc, datum, i) => {
     if (
-      typeof viz.data[i + 1] !== 'undefined' &&
-      datum.geomAttrs['cy'] === viz.data[i + 1].geomAttrs['cy']
+      typeof vizAttrs.data[i + 1] !== 'undefined' &&
+      datum.geomAttrs['cy'] === vizAttrs.data[i + 1].geomAttrs['cy']
     ) {
       acc += 1;
     }
@@ -102,21 +104,27 @@ const hasSiblingsWithConsistentCyAttr = (viz: VizAttrs): boolean => {
     return acc;
   }, 0);
 
-  return siblingCount + lanes.length === viz.data.length;
+  return siblingCount + lanes.length === vizAttrs.data.length;
 };
 
-const hasEqualSizedGroups = (viz: VizAttrs): boolean => {
-  const lanes = Object.values(groupBy(viz.data, (d) => d.geomAttrs['x']));
+const hasEqualSizedGroups: Predicate = (vizAttrs): boolean => {
+  const lanes = Object.values(groupBy(vizAttrs.data, (d) => d.geomAttrs['x']));
 
   const laneLength = lanes[0].length;
   return lanes.every((lane) => lane.length > 1 && lane.length === laneLength);
 };
 
+// Scale predicates.
+const hasXScaleType =
+  (scaleType: 'continuous' | 'discrete'): Predicate =>
+  (vizAttrs): boolean =>
+    vizAttrs.xScaleType === scaleType;
+
 // A higher-order function to return the logical NOT of the supplied predicate function.
 const invertPredicate =
-  (pred: (viz: VizAttrs) => boolean) =>
-  (viz: VizAttrs): boolean =>
-    !pred(viz);
+  (pred: Predicate): Predicate =>
+  (vizAttrs): boolean =>
+    !pred(vizAttrs);
 
 const vizTypeToPredicates = {
   Scatterplot: overEvery(
@@ -137,16 +145,19 @@ const vizTypeToPredicates = {
   BarChart: overEvery(
     hasMarkType('rect'),
     hasConsistentGeomAttr('width'),
+    hasXScaleType('discrete'),
     invertPredicate(hasEqualSizedGroups)
   ),
   StackedBarChart: overEvery(
     hasMarkType('rect'),
     hasConsistentGeomAttr('width'),
+    hasXScaleType('discrete'),
     hasEqualSizedGroups
   ),
   Histogram: overEvery(
     hasMarkType('rect'),
     hasConsistentGeomAttr('width'),
+    hasXScaleType('continuous'),
     invertPredicate(hasEqualSizedGroups)
   ),
 };
@@ -158,14 +169,14 @@ type VizType = keyof typeof vizTypeToPredicates;
  * and checks this schema against the composed predicates associated with each visualization
  * type. It returns the first matching visualization type.
  *
- * @param viz – the schema of visualization attributes.
+ * @param vizAttrs – the schema of visualization attributes.
  * @returns – the visualization type of the svg subtree.
  */
-const determineVizType = (viz: VizAttrs): VizType => {
+const determineVizType = (vizAttrs: VizAttrs): VizType => {
   const possibleVizTypes = Object.entries(vizTypeToPredicates).reduce<
     VizType[]
   >((acc, [type, predicate]) => {
-    if (predicate(viz)) {
+    if (predicate(vizAttrs)) {
       // This cast is safe. We are getting `type` here from the keys of vizTypeToPredicates,
       // so we can guarantee that type must be one of those keys. TS does not provide a mechanism
       // for inferring this because it cannot prove that even constant objects are "closed".
@@ -190,14 +201,14 @@ const determineVizType = (viz: VizAttrs): VizType => {
  * buildVizSpec generates the visualization specification from a normalized schema
  * containing visualization attributes.
  *
- * @param viz – the schema of visualization attributes.
+ * @param vizAttrs – the schema of visualization attributes.
  * @returns – the visualization specification for the svg subtree.
  */
-export const buildVizSpec = (viz: VizAttrs): VizSpec => {
-  const vizType = determineVizType(viz);
+export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
+  const vizType = determineVizType(vizAttrs);
 
   const presAttrs = PRES_ATTR_NAMES.reduce((acc, attr) => {
-    acc[attr as keyof PresAttrs] = Array.from(viz.presAttrs[attr]);
+    acc[attr as keyof PresAttrs] = Array.from(vizAttrs.presAttrs[attr]);
 
     return acc;
   }, {} as Record<keyof PresAttrs, string[]>);
@@ -207,7 +218,7 @@ export const buildVizSpec = (viz: VizAttrs): VizSpec => {
     case 'StripPlot':
       return {
         type: vizType,
-        r: Number(Array.from(viz.geomAttrs['r'])[0]),
+        r: Number(Array.from(vizAttrs.geomAttrs['r'])[0]),
         ...presAttrs,
       };
     case 'BubbleChart':
@@ -220,7 +231,7 @@ export const buildVizSpec = (viz: VizAttrs): VizSpec => {
     case 'Histogram':
       return {
         type: vizType,
-        width: Number(Array.from(viz.geomAttrs['width'])[0]),
+        width: Number(Array.from(vizAttrs.geomAttrs['width'])[0]),
         ...presAttrs,
       };
   }

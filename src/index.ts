@@ -1,12 +1,16 @@
-import { collectAllAttributes } from './attributes';
+import { collectDataAttributes, collectTextAttributes } from './attributes';
 import { inferVizAttributes } from './inference';
-import { buildVizSpec, generate } from './spec';
+import { generate } from './spec';
+import { buildVizSpec } from './ir';
 import { walk } from './walk';
 
 export function analyzeVisualization(root: SVGElement): void {
   const elements = walk(root);
-  const data = collectAllAttributes(elements);
-  const vizAttrs = inferVizAttributes(data);
+
+  const dataAttrs = collectDataAttributes(elements);
+  const textAttrs = collectTextAttributes(elements);
+  const vizAttrs = inferVizAttributes(dataAttrs, textAttrs);
+
   const vizSpec = buildVizSpec(vizAttrs);
   // vizSpec.type = 'Histogram'; // doesn't catch histogram vs bar chart!
   const template = generate(vizSpec);
