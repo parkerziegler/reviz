@@ -311,16 +311,23 @@ function partial<S, T>(
 }
 
 function plot<T>(markTemplate: Template<T>): Template<PlotPresData & T> {
-  return (data): string =>
-    `const plot = Plot.plot({ grid: ${Boolean(
-      data.grid
-    )}, marks: [ ${markTemplate(data)} ] })`;
+  return wrap(
+    'const plot = Plot.plot(',
+    json(comma(plotPresFields, wrap('marks: [ ', markTemplate, ' ]'))),
+    ');'
+  );
 }
 
-function wrap<T>(pre: string, t: Template<T>, post: string): Template<T> {
-  return (data: T): string => pre + t(data) + post;
+function wrap<S, T>(
+  pre: string,
+  mid: Template<S>,
+  post: string | Template<T>
+): Template<S & T> {
+  return (data: S & T): string =>
+    pre + mid(data) + (typeof post === 'string' ? post : post(data));
 }
 
+const plotPresFields: Template<PlotPresData> = fields('grid');
 const coordFields: Template<CoordData> = fields('x', 'y');
 const bubbleFields: Template<BubbleData> = fields('x', 'y', 'r');
 const stripFields: Template<StripData> = fields('x', 'y', 'z', 'basis');
@@ -332,47 +339,51 @@ const presAttrsFields: Template<PresAttrs> = fields(
   'stroke-width'
 );
 
-const barMark: Template<PresAttrs & CoordData> = partial(
-  { mark: 'barY' },
-  withRuleY(mark(coordFields), 0)
+const barMark: Template<PresAttrs & CoordData> = withRuleY(
+  mark('barY', coordFields),
+  0
+);
+const histogramMark: Template<PresAttrs & CoordData> = withRuleY(
+  mark(
+    'rectY',
+    wrap('...Plot.binX(', comma(json(field('y')), json(field('x'))), ')')
+  ),
+  0
 );
 
-const histogramMark: Template<PresAttrs & CoordData> = partial(
-  { mark: 'rectY' },
-  withRuleY(
-    mark(
-      (data: CoordData) =>
-        `...Plot.binX({ ${field('y')(data)} }, { ${field('x')(data)} })`
-    ),
-    0
-  )
+const scatterplotMark: Template<PresAttrs & CoordData> = mark(
+  'dot',
+  coordFields
 );
 
-const scatterplotMark: Template<PresAttrs & CoordData> = partial(
-  { mark: 'dot' },
-  mark(coordFields)
-);
+const bubbleMark: Template<PresAttrs & BubbleData> = mark('dot', bubbleFields);
 
-const bubbleMark: Template<PresAttrs & BubbleData> = partial(
-  { mark: 'dot' },
-  mark(bubbleFields)
-);
-
-const stripMark: Template<PresAttrs & StripData> = partial(
-  { mark: 'dotX' },
-  mark(wrap('..Plot.normalizeX({ ', stripFields, ' })'))
+const stripMark: Template<PresAttrs & StripData> = mark(
+  'dotX',
+  wrap('...Plot.normalizeX(', json(stripFields), ')')
 );
 
 function mark<S extends PresAttrs, T>(
-  specialFields: Template<T>,
-  presFields: Template<S> = presAttrsFields
-): Template<{ mark: string } & S & T> {
-  return (data): string =>
-    `Plot.${data.mark}(data, { ${presFields(data)}, ${specialFields(data)} })`;
+  markType: string,
+  specialFields: Template<T>
+): Template<S & T> {
+  return wrap(
+    `Plot.${markType}(data, `,
+    json(comma(presAttrsFields, specialFields)),
+    ')'
+  );
 }
 
 function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
-  return (data: T): string => `${t(data)}, Plot.ruleY(${xs})`;
+  return comma(t, () => `Plot.ruleY(${xs})`);
+}
+
+function json<T>(t: Template<T>): Template<T> {
+  return wrap('{ ', t, ' }');
+}
+
+function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
+  return (data: S & T): string => `${s(data)}, ${t(data)}`;
 }
 
 function fields<T>(...field_names: (keyof T)[]): Template<T> {

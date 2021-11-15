@@ -1,7 +1,6 @@
 import { collectDataAttributes, collectTextAttributes } from './attributes';
 import { inferVizAttributes } from './inference';
-import { generate } from './spec';
-import { buildVizSpec } from './ir';
+import { buildVizSpec, generate } from './ir';
 import { walk } from './walk';
 
 export function analyzeVisualization(root: SVGElement): void {
