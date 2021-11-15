@@ -301,15 +301,6 @@ function fromSpec<S extends PresAttrs, T>(
   return partial(spec, plot(markTemplate));
 }
 
-function partial<S, T>(
-  data: S,
-  template: Template<S & T>,
-  override = true
-): Template<T> {
-  return (d: T): string =>
-    template(override ? { ...d, ...data } : { ...data, ...d });
-}
-
 function plot<T>(markTemplate: Template<T>): Template<PlotPresData & T> {
   return wrap(
     'const plot = Plot.plot(',
@@ -327,10 +318,43 @@ function wrap<S, T>(
     pre + mid(data) + (typeof post === 'string' ? post : post(data));
 }
 
+function partial<S, T>(
+  data: S,
+  template: Template<S & T>,
+  override = true
+): Template<T> {
+  return (d: T): string =>
+    template(override ? { ...d, ...data } : { ...data, ...d });
+}
+
+function json<T>(t: Template<T>): Template<T> {
+  return wrap('{ ', t, ' }');
+}
+
+function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
+  return (data: S & T): string => `${s(data)}, ${t(data)}`;
+}
+
+function fields<T>(...field_names: (keyof T)[]): Template<T> {
+  const fs = [...new Set(field_names)];
+  return (data: T): string =>
+    fs.map((f_name) => field(f_name)(data)).join(', ');
+}
+
+function field<T>(field_name: keyof T): Template<T> {
+  return (data: T): string => {
+    const f_data = data[field_name];
+    // if data is a number, don't surround with quotes.
+    const f_data_str = !isNaN(+f_data) ? f_data : `'${f_data}'`;
+    return `'${field_name}': ` + f_data_str;
+  };
+}
+
 const plotPresFields: Template<PlotPresData> = fields('grid');
 const coordFields: Template<CoordData> = fields('x', 'y');
 const bubbleFields: Template<BubbleData> = fields('x', 'y', 'r');
 const stripFields: Template<StripData> = fields('x', 'y', 'z', 'basis');
+
 const presAttrsFields: Template<PresAttrs> = fields(
   'fill',
   'stroke',
@@ -338,6 +362,10 @@ const presAttrsFields: Template<PresAttrs> = fields(
   'stroke-opacity',
   'stroke-width'
 );
+
+function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
+  return comma(t, () => `Plot.ruleY(${xs})`);
+}
 
 const barMark: Template<PresAttrs & CoordData> = withRuleY(
   mark('barY', coordFields),
@@ -372,31 +400,4 @@ function mark<S extends PresAttrs, T>(
     json(comma(presAttrsFields, specialFields)),
     ')'
   );
-}
-
-function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
-  return comma(t, () => `Plot.ruleY(${xs})`);
-}
-
-function json<T>(t: Template<T>): Template<T> {
-  return wrap('{ ', t, ' }');
-}
-
-function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
-  return (data: S & T): string => `${s(data)}, ${t(data)}`;
-}
-
-function fields<T>(...field_names: (keyof T)[]): Template<T> {
-  const fs = [...new Set(field_names)];
-  return (data: T): string =>
-    fs.map((f_name) => field(f_name)(data)).join(', ');
-}
-
-function field<T>(field_name: keyof T): Template<T> {
-  return (data: T): string => {
-    const f_data = data[field_name];
-    // if data is a number, don't surround with quotes.
-    const f_data_str = !isNaN(+f_data) ? f_data : `'${f_data}'`;
-    return `'${field_name}': ` + f_data_str;
-  };
 }
