@@ -231,11 +231,16 @@ interface CoordData {
   y: string;
 }
 
+interface StripData extends CoordData {
+  z: string;
+  basis: string;
+}
+
 interface PlotPresData {
   grid?: boolean;
 }
 
-interface RadiusData {
+interface BubbleData extends CoordData {
   r: string;
 }
 
@@ -243,7 +248,7 @@ type Template<T> = (data: T) => string;
 
 export function generate(
   spec: VizSpec
-): Template<CoordData> | Template<CoordData & RadiusData> {
+): Template<CoordData> | Template<BubbleData> | Template<StripData> {
   switch (spec.type) {
     case 'BarChart':
     case 'StackedBarChart':
@@ -254,8 +259,8 @@ export function generate(
       return generateScatterplot(spec);
     case 'BubbleChart':
       return generateBubble(spec);
-    default:
-      throw new Error('Unkown type: ' + spec.type);
+    case 'StripPlot':
+      return generateStrip(spec);
   }
 }
 
@@ -268,8 +273,11 @@ const generateHistogram = (spec: Histogram): Template<CoordData> =>
 const generateScatterplot = (spec: Scatterplot): Template<CoordData> =>
   withGrid(fromSpec(spec, scatterplotMark));
 
-const generateBubble = (spec: BubbleChart): Template<CoordData & RadiusData> =>
+const generateBubble = (spec: BubbleChart): Template<BubbleData> =>
   fromSpec(spec, bubbleMark);
+
+const generateStrip = (spec: StripPlot): Template<StripData> =>
+  fromSpec(spec, stripMark);
 
 function withGrid<T>(t: Template<{ grid?: boolean } & T>): Template<T> {
   return partial({ grid: true }, t);
@@ -298,8 +306,13 @@ function plot<T>(markTemplate: Template<T>): Template<PlotPresData & T> {
     )}, marks: [ ${markTemplate(data)} ] })`;
 }
 
+function wrap<T>(pre: string, t: Template<T>, post: string): Template<T> {
+  return (data: T): string => pre + t(data) + post;
+}
+
 const coordFields: Template<CoordData> = fields('x', 'y');
-const bubbleFields: Template<CoordData & RadiusData> = fields('x', 'y', 'r');
+const bubbleFields: Template<BubbleData> = fields('x', 'y', 'r');
+const stripFields: Template<StripData> = fields('x', 'y', 'z', 'basis');
 const presAttrsFields: Template<PresAttrs> = fields(
   'fill',
   'stroke',
@@ -317,7 +330,8 @@ const histogramMark: Template<PresAttrs & CoordData> = partial(
   { mark: 'rectY' },
   withRuleY(
     mark(
-      (data) => `...Plot.binX({ ${field('y')(data)} }, { ${field('x')(data)} })`
+      (data: CoordData) =>
+        `...Plot.binX({ ${field('y')(data)} }, { ${field('x')(data)} })`
     ),
     0
   )
@@ -328,16 +342,22 @@ const scatterplotMark: Template<PresAttrs & CoordData> = partial(
   mark(coordFields)
 );
 
-const bubbleMark: Template<PresAttrs & CoordData & RadiusData> = partial(
+const bubbleMark: Template<PresAttrs & BubbleData> = partial(
   { mark: 'dot' },
   mark(bubbleFields)
 );
 
-function mark<T>(
-  fields: Template<T>
-): Template<{ mark: string } & PresAttrs & T> {
+const stripMark: Template<PresAttrs & StripData> = partial(
+  { mark: 'dotX' },
+  mark(wrap('..Plot.normalizeX({ ', stripFields, ' })'))
+);
+
+function mark<S extends PresAttrs, T>(
+  specialFields: Template<T>,
+  presFields: Template<S> = presAttrsFields
+): Template<{ mark: string } & S & T> {
   return (data): string =>
-    `Plot.${data.mark}(data, { ${presAttrsFields(data)}, ${fields(data)} })`;
+    `Plot.${data.mark}(data, { ${presFields(data)}, ${specialFields(data)} })`;
 }
 
 function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
@@ -345,8 +365,9 @@ function withRuleY<T>(t: Template<T>, ...xs: number[]): Template<T> {
 }
 
 function fields<T>(...field_names: (keyof T)[]): Template<T> {
+  const fs = [...new Set(field_names)];
   return (data: T): string =>
-    field_names.map((f_name) => field(f_name)(data)).join(', ');
+    fs.map((f_name) => field(f_name)(data)).join(', ');
 }
 
 function field<T>(field_name: keyof T): Template<T> {
