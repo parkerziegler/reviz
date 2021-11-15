@@ -246,6 +246,7 @@ export function generate(
 ): Template<CoordData> | Template<CoordData & RadiusData> {
   switch (spec.type) {
     case 'BarChart':
+    case 'StackedBarChart':
       return generateBar(spec);
     case 'Histogram':
       return generateHistogram(spec);
@@ -258,17 +259,21 @@ export function generate(
   }
 }
 
-const generateBar = (spec: BarChart): Template<CoordData> =>
-  partial({ grid: true }, fromSpec(spec, barMark));
+const generateBar = (spec: BarChart | StackedBarChart): Template<CoordData> =>
+  withGrid(fromSpec(spec, barMark));
 
 const generateHistogram = (spec: Histogram): Template<CoordData> =>
   fromSpec(spec, histogramMark);
 
 const generateScatterplot = (spec: Scatterplot): Template<CoordData> =>
-  partial({ grid: true }, fromSpec(spec, scatterplotMark));
+  withGrid(fromSpec(spec, scatterplotMark));
 
 const generateBubble = (spec: BubbleChart): Template<CoordData & RadiusData> =>
   fromSpec(spec, bubbleMark);
+
+function withGrid<T>(t: Template<{ grid?: boolean } & T>): Template<T> {
+  return partial({ grid: true }, t);
+}
 
 function fromSpec<S extends PresAttrs, T>(
   spec: S,
@@ -305,7 +310,7 @@ const presAttrsFields: Template<PresAttrs> = fields(
 
 const barMark: Template<PresAttrs & CoordData> = partial(
   { mark: 'barY' },
-  mark(coordFields)
+  withRuleY(mark(coordFields), 0)
 );
 
 const histogramMark: Template<PresAttrs & CoordData> = partial(
