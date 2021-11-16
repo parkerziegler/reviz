@@ -22,6 +22,7 @@ export function analyzeVisualization(root: SVGElement): void {
       y: 'power (hp)',
       // stroke: 'orange',
       r: 'economy (mpg)',
+      z: null,
     })
   ); // bubble
   // console.log(template({ x: 'stopping time', y: 'frequency (%)' })); // histogram

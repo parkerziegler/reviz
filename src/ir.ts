@@ -312,7 +312,11 @@ const splat = <T>(fn_name: string, t: Template<T>): Template<T> =>
   wrap(`...${fn_name}(`, t, ')');
 
 function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
-  return (data: S & T): string => `${s(data)}, ${t(data)}`;
+  return (data: S & T): string => {
+    const a = s(data),
+      b = t(data);
+    return a && b ? `${a}, ${b}` : a || b;
+  };
 }
 
 function wrap<S, T>(
@@ -335,14 +339,18 @@ function partial<S, T>(
 
 function fields<T>(...field_names: (keyof T)[]): Template<T> {
   return (data: T): string =>
-    field_names.map((f_name) => field(f_name)(data)).join(', ');
+    field_names
+      .map((f_name) => data[f_name] !== undefined && field(f_name)(data))
+      .filter(Boolean)
+      .join(', ');
 }
 
 function field<T>(field_name: keyof T): Template<T> {
   return (data: T): string => {
     const f_data = data[field_name];
     // if data is a number, don't surround with quotes.
-    const f_data_str = !isNaN(+f_data) ? f_data : `'${f_data}'`;
+    const f_data_str =
+      f_data == null || !isNaN(+f_data) ? f_data : `'${f_data}'`;
     return `'${field_name}': ` + f_data_str;
   };
 }
