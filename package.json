@@ -23,28 +23,23 @@
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
+    "@observablehq/plot": "^0.2.9",
+    "d3": "^7.1.1",
     "lodash.groupby": "^4.6.0",
     "lodash.overevery": "^4.7.0"
   },
   "devDependencies": {
-    "@observablehq/plot": "^0.2.9",
     "@types/d3": "^7.1.0",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.overevery": "^4.7.6",
     "@types/node": "^16.11.6",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
-    "d3": "^7.1.1",
     "esbuild": "^0.13.8",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
-    "next": "^12.0.1",
     "prettier": "^2.4.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "typescript": "^4.4.4"
   },
   "prettier": {
