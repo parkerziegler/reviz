@@ -1,6 +1,6 @@
 import { collectDataAttributes, collectTextAttributes } from './attributes';
 import { inferVizAttributes } from './inference';
-import { buildVizSpec } from './ir';
+import { buildVizSpec, generate } from './ir';
 import { walk } from './walk';
 
 export function analyzeVisualization(root: SVGElement): void {
@@ -11,5 +11,20 @@ export function analyzeVisualization(root: SVGElement): void {
   const vizAttrs = inferVizAttributes(dataAttrs, textAttrs);
 
   const vizSpec = buildVizSpec(vizAttrs);
-  console.log({ vizSpec });
+  // vizSpec.type = 'Histogram'; // doesn't catch histogram vs bar chart!
+  const template = generate(vizSpec);
+  // eslint-disable-next-line no-console
+  console.log({ vizSpec, template });
+  // eslint-disable-next-line no-console
+  console.log(
+    template({
+      x: '0-60 mph (s)',
+      y: 'power (hp)',
+      // stroke: 'orange',
+      r: 'economy (mpg)',
+      z: null,
+    })
+  ); // bubble
+  // console.log(template({ x: 'stopping time', y: 'frequency (%)' })); // histogram
+  // console.log(template({ x: 'economy (mpg)', y: 'power (hp)' })); // scatterplot
 }
