@@ -1,0 +1,15 @@
+/* In-the-wild example visualization CSS. */
+.layer.svelte-jdsvwm.svelte-jdsvwm {
+  width: 100%;
+  height: 450px;
+}
+
+.g-tick.svelte-jdsvwm.svelte-jdsvwm {
+  stroke: #eeeeee;
+  stroke-width: 1;
+}
+
+.state_label {
+  font-size: 13px;
+  font-weight: 300;
+}

@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { analyzeVisualization } from '../../src';
+import { analyzeVisualization } from '../../../../src';
 
 interface Car {
   name: string;

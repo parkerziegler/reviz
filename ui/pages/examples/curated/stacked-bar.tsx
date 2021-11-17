@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { readData } from '../../helpers';
-import { analyzeVisualization } from '../../src';
+import { readData } from '../../../helpers/server';
+import { analyzeVisualization } from '../../../../src';
 
 interface DeathRecord {
   date: string;
