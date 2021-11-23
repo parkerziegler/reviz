@@ -3,7 +3,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { readData } from '../../../helpers/server';
-import { analyzeVisualization } from '../../../../src';
+import { withViewer } from '../../../components/Viewer';
 
 interface Letter {
   letter: string;
@@ -14,7 +14,7 @@ interface Props {
   data: Letter[];
 }
 
-const BarChart: React.FC<Props> = ({ data }) => {
+const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -32,19 +32,21 @@ const BarChart: React.FC<Props> = ({ data }) => {
 
     root.current.appendChild(plot);
 
-    analyzeVisualization(plot);
-
     return (): void => {
-      root.current.removeChild(plot);
+      root.current?.removeChild(plot);
     };
   }, []);
 
+  return <div ref={root}></div>;
+};
+
+const BarChart: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
         <title>reviz: Bar Chart</title>
       </Head>
-      <div ref={root}></div>
+      {React.createElement(withViewer(Chart, { data }))}
     </>
   );
 };

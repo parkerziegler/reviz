@@ -1,0 +1,23 @@
+.viewer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-areas:
+    "viz spec"
+    "viz program";
+  grid-template-columns: minmax(200px, 1fr) minmax(200px, 500px);
+}
+
+.viewer > :first-child {
+  grid-area: viz;
+  align-self: center;
+  justify-self: center;
+}
+
+.viewer > :nth-child(2) {
+  grid-area: spec;
+}
+
+.viewer > :last-child {
+  grid-area: program;
+}

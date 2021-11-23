@@ -3,7 +3,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { readData } from '../../../helpers/server';
-import { analyzeVisualization } from '../../../../src';
+import { withViewer } from '../../../components/Viewer';
 
 enum AgeRange {
   '<10',
@@ -39,11 +39,10 @@ interface StateAge {
 }
 
 interface Props {
-  states: StateDistribution[];
   stateAges: StateAge[];
 }
 
-const StripPlot: React.FC<Props> = ({ stateAges }) => {
+const Chart: React.FC<Props> = ({ stateAges }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -77,19 +76,21 @@ const StripPlot: React.FC<Props> = ({ stateAges }) => {
 
     root.current.appendChild(plot);
 
-    analyzeVisualization(plot);
-
     return (): void => {
-      root.current.removeChild(plot);
+      root.current?.removeChild(plot);
     };
   }, []);
 
+  return <div ref={root}></div>;
+};
+
+const StripPlot: React.FC<Props> = ({ stateAges }) => {
   return (
     <>
       <Head>
         <title>reviz: Strip Plot</title>
       </Head>
-      <div ref={root}></div>
+      {React.createElement(withViewer(Chart, { stateAges }))}
     </>
   );
 };
@@ -99,9 +100,9 @@ export async function getStaticProps(): Promise<{ props: Props }> {
   const stateAges = ages.flatMap((age) =>
     states.map((d) => ({ state: d.name, age, population: d[age] } as StateAge))
   );
+
   return {
     props: {
-      states,
       stateAges,
     },
   };

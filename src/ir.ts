@@ -4,7 +4,7 @@ import groupBy from 'lodash.groupby';
 import type { VizAttrs } from './inference';
 import { PRES_ATTR_NAMES } from './constants';
 
-interface PresAttrs {
+export interface PresAttrs {
   fill: string[];
   stroke: string[];
   ['fill-opacity']: string[];
@@ -12,36 +12,36 @@ interface PresAttrs {
   ['stroke-width']: string[];
 }
 
-interface Scatterplot extends PresAttrs {
+export interface Scatterplot extends PresAttrs {
   type: 'Scatterplot';
   r: number;
 }
 
-interface BubbleChart extends PresAttrs {
+export interface BubbleChart extends PresAttrs {
   type: 'BubbleChart';
 }
 
-interface StripPlot extends PresAttrs {
+export interface StripPlot extends PresAttrs {
   type: 'StripPlot';
   r: number;
 }
 
-interface BarChart extends PresAttrs {
+export interface BarChart extends PresAttrs {
   type: 'BarChart';
   width: number;
 }
 
-interface StackedBarChart extends PresAttrs {
+export interface StackedBarChart extends PresAttrs {
   type: 'StackedBarChart';
   width: number;
 }
 
-interface Histogram extends PresAttrs {
+export interface Histogram extends PresAttrs {
   type: 'Histogram';
   width: number;
 }
 
-type VizSpec =
+export type VizSpec =
   | Scatterplot
   | BubbleChart
   | StripPlot
@@ -236,161 +236,3 @@ export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
       };
   }
 };
-
-interface CoordData {
-  x: string;
-  y: string;
-}
-
-interface StripData extends CoordData {
-  z: string;
-  basis: string;
-}
-
-interface PlotPresData {
-  grid?: boolean;
-}
-
-interface BubbleData extends CoordData {
-  r: string;
-}
-
-type Template<T> = (data: T) => string;
-
-export function generate(
-  spec: VizSpec
-): Template<CoordData> | Template<BubbleData> | Template<StripData> {
-  switch (spec.type) {
-    case 'BarChart':
-    case 'StackedBarChart':
-      return generateBar(spec);
-    case 'Histogram':
-      return generateHistogram(spec);
-    case 'Scatterplot':
-      return generateScatterplot(spec);
-    case 'BubbleChart':
-      return generateBubble(spec);
-    case 'StripPlot':
-      return generateStrip(spec);
-  }
-}
-
-const generateBar = (spec: BarChart | StackedBarChart): Template<CoordData> =>
-  withGrid(fromSpec(spec, barMark));
-
-const generateHistogram = (spec: Histogram): Template<CoordData> =>
-  fromSpec(spec, histogramMark);
-
-const generateScatterplot = (spec: Scatterplot): Template<CoordData> =>
-  withGrid(fromSpec(spec, scatterMark));
-
-const generateBubble = (spec: BubbleChart): Template<BubbleData> =>
-  fromSpec(spec, bubbleMark);
-
-const generateStrip = (spec: StripPlot): Template<StripData> =>
-  fromSpec(spec, stripMark);
-
-const withGrid = <T>(t: Template<{ grid?: boolean } & T>): Template<T> =>
-  partial({ grid: true }, t);
-
-const fromSpec = <S extends PresAttrs, T>(
-  spec: S,
-  markTemplate: Template<S & T>
-): Template<PlotPresData & T> => partial(spec, plot(markTemplate));
-
-const plot = <T>(markTemplate: Template<T>): Template<PlotPresData & T> =>
-  wrap(
-    'const plot = Plot.plot(',
-    json(plotPresFields, wrap('marks: [ ', markTemplate, ' ]')),
-    ');'
-  );
-
-const json = <S, T>(s: Template<S>, t?: Template<T>): Template<S & T> =>
-  wrap('{ ', t ? comma(s, t) : s, ' }');
-
-const splat = <T>(fn_name: string, t: Template<T>): Template<T> =>
-  wrap(`...${fn_name}(`, t, ')');
-
-function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
-  return (data: S & T): string => {
-    const a = s(data),
-      b = t(data);
-    return a && b ? `${a}, ${b}` : a || b;
-  };
-}
-
-function wrap<S, T>(
-  pre: string,
-  mid: Template<S>,
-  post: string | Template<T>
-): Template<S & T> {
-  return (data: S & T): string =>
-    pre + mid(data) + (typeof post === 'string' ? post : post(data));
-}
-
-function partial<S, T>(
-  data: S,
-  template: Template<S & T>,
-  override = true
-): Template<T> {
-  return (d: T): string =>
-    template(override ? { ...d, ...data } : { ...data, ...d });
-}
-
-function fields<T>(...field_names: (keyof T)[]): Template<T> {
-  return (data: T): string =>
-    field_names
-      .map((f_name) => data[f_name] !== undefined && field(f_name)(data))
-      .filter(Boolean)
-      .join(', ');
-}
-
-function field<T>(field_name: keyof T): Template<T> {
-  return (data: T): string => {
-    const f_data = data[field_name];
-    // if data is a number, don't surround with quotes.
-    const f_data_str =
-      f_data == null || !isNaN(+f_data) ? f_data : `'${f_data}'`;
-    return `'${field_name}': ` + f_data_str;
-  };
-}
-
-const plotPresFields: Template<PlotPresData> = fields('grid');
-const coordFields: Template<CoordData> = fields('x', 'y');
-const bubbleFields: Template<BubbleData> = fields('x', 'y', 'r');
-const stripFields: Template<StripData> = fields('x', 'y', 'z', 'basis');
-
-const presAttrsFields: Template<PresAttrs> = fields(
-  'fill',
-  'stroke',
-  'fill-opacity',
-  'stroke-opacity',
-  'stroke-width'
-);
-
-const withRuleY = <T>(t: Template<T>, ...xs: number[]): Template<T> =>
-  comma(t, () => `Plot.ruleY(${xs})`);
-
-const mark = <S extends PresAttrs, T>(
-  markType: string,
-  specialFields: Template<T>
-): Template<S & T> =>
-  wrap(`Plot.${markType}(data, `, json(presAttrsFields, specialFields), ')');
-
-const barMark: Template<PresAttrs & CoordData> = withRuleY(
-  mark('barY', coordFields),
-  0
-);
-const histogramMark: Template<PresAttrs & CoordData> = withRuleY(
-  mark('rectY', splat('Plot.binX', comma(json(field('y')), json(field('x'))))),
-  0
-);
-
-const scatterMark: Template<PresAttrs & CoordData> = mark('dot', coordFields);
-
-const bubbleMark: Template<PresAttrs & BubbleData> = mark('dot', bubbleFields);
-
-const stripMark: Template<PresAttrs & StripData> = mark(
-  'dotX',
-  splat('Plot.normalizeX', json(stripFields))
-);

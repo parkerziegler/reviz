@@ -3,7 +3,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
 import { readData } from '../../../helpers/server';
-import { analyzeVisualization } from '../../../../src';
+import { withViewer } from '../../../components/Viewer';
 
 interface DeathRecord {
   date: string;
@@ -15,11 +15,10 @@ interface Props {
   data: DeathRecord[];
 }
 
-const StackedBarChart: React.FC<Props> = ({ data }) => {
+const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    // legend? @d3/color-legend doesn't work...
     const plot = Plot.plot({
       x: {
         tickFormat: (d: string) =>
@@ -34,19 +33,21 @@ const StackedBarChart: React.FC<Props> = ({ data }) => {
 
     root.current.appendChild(plot);
 
-    analyzeVisualization(plot);
-
     return (): void => {
-      root.current.removeChild(plot);
+      root.current?.removeChild(plot);
     };
   }, []);
 
+  return <div ref={root}></div>;
+};
+
+const StackedBarChart: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
         <title>reviz: Stacked Bar Chart</title>
       </Head>
-      <div ref={root}></div>
+      {React.createElement(withViewer(Chart, { data }))}
     </>
   );
 };

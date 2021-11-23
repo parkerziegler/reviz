@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { analyzeVisualization } from '../../../../src';
+import { withViewer } from '../../../components/Viewer';
 
 interface Car {
   name: string;
@@ -22,7 +22,7 @@ interface Props {
   data: Car[];
 }
 
-const BubbleChart: React.FC<Props> = ({ data }) => {
+const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -43,10 +43,8 @@ const BubbleChart: React.FC<Props> = ({ data }) => {
 
     root.current.appendChild(plot);
 
-    analyzeVisualization(plot);
-
     return (): void => {
-      root.current.removeChild(plot);
+      root.current?.removeChild(plot);
     };
   }, []);
 
@@ -56,6 +54,17 @@ const BubbleChart: React.FC<Props> = ({ data }) => {
         <title>reviz: Bubble Chart</title>
       </Head>
       <div ref={root}></div>
+    </>
+  );
+};
+
+const BubbleChart: React.FC<Props> = ({ data }) => {
+  return (
+    <>
+      <Head>
+        <title>reviz: Bubble Chart</title>
+      </Head>
+      {React.createElement(withViewer(Chart, { data }))}
     </>
   );
 };

@@ -1,15 +1,11 @@
 import * as React from 'react';
 
-import { analyzeVisualization } from '../../../../src';
+import { withViewer } from '../../../components/Viewer';
 
 import styles from './nyt-vaccine-voting.module.css';
 
 const NytVaccineVoting: React.FC = () => {
   const ref = React.useRef(null);
-
-  React.useEffect(() => {
-    analyzeVisualization(ref.current);
-  }, []);
 
   return (
     <svg
@@ -797,4 +793,4 @@ const NytVaccineVoting: React.FC = () => {
   );
 };
 
-export default NytVaccineVoting;
+export default withViewer(NytVaccineVoting, {});

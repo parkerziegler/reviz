@@ -11,6 +11,7 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'no-console': ['error', { allow: ['warn', 'error'] }],
+    camelcase: 'error',
     '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '_' }],
     '@typescript-eslint/explicit-function-return-type': ['error'],
     'import/newline-after-import': 2,

@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { analyzeVisualization } from '../../../../src';
 import { readData } from '../../../helpers/server';
+import { withViewer } from '../../../components/Viewer';
 
 interface Car {
   name: string;
@@ -20,7 +20,7 @@ interface Props {
   data: Car[];
 }
 
-const Scatterplot: React.FC<Props> = ({ data }) => {
+const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -33,20 +33,21 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
 
     root.current.appendChild(plot);
 
-    // Begin visualization analysis.
-    analyzeVisualization(plot);
-
     return (): void => {
-      root.current.removeChild(plot);
+      root.current?.removeChild(plot);
     };
   }, []);
 
+  return <div ref={root}></div>;
+};
+
+const Scatterplot: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
         <title>reviz: Scatterplot</title>
       </Head>
-      <div ref={root}></div>
+      {React.createElement(withViewer<Props>(Chart, { data }))}
     </>
   );
 };

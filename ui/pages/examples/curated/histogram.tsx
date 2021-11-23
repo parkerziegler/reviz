@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { analyzeVisualization } from '../../../../src';
+import { withViewer } from '../../../components/Viewer';
 
 function collatz(n: number, stoppingTime = 0): number {
   // Base case, n has reached 1.
@@ -19,12 +19,12 @@ function collatz(n: number, stoppingTime = 0): number {
   return collatz(3 * n + 1, stoppingTime + 1);
 }
 
+const data = new Array(1000).fill(0).map((_, i) => collatz(i + 1, 0));
+
 const Histogram: React.FC = () => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const data = new Array(1000).fill(0).map((_, i) => collatz(i + 1, 0));
-
     const plot = Plot.plot({
       x: {
         label: 'Stopping Time',
@@ -44,10 +44,8 @@ const Histogram: React.FC = () => {
 
     root.current.appendChild(plot);
 
-    analyzeVisualization(plot);
-
     return (): void => {
-      root.current.removeChild(plot);
+      root.current?.removeChild(plot);
     };
   }, []);
 
@@ -61,4 +59,4 @@ const Histogram: React.FC = () => {
   );
 };
 
-export default Histogram;
+export default withViewer(Histogram, { data });
