@@ -12,7 +12,6 @@ import styles from './index.module.css';
 interface Props {
   examples: {
     name: string;
-    description: string;
   }[];
 }
 
@@ -28,7 +27,7 @@ const Index: React.FC<Props> = ({ examples }) => {
             <Card
               name={normalizeExampleName(example.name)}
               href={`curated/${example.name}`}
-              description={example.description}
+              description=""
             />
           </li>
         ))}
@@ -38,24 +37,19 @@ const Index: React.FC<Props> = ({ examples }) => {
 };
 
 export async function getStaticProps(): Promise<{ props: Props }> {
-  // const descriptions = {
-  //   curated:
-  //     "These examples were reproduced from Mike Bostock's collection of notebooks on Observeable's Plot library.",
-  //   'real-world':
-  //     'These examples were copied directly from published outlets like the New York Times, Washington Post and FiveThirtyEight.',
-  // };
-
   const files = fs.readdirSync(
     path.join(process.cwd(), 'pages', 'examples', 'curated')
   );
   const examples = files
-    .filter((file) => path.extname(file) === '.tsx')
+    .filter(
+      (file) =>
+        path.extname(file) === '.tsx' && path.basename(file, '.tsx') !== 'index'
+    )
     .map((file) => {
       const name = path.basename(file, '.tsx');
 
       return {
         name,
-        description: '',
       };
     });
 

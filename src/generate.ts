@@ -12,12 +12,16 @@ import type {
   PresAttrs,
 } from './ir';
 
-interface DotData {
+interface Scales {
   x: string;
   y: string;
 }
 
-interface StripData extends DotData {
+interface ScatterData extends Scales {
+  r: string;
+}
+
+interface StripData extends Scales {
   z: string;
   basis: string;
 }
@@ -29,15 +33,11 @@ interface PlotPresData {
   };
 }
 
-interface ScatterData extends DotData {
-  r: string;
-}
-
 type Template<T> = (data: T) => string;
 
 export function generate(
   spec: VizSpec
-): Template<DotData> | Template<ScatterData> | Template<StripData> {
+): Template<Scales> | Template<ScatterData> | Template<StripData> {
   switch (spec.type) {
     case 'BarChart':
     case 'StackedBarChart':
@@ -53,16 +53,16 @@ export function generate(
   }
 }
 
-const generateBar = (spec: BarChart | StackedBarChart): Template<DotData> =>
+const generateBar = (spec: BarChart | StackedBarChart): Template<Scales> =>
   withColor(spec, fromSpec(spec, barMark));
 
-const generateHistogram = (spec: Histogram): Template<DotData> =>
+const generateHistogram = (spec: Histogram): Template<Scales> =>
   withColor(spec, fromSpec(spec, histogramMark));
 
 const generateScatterplot = (spec: Scatterplot): Template<ScatterData> =>
   withColor(spec, fromSpec(spec, scatterMark));
 
-const generateBubble = (spec: BubbleChart): Template<DotData> =>
+const generateBubble = (spec: BubbleChart): Template<Scales> =>
   withColor(spec, fromSpec(spec, bubbleMark));
 
 const generateStrip = (spec: StripPlot): Template<StripData> =>
@@ -148,7 +148,10 @@ function fields<T>(...fieldNames: (keyof T)[]): Template<T> {
 
 function field<T>(fieldName: keyof T): Template<T> {
   return (data: T): string => {
-    const fName = camelCase(`${fieldName}`);
+    // Plot cannot understand strokeWidth values provided as strings like "1px",
+    // but it does correctly apply ['stroke-width']: 1px.
+    const fName =
+      fieldName === 'stroke-width' ? fieldName : camelCase(`${fieldName}`);
     const fData = data[fieldName];
 
     // If our fill or stroke attributes in the spec are arrays with length > 1
@@ -176,7 +179,7 @@ function field<T>(fieldName: keyof T): Template<T> {
 }
 
 const plotPresFields: Template<PlotPresData> = fields('color');
-const coordFields: Template<DotData> = fields('x', 'y');
+const scaleFields: Template<Scales> = fields('x', 'y');
 const scatterFields: Template<ScatterData> = fields('x', 'y', 'r');
 const stripFields: Template<StripData> = fields('x', 'y', 'z', 'basis');
 
@@ -194,9 +197,9 @@ const mark = <S extends PresAttrs, T>(
 ): Template<S & T> =>
   wrap(`Plot.${markType}(data, `, json(presAttrsFields, specialFields), ')');
 
-const barMark: Template<PresAttrs & DotData> = mark('barY', coordFields);
+const barMark: Template<PresAttrs & Scales> = mark('barY', scaleFields);
 
-const histogramMark: Template<PresAttrs & DotData> = mark(
+const histogramMark: Template<PresAttrs & Scales> = mark(
   'rectY',
   splat('Plot.binX', comma(json(field('y')), json(field('x'))))
 );
@@ -205,7 +208,7 @@ const scatterMark: Template<PresAttrs & ScatterData> = mark(
   'dot',
   scatterFields
 );
-const bubbleMark: Template<PresAttrs & DotData> = mark('dot', coordFields);
+const bubbleMark: Template<PresAttrs & Scales> = mark('dot', scaleFields);
 const stripMark: Template<PresAttrs & StripData> = mark(
   'dotX',
   splat('Plot.normalizeX', json(stripFields))
