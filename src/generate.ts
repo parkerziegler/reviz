@@ -21,11 +21,6 @@ interface ScatterData extends Scales {
   r: string;
 }
 
-interface StripData extends Scales {
-  z: string;
-  basis: string;
-}
-
 interface PlotPresData {
   color?: {
     type: 'ordinal';
@@ -37,7 +32,7 @@ type Template<T> = (data: T) => string;
 
 export function generate(
   spec: VizSpec
-): Template<Scales> | Template<ScatterData> | Template<StripData> {
+): Template<Scales> | Template<ScatterData> {
   switch (spec.type) {
     case 'BarChart':
     case 'StackedBarChart':
@@ -65,7 +60,7 @@ const generateScatterplot = (spec: Scatterplot): Template<ScatterData> =>
 const generateBubble = (spec: BubbleChart): Template<Scales> =>
   withColor(spec, fromSpec(spec, bubbleMark));
 
-const generateStrip = (spec: StripPlot): Template<StripData> =>
+const generateStrip = (spec: StripPlot): Template<Scales> =>
   withColor(spec, fromSpec(spec, stripMark));
 
 const withColor = <S extends PresAttrs, T>(
@@ -181,7 +176,6 @@ function field<T>(fieldName: keyof T): Template<T> {
 const plotPresFields: Template<PlotPresData> = fields('color');
 const scaleFields: Template<Scales> = fields('x', 'y');
 const scatterFields: Template<ScatterData> = fields('x', 'y', 'r');
-const stripFields: Template<StripData> = fields('x', 'y', 'z', 'basis');
 
 const presAttrsFields: Template<PresAttrs> = fields(
   'fill',
@@ -209,7 +203,4 @@ const scatterMark: Template<PresAttrs & ScatterData> = mark(
   scatterFields
 );
 const bubbleMark: Template<PresAttrs & Scales> = mark('dot', scaleFields);
-const stripMark: Template<PresAttrs & StripData> = mark(
-  'dotX',
-  splat('Plot.normalizeX', json(stripFields))
-);
+const stripMark: Template<PresAttrs & Scales> = mark('dotX', scaleFields);
