@@ -1,7 +1,12 @@
 :root {
   --color-linework: #e2e2e2;
   --color-bg: #fbfbfb;
+  --color-link: #e7131a;
   --spacing: 0.2rem;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html {
@@ -25,4 +30,14 @@ svg {
 
 .viz {
   grid-area: viz;
+}
+
+.no-fouc {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.fouc {
+  visibility: visible;
+  opacity: 1;
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Highlight, { defaultProps } from 'prism-react-renderer';
 import theme from 'prism-react-renderer/themes/nightOwlLight';
+import cs from 'classnames';
 
 import styles from './CodePane.module.css';
 
@@ -8,11 +9,12 @@ interface Props {
   code: string;
   name: string;
   compile: () => void;
+  perf: number;
 }
 
-const CodePane: React.FC<Props> = ({ code, name, compile }) => {
+const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
   return (
-    <div className={styles['code-pane__container']}>
+    <div className={styles['code-pane']}>
       <Highlight
         {...defaultProps}
         code={code}
@@ -21,7 +23,10 @@ const CodePane: React.FC<Props> = ({ code, name, compile }) => {
       >
         {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <pre className={`${className} ${styles['code-pane']}`} style={style}>
+          <pre
+            className={cs(styles['code-pane__body'], className)}
+            style={style}
+          >
             {tokens.map((line, i) => (
               <div
                 {...getLineProps({ line, key: i })}
@@ -59,7 +64,12 @@ const CodePane: React.FC<Props> = ({ code, name, compile }) => {
           </svg>
           Compile
         </button>
-        <p className={styles['code-pane__name']}>{name}</p>
+        {perf ? (
+          <p className={styles['code-pane__info']}>Compiled in {perf} ms</p>
+        ) : null}
+        <p className={cs(styles['code-pane__info'], styles['code-pane__name'])}>
+          {name}
+        </p>
       </div>
     </div>
   );

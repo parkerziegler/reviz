@@ -59,4 +59,8 @@ const Histogram: React.FC = () => {
   );
 };
 
-export default withViewer(Histogram, { data });
+export default withViewer(Histogram, {
+  data,
+  href: 'https://observablehq.com/@parkerziegler/playing-with-the-collatz-conjecture',
+  title: 'From Observable: Playing with the Collatz Conjecture',
+});

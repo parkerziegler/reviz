@@ -1,35 +1,26 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 import * as React from 'react';
+import * as d3 from 'd3';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { readData } from '../../../helpers/server';
 import { withViewer } from '../../../components/Viewer';
 
-interface Car {
-  name: string;
-  'economy (mpg)': number;
-  cylinders: number;
-  'displacement (cc)': number;
-  'power (hp)': number;
-  'weight (lb)': number;
-  '0-60 mph (s)': number;
-  year: number;
-}
-
 interface Props {
-  data: Car[];
+  data: d3.DSVRowArray<string>;
 }
 
 const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const plot = Plot.plot({
-      grid: true,
-      marks: [
-        Plot.dot(data, { x: 'economy (mpg)', y: 'power (hp)', fill: 'orange' }),
-      ],
-    });
+    const plot = Plot.dot(data, {
+      x: 'weight',
+      y: 'height',
+      stroke: 'sex',
+    }).plot();
 
     root.current.appendChild(plot);
 
@@ -45,17 +36,28 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
-        <title>reviz: Scatterplot</title>
+        <title>reviz: Scatterplot Color</title>
       </Head>
-      {React.createElement(withViewer<Props>(Chart, { data }))}
+      {React.createElement(
+        withViewer(Chart, {
+          data,
+          href: 'https://observablehq.com/@observablehq/plot?collection=@observablehq/plot',
+          title: 'From Observable: Observable Plot',
+        })
+      )}
     </>
   );
 };
 
 export async function getStaticProps(): Promise<{ props: Props }> {
+  const json = fs
+    .readFileSync(path.join(process.cwd(), 'data/athletes.json'))
+    .toString();
+  const data = JSON.parse(json);
+
   return {
     props: {
-      data: readData<Car>('cars'),
+      data,
     },
   };
 }

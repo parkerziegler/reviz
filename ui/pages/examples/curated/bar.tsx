@@ -46,7 +46,13 @@ const BarChart: React.FC<Props> = ({ data }) => {
       <Head>
         <title>reviz: Bar Chart</title>
       </Head>
-      {React.createElement(withViewer(Chart, { data }))}
+      {React.createElement(
+        withViewer(Chart, {
+          data,
+          href: 'https://observablehq.com/@observablehq/plot-bar?collection=@observablehq/plot',
+          title: 'From Observable: Plot: Bar',
+        })
+      )}
     </>
   );
 };

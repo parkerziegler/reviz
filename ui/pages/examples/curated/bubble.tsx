@@ -48,14 +48,7 @@ const Chart: React.FC<Props> = ({ data }) => {
     };
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>reviz: Bubble Chart</title>
-      </Head>
-      <div ref={root}></div>
-    </>
-  );
+  return <div ref={root}></div>;
 };
 
 const BubbleChart: React.FC<Props> = ({ data }) => {
@@ -64,7 +57,13 @@ const BubbleChart: React.FC<Props> = ({ data }) => {
       <Head>
         <title>reviz: Bubble Chart</title>
       </Head>
-      {React.createElement(withViewer(Chart, { data }))}
+      {React.createElement(
+        withViewer(Chart, {
+          data,
+          href: 'https://observablehq.com/@observablehq/plot-dot?collection=@observablehq/plot',
+          title: 'From Observable: Plot: Dot',
+        })
+      )}
     </>
   );
 };

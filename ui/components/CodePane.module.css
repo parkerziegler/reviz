@@ -1,22 +1,24 @@
 .code-pane {
-  margin: 0;
-  font-family: monospace;
-  font-size: 1.2rem;
   position: relative;
-  overflow: auto;
-}
-
-.code-pane:last-child {
-  border-top: none;
-}
-
-.code-pane__container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background: var(--color-bg);
   padding: calc(var(--spacing) * 10);
   border: 1px solid var(--color-linework);
   overflow: hidden;
+  font-family: monospace;
+}
+
+.code-pane__body {
+  flex: 1;
+  margin: 0;
+  font-size: 1.2rem;
+  overflow: auto;
+}
+
+.code-pane__body:last-child {
+  border-top: none;
 }
 
 .code-pane__line {
@@ -34,13 +36,18 @@
 .code-pane__controls {
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
   padding-top: calc(var(--spacing) * 10);
 }
 
-.code-pane__name {
+.code-pane__info {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
+}
+
+.code-pane__name {
+  position: absolute;
+  top: calc(var(--spacing) * 10);
+  right: calc(var(--spacing) * 10);
 }
 
 .code-pane__synthesize {

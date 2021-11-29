@@ -14,18 +14,35 @@ const Viewer: React.FC = ({ children }) => {
 const isSVGElement = (element: Element | null): element is SVGElement =>
   element?.nodeName === 'svg';
 
-export function withViewer<T>(Viz: React.FC<T>, data: T): React.FC {
+interface WithViewerProps {
+  href: string;
+  title: string;
+}
+
+export function withViewer<T>(
+  Viz: React.FC<{ data: T }>,
+  props: { data: T } & WithViewerProps
+): React.FC {
   const WithViewer: React.FC = () => {
-    const [vizSpec, setVizSpec] = React.useState('Waiting to generate...');
-    const [vizProgram, setVizProgram] = React.useState(
-      'Waiting to generate...'
-    );
+    const [vizSpec, setVizSpec] = React.useState('Click to generate...');
+    const [vizProgram, setVizProgram] = React.useState('Click to generate...');
+    const [perf, setPerf] = React.useState(0);
 
     const compile = React.useCallback(() => {
       const viz = document.querySelector('svg');
 
       if (isSVGElement(viz)) {
+        performance.mark('pre-compile');
+
         const { spec, program } = analyzeVisualization(viz);
+
+        performance.mark('post-compile');
+        performance.measure('compile', 'pre-compile', 'post-compile');
+
+        const entries = performance.getEntriesByName('compile');
+
+        const result = entries.map((entry) => entry.duration);
+
         setVizSpec(JSON.stringify(spec, null, 2));
         setVizProgram(
           prettier.format(program, {
@@ -33,14 +50,32 @@ export function withViewer<T>(Viz: React.FC<T>, data: T): React.FC {
             plugins: [babylon],
           })
         );
+        setPerf(result[0]);
       }
     }, []);
 
     return (
       <div className={styles['viewer']}>
-        <Viz {...data} />
-        <CodePane code={vizSpec} name="Spec" compile={compile} />
-        <CodePane code={vizProgram} name="Program" compile={compile} />
+        <div className={styles['viewer__viz']}>
+          <div className={styles['viewer__viz-container']}>
+            <Viz data={props.data} />
+          </div>
+          <a
+            href={props.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles['viewer__link']}
+          >
+            {props.title}
+          </a>
+        </div>
+        <CodePane code={vizSpec} name="Spec" compile={compile} perf={perf} />
+        <CodePane
+          code={vizProgram}
+          name="Program"
+          compile={compile}
+          perf={perf}
+        />
       </div>
     );
   };

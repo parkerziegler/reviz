@@ -39,10 +39,10 @@ interface StateAge {
 }
 
 interface Props {
-  stateAges: StateAge[];
+  data: StateAge[];
 }
 
-const Chart: React.FC<Props> = ({ stateAges }) => {
+const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -60,7 +60,7 @@ const Chart: React.FC<Props> = ({ stateAges }) => {
       },
       marks: [
         Plot.ruleX([0]),
-        Plot.dotX(stateAges, {
+        Plot.dotX(data, {
           ...Plot.normalizeX({
             basis: 'sum',
             z: 'state',
@@ -84,26 +84,32 @@ const Chart: React.FC<Props> = ({ stateAges }) => {
   return <div ref={root}></div>;
 };
 
-const StripPlot: React.FC<Props> = ({ stateAges }) => {
+const StripPlot: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
         <title>reviz: Strip Plot</title>
       </Head>
-      {React.createElement(withViewer(Chart, { stateAges }))}
+      {React.createElement(
+        withViewer(Chart, {
+          data,
+          href: 'https://observablehq.com/@observablehq/plot-tick',
+          title: 'From Observable: Plot: Tick',
+        })
+      )}
     </>
   );
 };
 
 export async function getStaticProps(): Promise<{ props: Props }> {
   const states = readData<StateDistribution>('states');
-  const stateAges = ages.flatMap((age) =>
+  const data = ages.flatMap((age) =>
     states.map((d) => ({ state: d.name, age, population: d[age] } as StateAge))
   );
 
   return {
     props: {
-      stateAges,
+      data,
     },
   };
 }

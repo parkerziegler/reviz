@@ -1,0 +1,29 @@
+.axis {
+  font-size: 11px;
+  -webkit-font-smoothing: antialiased;
+  fill: #999;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.axis.y .tick line,
+.axis.y path,
+.grid path {
+  display: none;
+}
+
+.bar text {
+  fill: #fff;
+  font-size: 12px;
+}
+
+.grid .tick {
+  stroke: #eee;
+  color: #eee;
+  stroke-width: 1px;
+}
