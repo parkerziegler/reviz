@@ -3,6 +3,7 @@ import {
   PRES_ATTR_NAMES,
   RECT_ATTR_NAMES,
 } from './constants';
+import { WalkCallback } from './walk';
 
 export interface RevizDatum {
   nodeName: string;
@@ -10,70 +11,72 @@ export interface RevizDatum {
   presAttrs: Record<string, string>;
 }
 
-/**
- * collectAttributes will collect a set of attributes off an Element,
- * checking both attributes from the DOM and computed styles.
- *
- * @param element – the element to inspect.
- * @param attrs – the names of attributes to aggregate
- * @returns
- */
-function collectAttributes(
-  element: Element,
-  attrs: string[]
-): Record<string, string> {
+export type AttrSets = Record<string, Set<string>>;
+
+export const initializeAttrSets = (attrs: string[]): AttrSets => {
   return attrs.reduce((acc, attr) => {
+    acc[attr] = new Set();
+
+    return acc;
+  }, {} as AttrSets);
+};
+
+export const collectMarkType =
+  (markTypes: string[]): WalkCallback =>
+  (element): void => {
+    markTypes.push(element.nodeName);
+  };
+
+const readAttrs = (
+  element: Element,
+  attrs: string[],
+  attrSets: AttrSets
+): void => {
+  attrs.forEach((attr) => {
     const value = element.getAttribute(attr);
 
     if (value) {
-      acc[attr] = value;
+      attrSets[attr].add(value);
     } else {
       const computedStyles = window.getComputedStyle(element);
       const computedValue = computedStyles.getPropertyValue(attr);
 
-      acc[attr] = computedValue;
+      attrSets[attr].add(computedValue);
     }
+  });
+};
 
-    return acc;
-  }, {} as Record<string, string>);
-}
-
-/**
- * collectDataAttributes aggregates all geometric and presentational attributes of all
- * element in the svg subtree into a normalized schema, RevizDatum.
- *
- * @param elements – the array of elements obtained from walking the svg subtree.
- * @returns – the array of normalized RevizDatum elements.
- */
-export function collectDataAttributes(elements: Element[]): RevizDatum[] {
-  return elements.map((element) => {
+export const collectGeomAttrs =
+  (geomAttrs: AttrSets): WalkCallback =>
+  (element): void => {
     const nodeName = element.nodeName;
-
-    let geomAttrNames: string[] = [];
 
     switch (nodeName) {
       case 'circle':
-        geomAttrNames = CIRCLE_ATTR_NAMES;
+        readAttrs(element, CIRCLE_ATTR_NAMES, geomAttrs);
         break;
       case 'rect':
-        geomAttrNames = RECT_ATTR_NAMES;
+        readAttrs(element, RECT_ATTR_NAMES, geomAttrs);
         break;
       default:
         break;
     }
+  };
 
-    const geomAttrs = collectAttributes(element, geomAttrNames);
-    const presAttrs = collectAttributes(element, PRES_ATTR_NAMES);
+export const collectPresAttrs =
+  (presAttrs: AttrSets): WalkCallback =>
+  (element): void => {
+    const nodeName = element.nodeName;
 
-    const datum = {
-      nodeName,
-      geomAttrs,
-      presAttrs,
-    };
-
-    return datum;
-  });
-}
+    switch (nodeName) {
+      case 'rect':
+      case 'circle':
+        readAttrs(element, PRES_ATTR_NAMES, presAttrs);
+        break;
+      default:
+        break;
+    }
+  };
 
 export interface RevizTextDatum {
   x: string;
@@ -81,26 +84,57 @@ export interface RevizTextDatum {
   text: string;
 }
 
-/**
- * collectTextAttributes looks at all <text> elements of the svg subtree and
- * captures their pixel locations (relative to the viewport) and text content.
- *
- * @param elements – the array of elements obtained from walking the svg subtree.
- * @returns - the array of normalized RevizTextDatum elements.
- */
-export function collectTextAttributes(elements: Element[]): RevizTextDatum[] {
-  const textElements = elements.filter(
-    (element) => element.nodeName === 'text'
-  );
+export const collectTextAttrs =
+  (textAttrs: RevizTextDatum[]): WalkCallback =>
+  (element): void => {
+    if (element.nodeName !== 'text') {
+      return;
+    }
 
-  return textElements.map((element) => {
     const { x, y } = element.getBoundingClientRect();
     const text = element.textContent;
 
-    return {
+    textAttrs.push({
       x: x.toFixed(3),
       y: y.toFixed(3),
       text: text ?? '',
-    };
-  });
+    });
+  };
+
+export interface RevizPositionDatum {
+  x?: string;
+  cy?: string;
 }
+
+export const collectPositionAttrs =
+  (data: RevizPositionDatum[]): WalkCallback =>
+  (element): void => {
+    const nodeName = element.nodeName;
+
+    switch (nodeName) {
+      case 'circle':
+        {
+          const cy = element.getAttribute('cy');
+
+          if (cy) {
+            data.push({
+              cy,
+            });
+          }
+        }
+        break;
+      case 'rect':
+        {
+          const x = element.getAttribute('x');
+
+          if (x) {
+            data.push({
+              x,
+            });
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  };

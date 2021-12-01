@@ -1,8 +1,9 @@
 import overEvery from 'lodash.overevery';
 import groupBy from 'lodash.groupby';
 
-import type { VizAttrs } from './inference';
 import { PRES_ATTR_NAMES } from './constants';
+import { VizMetaAttrs } from './inference';
+import { AttrSets, RevizPositionDatum, RevizTextDatum } from './attributes';
 
 export interface PresAttrs {
   fill: string[];
@@ -57,6 +58,12 @@ export type VizSpec =
  * We then use lodash's overEvery function to compose these predicates; a visualization is of a
  * particular type if it returns true for all of that visualization's associated predicates.
  */
+interface VizAttrs extends VizMetaAttrs {
+  geomAttrs: AttrSets;
+  presAttrs: AttrSets;
+  textAttrs: RevizTextDatum[];
+  positionAttrs: RevizPositionDatum[];
+}
 
 type Predicate = (vizAttrs: VizAttrs) => boolean;
 
@@ -91,12 +98,12 @@ const hasDivergentGeomAttr =
 
 // Element predicates.
 const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
-  const lanes = Object.values(groupBy(vizAttrs.data, (d) => d.geomAttrs['cy']));
+  const lanes = Object.values(groupBy(vizAttrs.positionAttrs, (d) => d.cy));
 
-  const siblingCount = vizAttrs.data.reduce((acc, datum, i) => {
+  const siblingCount = vizAttrs.positionAttrs.reduce((acc, datum, i) => {
     if (
-      typeof vizAttrs.data[i + 1] !== 'undefined' &&
-      datum.geomAttrs['cy'] === vizAttrs.data[i + 1].geomAttrs['cy']
+      typeof vizAttrs.positionAttrs[i + 1] !== 'undefined' &&
+      datum.cy === vizAttrs.positionAttrs[i + 1].cy
     ) {
       acc += 1;
     }
@@ -104,11 +111,11 @@ const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
     return acc;
   }, 0);
 
-  return siblingCount + lanes.length === vizAttrs.data.length;
+  return siblingCount + lanes.length === vizAttrs.positionAttrs.length;
 };
 
 const hasEqualSizedGroups: Predicate = (vizAttrs): boolean => {
-  const lanes = Object.values(groupBy(vizAttrs.data, (d) => d.geomAttrs['x']));
+  const lanes = Object.values(groupBy(vizAttrs.positionAttrs, (d) => d.x));
 
   const laneLength = lanes[0].length;
   return lanes.every((lane) => lane.length > 1 && lane.length === laneLength);

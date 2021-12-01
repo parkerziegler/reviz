@@ -8,13 +8,14 @@ function isElement(node: Node): node is Element {
   return Boolean(node && node.nodeType === Node.ELEMENT_NODE);
 }
 
+export type WalkCallback = (element: Element) => void;
 /**
  * A function to walk a DOM subtree and return an array of Elements in the subtree.
  * This implementation only visits Nodes of type Element.
  *
  * @param subtree – a DOM subtree.
  */
-export function walk(subtree: Node): Element[] {
+export function walk(subtree: Node, cbs: WalkCallback[] = []): void {
   const treeWalker = document.createTreeWalker(
     subtree,
     NodeFilter.SHOW_ELEMENT,
@@ -30,14 +31,12 @@ export function walk(subtree: Node): Element[] {
   );
 
   let currentNode: Node | null = treeWalker.currentNode;
-  const elements: Element[] = [];
 
   while (currentNode) {
     if (isElement(currentNode)) {
-      elements.push(currentNode);
+      const el = currentNode;
+      cbs.forEach((cb) => cb(el));
     }
     currentNode = treeWalker.nextNode();
   }
-
-  return elements;
 }

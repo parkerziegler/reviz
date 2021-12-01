@@ -1,28 +1,63 @@
 import { walk } from './walk';
-import { collectDataAttributes, collectTextAttributes } from './attributes';
-import { inferVizAttributes } from './inference';
+import {
+  initializeAttrSets,
+  collectMarkType,
+  collectGeomAttrs,
+  collectPresAttrs,
+  collectTextAttrs,
+  AttrSets,
+  RevizTextDatum,
+  collectPositionAttrs,
+  RevizPositionDatum,
+} from './attributes';
+import { inferVizMetaAttrs } from './inference';
 import { buildVizSpec, VizSpec } from './ir';
 import { generate } from './generate';
+import {
+  CIRCLE_ATTR_NAMES,
+  PRES_ATTR_NAMES,
+  RECT_ATTR_NAMES,
+} from './constants';
 
 interface Output {
   spec: VizSpec;
   program: string;
 }
 
-export function analyzeVisualization(root: SVGElement): Output {
-  const elements = walk(root);
+export const analyzeVisualization = (root: SVGElement): Output => {
+  const markTypes: string[] = [];
+  const geomAttrs: AttrSets = initializeAttrSets([
+    ...CIRCLE_ATTR_NAMES,
+    ...RECT_ATTR_NAMES,
+  ]);
+  const presAttrs: AttrSets = initializeAttrSets(PRES_ATTR_NAMES);
+  const textAttrs: RevizTextDatum[] = [];
+  const positionAttrs: RevizPositionDatum[] = [];
 
-  const dataAttrs = collectDataAttributes(elements);
-  const textAttrs = collectTextAttributes(elements);
-  const vizAttrs = inferVizAttributes(dataAttrs, textAttrs);
+  walk(root, [
+    collectMarkType(markTypes),
+    collectGeomAttrs(geomAttrs),
+    collectPresAttrs(presAttrs),
+    collectTextAttrs(textAttrs),
+    collectPositionAttrs(positionAttrs),
+  ]);
 
-  const vizSpec = buildVizSpec(vizAttrs);
+  const vizMetaAttrs = inferVizMetaAttrs({
+    markTypes,
+    textAttrs,
+  });
+
+  const vizSpec = buildVizSpec({
+    ...vizMetaAttrs,
+    geomAttrs,
+    presAttrs,
+    textAttrs,
+    positionAttrs,
+  });
   const program = generate(vizSpec);
-  // eslint-disable-next-line no-console
-  console.log({ vizSpec, program });
 
   return {
     spec: vizSpec,
-    program: program({ x: '?', y: '?', r: '?', z: '?', basis: '?' }),
+    program: program({ x: '?', y: '?', r: '?' }),
   };
-}
+};
