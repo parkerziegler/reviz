@@ -34,7 +34,8 @@
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
-    "dist/"
+    "dist/",
+    "!dist/types/tsconfig.tsbuildinfo"
   ],
   "dependencies": {
     "d3-array": "^3.1.1",
