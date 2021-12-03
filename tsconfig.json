@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "noUnusedLocals": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -17,16 +14,11 @@
     "target": "esnext",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

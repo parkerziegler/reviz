@@ -2,7 +2,9 @@
   "name": "reviz",
   "version": "0.1.0",
   "description": "An engine for reverse engineering data visualizations from the DOM.",
-  "main": "index.js",
+  "main": "dist/reviz.js",
+  "module": "dist/reviz.esm.js",
+  "types": "dist/types/index.d.ts",
   "contributors": [
     {
       "name": "Parker Ziegler",
@@ -16,11 +18,24 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "yarn check:ts && esbuild src/index.ts --bundle --outdir=dist",
+    "build": "yarn check:ts && yarn emit:types && yarn build:esm:dev && yarn build:esm:prod && yarn build:cjs:dev && yarn build:cjs:prod",
+    "build:esm:dev": "esbuild src/index.ts --bundle --sourcemap --format=esm --outfile=dist/reviz.esm.js",
+    "build:esm:prod": "esbuild src/index.ts --bundle --minify --format=esm --outfile=dist/reviz.esm.min.js",
+    "build:cjs:dev": "esbuild src/index.ts --bundle --sourcemap --format=cjs --outfile=dist/reviz.js",
+    "build:cjs:prod": "esbuild src/index.ts --bundle --minify --outfile=dist/reviz.min.js",
     "check:ts": "tsc --noEmit",
+    "clean": "rimraf ./dist ./node_modules/.cache",
+    "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
     "format": "prettier --write **/*.{ts,tsx} **/*.json",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "preversion": "yarn clean && yarn check:ts && yarn build"
   },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "dist/"
+  ],
   "dependencies": {
     "d3-array": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
@@ -42,6 +57,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
     "typescript": "^4.4.4"
   },
   "prettier": {
