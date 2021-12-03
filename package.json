@@ -18,20 +18,18 @@
   "scripts": {
     "build": "yarn check:ts && esbuild src/index.ts --bundle --outdir=dist",
     "check:ts": "tsc --noEmit",
-    "dev": "next dev",
     "format": "prettier --write **/*.{ts,tsx} **/*.json",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
-    "@observablehq/plot": "^0.2.9",
-    "d3": "^7.1.1",
+    "d3-array": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.overevery": "^4.7.0"
   },
   "devDependencies": {
-    "@types/d3": "^7.1.0",
+    "@types/d3-array": "^3.0.2",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.isplainobject": "^4.0.6",

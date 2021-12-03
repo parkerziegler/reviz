@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { mode } from 'd3-array';
 import groupBy from 'lodash.groupby';
 
 import type { RevizTextDatum } from './attributes';
@@ -16,7 +16,7 @@ export const inferMarkType = (markTypes: string[]): 'rect' | 'circle' => {
 
   // @ts-expect-error – there are no updated type definitions for d3 v7, so
   // d3.mode still believes it can only return numbers in the accessor function.
-  return d3.mode(filteredElements);
+  return mode(filteredElements);
 };
 
 /**
