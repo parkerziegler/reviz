@@ -114,24 +114,22 @@ export const collectPositionAttrs =
     switch (nodeName) {
       case 'circle':
         {
-          const cy = element.getAttribute('cy');
+          const cySet = new Set<string>();
+          readAttrs(element, ['cy'], { cy: cySet });
 
-          if (cy) {
-            data.push({
-              cy,
-            });
-          }
+          data.push({
+            cy: Array.from(cySet)[0],
+          });
         }
         break;
       case 'rect':
         {
-          const x = element.getAttribute('x');
+          const xSet = new Set<string>();
+          readAttrs(element, ['x'], { x: xSet });
 
-          if (x) {
-            data.push({
-              x,
-            });
-          }
+          data.push({
+            x: Array.from(xSet)[0],
+          });
         }
         break;
       default:
