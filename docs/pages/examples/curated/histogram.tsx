@@ -35,7 +35,10 @@ const Histogram: React.FC = () => {
       },
       marks: [
         Plot.rectY(data, {
-          ...Plot.binX({ y: 'count' }, { x: (d: number) => d }),
+          ...Plot.binX(
+            { y: 'count', thresholds: 200 },
+            { x: (d: number) => d }
+          ),
           fill: 'steelblue',
         }),
         Plot.ruleY([0]),

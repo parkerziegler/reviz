@@ -1,0 +1,232 @@
+\documentclass[acmsmall,screen,nonacm]{acmart}
+
+\usepackage{calc}
+\usepackage[export]{adjustbox}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\sis}{% syntax is
+  ::=
+}
+\newcommand{\sor}{% syntax or
+  \mathrel{\makebox[\widthof{$\sis$}]{$|$}}%
+}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+\setcopyright{none}
+\acmBooktitle{}
+
+% https://tex.stackexchange.com/questions/456063/how-to-remove-authors-addresses-in-acm-art
+\makeatletter
+\let\@authorsaddresses\@empty
+\makeatother
+
+\begin{document}
+
+\title{reviz: A lightweight engine for reverse engineering data visualizations from the DOM}
+
+\author{Parker Ziegler}
+\email{peziegler@berkeley.edu}
+\affiliation{
+    \institution{University of California, Berkeley}
+    \city{Berkeley}
+    \state{California}
+    \country{USA}
+}
+
+\author{Logan Caraco}
+\email{logan_carco@berkeley.edu}
+\affiliation{
+    \institution{University of California, Berkeley}
+    \city{Berkeley}
+    \state{California}
+    \country{USA}
+}
+
+\maketitle
+
+\section{Introduction}
+
+For many data visualization developers, examples play a foundational role in their design process \cite{bostock:2021,bostock:2013}. Examples help demonstrate challenging techniques, reveal new possibilities for exploring a dataset, and serve as essential building blocks from which to get started. Examples also allow for rapid, iterative visualization sketching, in which users can see their data in many visualization contexts quickly. However, using examples to inform the design of new data visualizations relies on the source code for such examples being accessible. Reproducing closed source visualizations, like those published in journalistic outlets, requires painstaking reverse engineering. In these situations, data visualization developers rely on techniques like manual DOM inspection to reconstruct a target visualization by hand.
+
+We introduce \code{reviz}, a lightweight engine for automatically reverse engineering data visualizations from the DOM. Given an arbitrary \code{svg} \code{Node}, \code{reviz} produces a partial JavaScript program (a program with holes) that can reproduce an input visualization when applied to a new dataset, a process we call \emph{visualization retargeting}. We show that \code{reviz} can effectively infer visualization semantics through deductive search over \code{Sets} of DOM attributes and computed styles found in the \code{svg} subtree. We also demonstrate that \code{reviz} excels in automatically reverse-engineering both simple examples from the Plot library's documentation \cite{observable_plot_docs:2021} and more complex real-world visualizations published in venues like the New York Times \cite{ivory_nyt:2021} and NPR \cite{mcminn_npr:2020}.
+
+\section{Implementation}
+
+The core implementation of \code{reviz} can be decomposed into four steps:
+
+\begin{enumerate}
+  \item Walking the input \code{svg} subtree and aggregating DOM attributes and computed styles into attribute \code{Set}s.
+  \item Using deductive search over these attribute \code{Sets} to infer a visualization type.
+  \item Constructing an intermediate representation (IR) from the inferred visualization type and attribute \code{Sets}.
+  \item Generating a partial JavaScript program using the \code{Plot} \cite{observable_plot:2021} library that, when applied to a new dataset, produces a visualization similar to the input.
+\end{enumerate}
+
+Figure \ref{fig:reviz} provides a visual overview of these phases. We describe each phase in detail in the subsequent sections.
+
+\subsection{Walking the input \code{svg} subtree}
+
+\code{reviz} begins its analysis by walking the input \code{svg} subtree using the browser's native \\ \code{document.createTreeWalker} API \cite{createTreeWalker_mozilla:2021}. \code{document.createTreeWalker} returns a \code{TreeWalker} instance that provides methods for advancing through \code{Nodes} in the subtree. As \code{reviz} visits each \code{Node} it runs a series of callback functions that read a collection of pre-defined attributes off of the \code{Node} and its computed styles. Inspecting the \code{Node}'s computed styles ensures that attributes that may be inherited from a parent \code{Node} or defined in a separate CSS stylesheet, such as \code{fill} and \code{stroke}, are still collected. In addition, \code{reviz} maintains an array of \code{nodeName}s encountered in the sub-tree (e.g. \code{rect}, \code{text}, \code{g}, etc.).
+
+The callback functions push each \code{Node}'s attribute values into \code{Set}s. Using a \code{Set} data structure ensures that duplicate attribute values encountered on different \code{Node}s in the subtree are only encoded once in the intermediate representation (IR). The result of walking the entire subtree is an object mapping attribute names to the \code{Set} of unique values for that attribute encountered on anywhere in the subtree (see Step (d) in Figure \ref{fig:reviz}).
+
+\begin{figure}
+    \centering
+    \includegraphics[max width=\linewidth]{reviz.png}
+    \caption{\textbf{A high-level overview of how \code{reviz} reverse-engineers and retargets data visualizations. The \code{reviz} architecture is somewhat akin to a traditional compiler, transforming \code{svg} subtrees into partial visualization programs. \code{reviz} uses deductive search over attribute \code{Set}s to infer a visualization type and produce its IR, which is then used to generate the partial visualization program. A user fills holes in this program (denoted by \code{"??"}) to generate an output visualization (g).}}
+    \Description[A graphic explaining the phases in the \code{reviz} reverse engineering process.]{A graphic explaining the phases in the \code{reviz} reverse engineering process. This includes (a) a user finding an input visualization, (b) \code{reviz} walking the \code{svg} subtree of the visualization, (c)\code{reviz} reading specific attributes and computed styles off of each \code{Node} in the subtree, (d) \code{reviz} collecting attributes into attribute \code{Set}s, (e) \code{reviz} generating an IR, (f) \code{reviz} synthesizing a partial JavaScript program with holes, and (g) a user supplying an input dataset to \code{reviz} to generate a new output visualization. }
+    \label{fig:reviz}
+\end{figure}
+
+\subsection{Inferring the visualization type from attribute \code{Set}s}
+
+Once \code{reviz} has finished walking the \code{svg} subtree and generated attribute \code{Set}s for all attributes of interest, it begins running inference procedures on these \code{Set}s. These procedures also take into account the mode element type of the subtree, derived by finding the mode of the \code{nodeName} array maintained during the walk.
+
+\subsubsection{Restricting visualization types}
+
+To make implementation more tractable, we restrict the set of visualization types that \code{reviz} supports; similar restrictions are found in related work \cite{poco_heer:2017, wang_etal:2019}. Our supported visualization types are defined by the following set $T$:
+$$T = \{``Scatterplot", ``BubbleChart", ``StripPlot", ``BarChart", ``StackedBarChart", ``Histogram"\}$$
+
+\subsubsection{Predicate functions over attribute \code{Set}s}
+
+For each visualization type $t \in T$, we define a \emph{unique} set of predicate functions $P$ that are associated with that visualization type. All predicate functions take in a collection of attribute \code{Set}s as input and return a Boolean value as output. If all predicate functions associated with a visualization type return \code{true} when applied to a collection of attribute \code{Set}s, we can infer that the input visualization is of that type. We define this formally as follows:
+
+\begin{quote}
+  Let $P = \{p_1, ..., p_n\}$ represent the set of predicate functions associated with a visualization type $t \in T$. Let $A = \{a_r, a_{cx}, ..., a_{fill}, a_{stroke}, ...\}$ be the set of attribute \code{Set}s for an input visualization $v$. We then say that $v$ is of type $t$ iff $\forall p \in P\forall a \in A. p(a)$.
+\end{quote}
+
+In practice, not all predicate functions are concerned with all attribute \code{Set}s; often, they are only concerned with one. For example, the predicate function \code{hasConsistentAttr} checks to see if the cardinality of an attribute \code{Set} $a$ is 1; if it returns \code{true}, this suggests that all values for that attribute in the input visualization are the same. An example for which this predicate returns \code{true} is the attribute \code{Set} $a_r$ for a scatterplot; all \code{circle} \code{Node}s in a scatterplot should, by definition, have the same value for their \code{r} attribute.
+
+\subsection{Constructing the intermediate representation (IR)}
+
+Once \code{reviz} has inferred the visualization type $t$ for an input visualization $v$, it constructs an intermediate representation (IR) that encodes the minimum essential information to recover a semantically-consistent output visualization. This includes the \emph{chart type}, \emph{geometric attributes} that define geometries of marks, and \emph{presentational attributes} that define the presentation of marks. We formalize the construction of our IR using the grammar given in Figure \ref{fig:grammar}.
+
+\begin{figure*}
+  \begin{minipage}[t]{0.45\textwidth}
+    \begin{align*}
+      \textbf{\code{circle}-based charts}~c
+      &\sis ``Scatterplot" \\
+      &\sor ``BubbleChart" \\
+      &\sor ``StripPlot"
+    \end{align*}
+  \end{minipage}
+  \begin{minipage}[t]{0.45\textwidth}
+    \begin{align*}
+      \textbf{\code{rect}-based charts}~r
+      &\sis ``BarChart" \\
+      &\sor ``StackedBarChart" \\
+      &\sor ``Histogram"
+    \end{align*}
+  \end{minipage}
+  \begin{minipage}[t]{0.9\textwidth}
+    \begin{align*}
+      \textbf{Presentational attribute}~p
+      &\sis fill: [s_0, ..., s_n] \hspace{5mm} s~is~valid~CSS~color \\
+      &\sor fill-opacity: [n_0, ..., n_z] \hspace{5mm} n \geq 0 \land n \leq 1  \\
+      &\sor stroke: [s_0, ..., s_n] \hspace{5mm} s~is~valid~CSS~color \\
+      &\sor stroke-opacity: [n_0, ..., n_z] \hspace{5mm} n \geq 0 \land n \leq 1 \\
+      &\sor stroke-width: [s_0, ..., s_n] \hspace{5mm} s~is~valid~CSS~unit
+     \end{align*}
+  \end{minipage}
+  \begin{minipage}[t]{0.4\textwidth}
+    \begin{align*}
+      \textbf{Presentational attribute list}~pl
+      &\sis p \\
+      &\sor pl, p
+    \end{align*}
+  \end{minipage}
+  \begin{minipage}[t]{0.5\textwidth}
+    \begin{align*}
+      \textbf{Start}~S
+      &\sis \{ type: c, r: n, pl \} \\
+      &\sor \{ type: r, width: n, pl \}
+    \end{align*}
+  \end{minipage}
+  \caption{\textbf{The grammar describing the encoding of the \code{reviz} IR. Metavariables $s$ and $n$ refer to string constants and numeric constants (any value encoded by the JavaScript \code{Number type}), respectively.}}
+  \Description[The grammar describing the encoding of the \code{reviz} IR.]{The grammar describing the encoding of the \code{reviz} IR. The IR is encoded as a JavaScript object with fields for the visualization type, geometric attributes of marks, and presentational attributes of marks.}
+  \label{fig:grammar}
+\end{figure*}
+
+The IR is encoded using a JavaScript object. One of the key benefits of using a JavaScript object rather than an S-expression style syntax is that we obviate the need for an additional parser. \code{reviz} runs in the browser, so it's beneficial to use a data structure the browser can natively parse. Another benefit is that the IR can be statically typed by our implementation language, TypeScript \cite{typescript:2021}.
+
+\subsection{Code generation}
+
+With the IR in hand, the final step in the \code{reviz} lifecycle involves generation of the output JavaScript program. This program produced by \code{reviz} uses the \code{Plot} library to handle low-level visualization details like defining scales, constructing data marks, and drawing axes. Plot exposes a \emph{Grammar of Graphics}\cite{wilkinson:2005}-like API in JavaScript, making it an ideal library to target in code generation. We chose Plot rather than a JSON-based alternative like Vega-Lite \cite{vega-lite:2021} to take advantage of Plot's automatic scale inference. While Vega-Lite requires end users to specify the scale types of their dataset (e.g. \code{"quantitative"}, \code{"nominal"}, \code{"temporal"}, etc.), Plot infers them automatically. This greatly reduces the number of holes we leave unfilled in the generated program.
+
+The Plot program generated by \code{reviz} is \emph{incomplete}, with holes denoted by \code{"??"} in the output. Holes in a \code{reviz} program are placeholders that correspond to encoding channels; they represent a case where the value of a particular visual attribute (e.g. the \code{x} position of a \code{circle} in a scatterplot) is derived from a column in the input dataset rather than determined statically. Thus, holes need to be manually filled by a user with a column name from the dataset they wish to visualize. Future work could experiment with requesting a user's dataset ahead of time, allowing us to preemptively fill holes and generate recommended visualizations rather than incomplete programs.
+
+\subsubsection{A contextual semantics for \code{reviz}'s code generation}
+
+The code generation process for \code{reviz} involves iterative evaluation of key-value pairs in the IR to new portions of the output partial JavaScript program, which invokes APIs from the \code{Plot} library. We use a contextual semantics to formalize this evaluation. The reducible expressions (redexes) of the contextual semantics consist of the visualization types encoded in the IR grammar. Intuitively, evaluation from the IR to the output program starts with the \code{type} key and the empty context, $\bullet$. One round of reduction and evaluation yields a program that invokes a top-level \code{Plot} API like \code{dot} or \code{barY}. From here, evaluation consists entirely of copying geometric and presentational attributes from the IR into the options object represented by the hole \{$\bullet$\}. Figures \ref{fig:consem} and \ref{fig:redrules} define the full semantics.
+
+\begin{figure}
+  \begin{minipage}[t]{0.3\textwidth}
+    \begin{align*}
+      r &\sis \{type: "Scatterplot", a\} \\
+      &\sor \{type: "BubbleChart", a\} \\
+      &\sor \{type: "StripPlot", a\} \\
+      &\sor \{type: "BarChart", a\} \\
+      &\sor \{type: "StackedBarChart", a\} \\
+      &\sor \{type: "Histogram", a\}
+    \end{align*}
+  \end{minipage}
+  \begin{minipage}[t]{0.6\textwidth}
+    \begin{align*}
+        H &\sis \bullet \\
+        &\sor \{H\} \\
+        &\sor Plot.dot("??", \{H\}) \\
+        &\sor Plot.dotX("??", \{H\}) \\
+        &\sor Plot.barY("??", \{H\}) \\
+        &\sor Plot.rectY("??", \{ ...Plot.binX(\{y: ``count"\}), \{H\} \})
+    \end{align*}
+  \end{minipage}
+  \caption{\textbf{The redexes (r) and contexts (H) of the contextual semantics defining how the \code{reviz} IR is evaluated to an incomplete JavaScript program. Non-reducible expressions include geometric and presentational attributes encoded in the IR, which fill the options context \code{\{H\}} but are not themselves reduced. Metavariable \code{a} refers to the rest of the IR object not under evaluation.}}
+  \Description[The redexes (r) and contexts (H) of the contextual semantics defining how the \code{reviz} IR is evaluated to an incomplete JavaScript program.]{The redexes (r) and contexts (H) of the contextual semantics defining how the \code{reviz} IR is evaluated to an incomplete JavaScript program.}
+  \label{fig:consem}
+\end{figure}
+
+\begin{figure}
+  \begin{minipage}[t]{\textwidth}
+      $
+      <\{ type: "Scatterplot" \}, \sigma> \rightarrow <Plot.dot(``??", \{\bullet\}), \sigma> \\
+      <\{ type: "BubbleChart" \}, \sigma> \rightarrow <Plot.dot(``??", \{\bullet\}), \sigma> \\
+      <\{ type: "StripPlot" \}, \sigma> \rightarrow <Plot.dotX(``??", \{\bullet\}), \sigma> \\
+      <\{ type: "BarChart" \}, \sigma> \rightarrow <Plot.barY(``??", \{\bullet\}), \sigma> \\
+      <\{ type: "StackedBarChart" \}, \sigma> \rightarrow <Plot.barY(``??", \{\bullet\}), \sigma> \\
+      <\{ type: "Histogram" \}, \sigma> \rightarrow <Plot.rectY(``??", \{ ...Plot.binX(\{ y: ``count" \}), \{\bullet\}\}), \sigma>
+      $
+  \end{minipage}
+    \caption{\textbf{Reduction rules defining redex evaluation. Visualization types in the \code{reviz} IR act almost as template generators for Plot API calls. Redex evaluation in \code{reviz} leads to the creation of a hole \{•\}, which becomes the next context of evaluation after the visualization type.}}
+    \label{fig:redrules}
+    \Description[Reduction rules defining redex evaluation.]{Visualization types in the \code{reviz} IR act almost as template generators for Plot API calls.}
+\end{figure}
+
+\section{Evaluation}
+
+We evaluated \code{reviz} against 6 example visualizations from the \code{Plot} documentation \cite{observable_plot_docs:2021} and 4 example visualizations from journalistic outlets like the New York Times\cite{ivory_nyt:2021} and NPR \cite{mcminn_npr:2020}. Our evaluation sought to answer two questions:
+
+\begin{enumerate}
+    \item Given an input visualization, can \code{reviz} correctly infer its chart type?
+    \item Given an input visualization and a new dataset, can \code{reviz} produce a visually similar output visualization?
+\end{enumerate}
+
+While the first question is independently verifiable, the second entails some qualitative ambiguity. By "visually similar", we mean that the output visualization matches visual characteristics like color, opacity, and linework of the input visualization. Some differences in the input and output visualizations will be the product of differences in the datasets themselves. For example, our sample visualization from the New York Times uses an ordinal color scale with five different colors for \code{fill} and \code{stroke}. There is no guarantee that all five of these colors will be used by a new dataset applied to the program \code{reviz} generates; for example, the dataset may map \code{fill} and \code{stroke} to a column with more than five (or fewer than five) discrete values.
+
+Acknowledging this ambiguity, we found that \code{reviz} correctly inferred the chart type for \textbf{nine out of ten} visualizations and produced visually similar output visualizations for \textbf{all ten} examples. The one case in which \code{reviz} failed to correctly infer the visualization type was the Dot Plot example \cite{bostock_dotplot:2018} developed by Mike Bostock on Observable. In this instance, \code{reviz} inferred the chart type to be \code{"Scatterplot"} although it should have inferred \code{"StripPlot."}
+
+\section{Related Work}
+
+Our work on \code{reviz} is most closely related to that of Harper and Agrawala\cite{harper_agrawala:2014}, who designed a tool for interactively restyling D3 visualizations. \code{reviz} improves on their work by avoiding reliance on implementation details of D3 (e.g. the attachment of the \code{\_\_data\_\_} property to DOM nodes) to recover chart semantics. This allows \code{reviz} to run on any \code{svg}-based data visualization, not just those produced by D3. Additionally, Harper and Agrawala's work only allows the end user to \emph{restyle} existing visualizations. Because \code{reviz} generates partial \code{programs}, end users can apply the program to their own data (\emph{visualization retargeting}), run the program in their own codebase, or even extend the program with additional visualization functionality.
+
+There has been significant work on reverse engineering data visualizations from bitmap images \cite{poco_heer:2017, jung_etal:2017, savva_etal:2011}. This work tends to employ deep learning approaches to recover chart semantics. For example, Poco and Heer rely on a convolutional neural network (CNN) to infer chart types, using this information to produce Vega-Lite specifications from input visualizations. Accuracy in chart type recognition is quite high in this domain, with both Rev \cite{poco_heer:2017} and ChartSense \cite{jung_etal:2017} reporting correct identification on >90\% of input visualizations. However, these approaches come with a significant drawback—they don't run in the browser, where end users are most likely to encounter the types of visualizations they want to directly reverse-engineer. Conversely, \code{reviz} is designed to run directly in the browser, taking advantage of native DOM APIs to run efficiently. In fact, \code{reviz} can synthesize correct partial programs in <10ms from visualizations with up to 200 data elements. This is a promising result that shows \code{reviz}'s viability as a tool for rapid visualization sketching.
+
+\section{Conclusion}
+
+We presented \code{reviz}, a new tool for synthesizing partial visualization programs from \code{svg} subtrees. Our work on \code{reviz} suggests that the DOM can be mined as a rich source of information for inferring visualization semantics. However, we argue that a tool like \code{reviz} is more appropriate for rapid, exploratory visualization sketching than developing production-facing data visualizations. \code{reviz} does not currently handle many visualization types, nor does it support multilayered visualizations. We see these as important future research directions to make automated reverse engineering usable in everyday data visualization development. \code{reviz} is open source and available at: \textbf{https://github.com/parkerziegler/reviz}.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+
+\end{document}
