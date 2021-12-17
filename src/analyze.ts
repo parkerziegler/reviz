@@ -15,6 +15,8 @@ import { buildVizSpec, VizSpec } from './ir';
 import { generate } from './generate';
 import {
   CIRCLE_ATTR_NAMES,
+  GeomAttrNames,
+  PresAttrNames,
   PRES_ATTR_NAMES,
   RECT_ATTR_NAMES,
 } from './constants';
@@ -26,11 +28,14 @@ interface RevizOutput {
 
 export const analyzeVisualization = (root: SVGElement): RevizOutput => {
   const markTypes: string[] = [];
-  const geomAttrs: AttrSets = initializeAttrSets([
+  const geomAttrs: AttrSets<GeomAttrNames> = initializeAttrSets<GeomAttrNames>([
     ...CIRCLE_ATTR_NAMES,
     ...RECT_ATTR_NAMES,
   ]);
-  const presAttrs: AttrSets = initializeAttrSets(PRES_ATTR_NAMES);
+
+  const presAttrs: AttrSets<PresAttrNames> =
+    initializeAttrSets<PresAttrNames>(PRES_ATTR_NAMES);
+
   const textAttrs: RevizTextDatum[] = [];
   const positionAttrs: RevizPositionDatum[] = [];
 

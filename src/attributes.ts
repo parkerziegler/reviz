@@ -1,24 +1,22 @@
 import {
   CIRCLE_ATTR_NAMES,
+  GeomAttrNames,
+  PresAttrNames,
   PRES_ATTR_NAMES,
   RECT_ATTR_NAMES,
 } from './constants';
 import { WalkCallback } from './walk';
 
-export interface RevizDatum {
-  nodeName: string;
-  geomAttrs: Record<string, string>;
-  presAttrs: Record<string, string>;
-}
+export type AttrSets<T extends string = string> = Map<T, Set<string>>;
 
-export type AttrSets = Record<string, Set<string>>;
-
-export const initializeAttrSets = (attrs: string[]): AttrSets => {
+export const initializeAttrSets = <T extends string = string>(
+  attrs: ReadonlyArray<T>
+): AttrSets<T> => {
   return attrs.reduce((acc, attr) => {
-    acc[attr] = new Set();
+    acc.set(attr, new Set());
 
     return acc;
-  }, {} as AttrSets);
+  }, new Map<T, Set<string>>());
 };
 
 export const collectMarkType =
@@ -27,27 +25,27 @@ export const collectMarkType =
     markTypes.push(element.nodeName);
   };
 
-const readAttrs = (
+const readAttrs = <T extends string = string>(
   element: Element,
-  attrs: string[],
-  attrSets: AttrSets
+  attrs: ReadonlyArray<T>,
+  attrSets: AttrSets<T>
 ): void => {
   attrs.forEach((attr) => {
     const value = element.getAttribute(attr);
 
     if (value) {
-      attrSets[attr].add(value);
+      attrSets.get(attr)?.add(value);
     } else {
       const computedStyles = window.getComputedStyle(element);
       const computedValue = computedStyles.getPropertyValue(attr);
 
-      attrSets[attr].add(computedValue);
+      attrSets.get(attr)?.add(computedValue);
     }
   });
 };
 
 export const collectGeomAttrs =
-  (geomAttrs: AttrSets): WalkCallback =>
+  (geomAttrs: AttrSets<GeomAttrNames>): WalkCallback =>
   (element): void => {
     const nodeName = element.nodeName;
 
@@ -64,7 +62,7 @@ export const collectGeomAttrs =
   };
 
 export const collectPresAttrs =
-  (presAttrs: AttrSets): WalkCallback =>
+  (presAttrs: AttrSets<PresAttrNames>): WalkCallback =>
   (element): void => {
     const nodeName = element.nodeName;
 
@@ -88,12 +86,13 @@ export const collectTextAttrs =
   (textAttrs: RevizTextDatum[]): WalkCallback =>
   (element): void => {
     if (element.nodeName !== 'text') {
-      return;
+      return undefined;
     }
 
     const { x, y } = element.getBoundingClientRect();
     const text = element.textContent;
 
+    // We arbitrarily limit text position precision to 3 decimal places.
     textAttrs.push({
       x: x.toFixed(3),
       y: y.toFixed(3),
@@ -101,10 +100,11 @@ export const collectTextAttrs =
     });
   };
 
-export interface RevizPositionDatum {
-  x?: string;
-  cy?: string;
-}
+export type RevizCirclePositionDatum = { type: 'circle'; cy: string };
+export type RevizRectPositionDatum = { type: 'rect'; x: string };
+export type RevizPositionDatum =
+  | RevizCirclePositionDatum
+  | RevizRectPositionDatum;
 
 export const collectPositionAttrs =
   (data: RevizPositionDatum[]): WalkCallback =>
@@ -115,9 +115,10 @@ export const collectPositionAttrs =
       case 'circle':
         {
           const cySet = new Set<string>();
-          readAttrs(element, ['cy'], { cy: cySet });
+          readAttrs(element, <const>['cy'], new Map([['cy', cySet]]));
 
           data.push({
+            type: 'circle',
             cy: Array.from(cySet)[0],
           });
         }
@@ -125,9 +126,10 @@ export const collectPositionAttrs =
       case 'rect':
         {
           const xSet = new Set<string>();
-          readAttrs(element, ['x'], { x: xSet });
+          readAttrs(element, <const>['x'], new Map([['x', xSet]]));
 
           data.push({
+            type: 'rect',
             x: Array.from(xSet)[0],
           });
         }

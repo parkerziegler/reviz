@@ -2,8 +2,14 @@ import overEvery from 'lodash.overevery';
 import groupBy from 'lodash.groupby';
 
 import { PRES_ATTR_NAMES } from './constants';
-import { VizMetaAttrs } from './inference';
-import { AttrSets, RevizPositionDatum, RevizTextDatum } from './attributes';
+import type { VizMetaAttrs } from './inference';
+import type {
+  AttrSets,
+  RevizCirclePositionDatum,
+  RevizPositionDatum,
+  RevizRectPositionDatum,
+  RevizTextDatum,
+} from './attributes';
 
 export interface PresAttrs {
   fill: string[];
@@ -77,12 +83,13 @@ const hasMarkType =
 const hasConsistentGeomAttr =
   (attr: 'r' | 'width'): Predicate =>
   (vizAttrs): boolean => {
-    if (vizAttrs.geomAttrs[attr] && vizAttrs.geomAttrs[attr].size === 1) {
+    if (vizAttrs.geomAttrs.get(attr)?.size === 1) {
       return true;
-    } else if (vizAttrs.geomAttrs[attr]) {
+    } else if (vizAttrs.geomAttrs.has(attr)) {
       const approxValueSet = new Set<string>();
-      vizAttrs.geomAttrs[attr].forEach((val) => {
-        approxValueSet.add(Number(val).toFixed(3));
+
+      vizAttrs.geomAttrs.get(attr)?.forEach((val) => {
+        approxValueSet.add((+val).toFixed(3));
       });
 
       return approxValueSet.size === 1;
@@ -94,31 +101,36 @@ const hasConsistentGeomAttr =
 const hasDivergentGeomAttr =
   (attr: 'r' | 'width'): Predicate =>
   (vizAttrs): boolean =>
-    vizAttrs.geomAttrs[attr] && vizAttrs.geomAttrs[attr].size > 1;
+    (vizAttrs.geomAttrs.get(attr)?.size || 0) > 1;
 
 // Element predicates.
 const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
-  const lanes = Object.values(groupBy(vizAttrs.positionAttrs, (d) => d.cy));
+  const circles = vizAttrs.positionAttrs
+    .filter((d): d is RevizCirclePositionDatum => d.type === 'circle')
+    .sort((a, b) => +a.cy - +b.cy);
 
-  const siblingCount = vizAttrs.positionAttrs.reduce((acc, datum, i) => {
-    if (
-      typeof vizAttrs.positionAttrs[i + 1] !== 'undefined' &&
-      datum.cy === vizAttrs.positionAttrs[i + 1].cy
-    ) {
+  const lanes = Object.values(groupBy(circles, (d) => d.cy));
+
+  // Get the count of all elements whose right-adjacent siblings have the same cy attr.
+  const siblingCount = circles.reduce((acc, el, i, arr) => {
+    if (el.cy === arr[i + 1].cy) {
       acc += 1;
     }
 
     return acc;
   }, 0);
 
-  return siblingCount + lanes.length === vizAttrs.positionAttrs.length;
+  return siblingCount + lanes.length === circles.length;
 };
 
 const hasEqualSizedGroups: Predicate = (vizAttrs): boolean => {
-  const lanes = Object.values(groupBy(vizAttrs.positionAttrs, (d) => d.x));
+  const rects = vizAttrs.positionAttrs
+    .filter((d): d is RevizRectPositionDatum => d.type === 'rect')
+    .sort((a, b) => +a.x - +b.x);
 
-  const laneLength = lanes[0].length;
-  return lanes.every((lane) => lane.length > 1 && lane.length === laneLength);
+  const lanes = Object.values(groupBy(rects, (d) => d.x));
+
+  return lanes.every((lane) => lane.length === lanes[0].length);
 };
 
 // Scale predicates.
@@ -215,7 +227,7 @@ export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
   const vizType = determineVizType(vizAttrs);
 
   const presAttrs = PRES_ATTR_NAMES.reduce((acc, attr) => {
-    acc[attr as keyof PresAttrs] = Array.from(vizAttrs.presAttrs[attr]);
+    acc[attr] = Array.from(vizAttrs.presAttrs.get(attr) ?? []);
 
     return acc;
   }, {} as Record<keyof PresAttrs, string[]>);
@@ -225,7 +237,7 @@ export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
     case 'StripPlot':
       return {
         type: vizType,
-        r: Number(Array.from(vizAttrs.geomAttrs['r'])[0]),
+        r: Number(Array.from(vizAttrs.geomAttrs.get('r') ?? ['3'])[0]),
         ...presAttrs,
       };
     case 'BubbleChart':
@@ -238,7 +250,7 @@ export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
     case 'Histogram':
       return {
         type: vizType,
-        width: Number(Array.from(vizAttrs.geomAttrs['width'])[0]),
+        width: Number(Array.from(vizAttrs.geomAttrs.get('width') ?? ['20'])[0]),
         ...presAttrs,
       };
   }

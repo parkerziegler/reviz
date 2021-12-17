@@ -9,6 +9,7 @@ function isElement(node: Node): node is Element {
 }
 
 export type WalkCallback = (element: Element) => void;
+
 /**
  * A function to walk a DOM subtree and return an array of Elements in the subtree.
  * This implementation only visits Nodes of type Element.
