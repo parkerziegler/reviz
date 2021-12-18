@@ -113,7 +113,7 @@ const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
 
   // Get the count of all elements whose right-adjacent siblings have the same cy attr.
   const siblingCount = circles.reduce((acc, el, i, arr) => {
-    if (el.cy === arr[i + 1].cy) {
+    if (typeof arr[i + 1] !== 'undefined' && el.cy === arr[i + 1].cy) {
       acc += 1;
     }
 
