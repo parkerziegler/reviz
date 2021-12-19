@@ -1,6 +1,6 @@
 {
   "name": "@parkerziegler/reviz",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An engine for reverse engineering data visualizations from the DOM.",
   "main": "dist/reviz.js",
   "module": "dist/reviz.esm.js",
