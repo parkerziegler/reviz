@@ -1,4 +1,3 @@
-import { mode } from 'd3-array';
 import groupBy from 'lodash.groupby';
 
 import type { RevizTextDatum } from './attributes';
@@ -9,14 +8,24 @@ import type { RevizTextDatum } from './attributes';
  * @param markTypes – the array of nodeNames encountered walking the SVG subtree.
  * @returns – the core mark type of the visualization, either 'rect' or 'circle'.
  */
-export const inferMarkType = (markTypes: string[]): 'rect' | 'circle' => {
+export const inferMarkType = (markTypes: string[]): 'circle' | 'rect' => {
   const filteredElements = markTypes.filter(
-    (markType) => markType === 'circle' || markType === 'rect'
+    (markType): markType is 'circle' | 'rect' =>
+      markType === 'circle' || markType === 'rect'
   );
 
-  // @ts-expect-error – there are no updated type definitions for d3 v7, so
-  // d3.mode still believes it can only return numbers in the accessor function.
-  return mode(filteredElements);
+  const nodeTypes = new Map<'circle' | 'rect', number>([
+    ['circle', 0],
+    ['rect', 0],
+  ]);
+
+  for (const element of filteredElements) {
+    nodeTypes.set(element, (nodeTypes.get(element) ?? 0) + 1);
+  }
+
+  return [...nodeTypes.entries()].reduce((acc, el) =>
+    el[1] > acc[1] ? el : acc
+  )[0];
 };
 
 /**

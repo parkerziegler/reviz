@@ -38,14 +38,12 @@
     "!dist/types/tsconfig.tsbuildinfo"
   ],
   "dependencies": {
-    "d3-array": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.overevery": "^4.7.0"
   },
   "devDependencies": {
-    "@types/d3-array": "^3.0.2",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.isplainobject": "^4.0.6",
