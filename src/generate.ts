@@ -11,6 +11,7 @@ import type {
   StripPlot,
   PresAttrs,
 } from './ir';
+import { PROGRAM_HOLE } from './constants';
 
 interface Scales {
   x: string;
@@ -158,7 +159,7 @@ function field<T>(fieldName: keyof T): Template<T> {
       fData.length > 1 &&
       (fieldName === 'fill' || fieldName === 'stroke')
     ) {
-      return `'${fName}': "?"`;
+      return `'${fName}': '${PROGRAM_HOLE}'`;
     }
 
     // If our field data is an object, preserve it using JSON.stringify.
