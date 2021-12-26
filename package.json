@@ -28,7 +28,8 @@
     "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
     "format": "prettier --write **/*.{ts,tsx} **/*.json",
     "lint": "eslint . --ext .ts,.tsx",
-    "preversion": "yarn clean && yarn check:ts && yarn build"
+    "preversion": "yarn clean && yarn check:ts && yarn build",
+    "test": "jest"
   },
   "files": [
     "README.md",
@@ -44,6 +45,9 @@
     "lodash.overevery": "^4.7.0"
   },
   "devDependencies": {
+    "@observablehq/plot": "^0.3.2",
+    "@sucrase/jest-plugin": "^2.2.0",
+    "@types/jest": "^27.0.3",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.isplainobject": "^4.0.6",
@@ -55,6 +59,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
+    "jest": "^27.4.5",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.4"
@@ -72,5 +77,19 @@
         }
       }
     ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-typescript"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "@sucrase/jest-plugin"
+    },
+    "moduleNameMapper": {
+      "@observablehq/plot": "<rootDir>/node_modules/@observablehq/plot/dist/plot.umd.min.js",
+      "d3": "<rootDir>/node_modules/d3/dist/d3.min.js"
+    }
   }
 }
