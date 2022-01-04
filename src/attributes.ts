@@ -45,16 +45,16 @@ const readAttrs = <T extends string = string>(
 };
 
 export const collectGeomAttrs =
-  (geomAttrs: AttrSets<GeomAttrNames>): WalkCallback =>
+  (geomAttrSets: AttrSets<GeomAttrNames>): WalkCallback =>
   (element): void => {
     const nodeName = element.nodeName;
 
     switch (nodeName) {
       case 'circle':
-        readAttrs(element, CIRCLE_ATTR_NAMES, geomAttrs);
+        readAttrs(element, CIRCLE_ATTR_NAMES, geomAttrSets);
         break;
       case 'rect':
-        readAttrs(element, RECT_ATTR_NAMES, geomAttrs);
+        readAttrs(element, RECT_ATTR_NAMES, geomAttrSets);
         break;
       default:
         break;
@@ -62,14 +62,14 @@ export const collectGeomAttrs =
   };
 
 export const collectPresAttrs =
-  (presAttrs: AttrSets<PresAttrNames>): WalkCallback =>
+  (presAttrSets: AttrSets<PresAttrNames>): WalkCallback =>
   (element): void => {
     const nodeName = element.nodeName;
 
     switch (nodeName) {
       case 'rect':
       case 'circle':
-        readAttrs(element, PRES_ATTR_NAMES, presAttrs);
+        readAttrs(element, PRES_ATTR_NAMES, presAttrSets);
         break;
       default:
         break;

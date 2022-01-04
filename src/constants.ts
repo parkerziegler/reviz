@@ -23,3 +23,6 @@ export const ATTR_NAMES = [
 // Code generation constants.
 export const PROGRAM_HOLE = '??';
 export const EVAL_HOLE = '•';
+
+// Observable Plot constants.
+export const OBSERVABLE_DEFAULT_R = 3;
