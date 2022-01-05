@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { withViewer } from '../../../components/Viewer';
+import { withViewer } from '../../components/Viewer';
 
 interface Props {
   data: d3.DSVRowArray<string>;

@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { withViewer } from '../../../components/Viewer';
+import { withViewer } from '../../components/Viewer';
 
 interface Car {
   name: string;

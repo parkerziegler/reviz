@@ -1,8 +1,0 @@
-.example-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: 2rem;
-  row-gap: 1rem;
-  list-style-type: none;
-  padding: 6rem;
-}

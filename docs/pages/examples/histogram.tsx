@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { withViewer } from '../../../components/Viewer';
+import { withViewer } from '../../components/Viewer';
 
 function collatz(n: number, stoppingTime = 0): number {
   // Base case, n has reached 1.

@@ -6,7 +6,7 @@ import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 import * as d3 from 'd3';
 
-import { withViewer } from '../../../components/Viewer';
+import { withViewer } from '../../components/Viewer';
 
 interface State {
   state: string;

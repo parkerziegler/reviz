@@ -2,17 +2,16 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { readData } from '../../../helpers/server';
-import { withViewer } from '../../../components/Viewer';
+import { readData } from '../../helpers/server';
+import { withViewer } from '../../components/Viewer';
 
-interface DeathRecord {
-  date: string;
-  cause: string;
-  deaths: number;
+interface Letter {
+  letter: string;
+  frequency: number;
 }
 
 interface Props {
-  data: DeathRecord[];
+  data: Letter[];
 }
 
 const Chart: React.FC<Props> = ({ data }) => {
@@ -20,14 +19,14 @@ const Chart: React.FC<Props> = ({ data }) => {
 
   React.useEffect(() => {
     const plot = Plot.plot({
-      x: {
-        tickFormat: (d: string) =>
-          new Date(d).toLocaleString('en', { month: 'narrow' }),
-        label: null,
+      y: {
+        label: 'frequency (%)',
       },
       marks: [
-        Plot.barY(data, { x: 'date', y: 'deaths', fill: 'cause' }),
-        Plot.ruleY([0]),
+        Plot.barY(data, {
+          x: 'letter',
+          y: (d: Letter): number => d.frequency * 100,
+        }),
       ],
     });
 
@@ -41,17 +40,17 @@ const Chart: React.FC<Props> = ({ data }) => {
   return <div ref={root}></div>;
 };
 
-const StackedBarChart: React.FC<Props> = ({ data }) => {
+const BarChart: React.FC<Props> = ({ data }) => {
   return (
     <>
       <Head>
-        <title>reviz: Stacked Bar Chart</title>
+        <title>reviz: Bar Chart</title>
       </Head>
       {React.createElement(
         withViewer(Chart, {
           data,
-          href: 'https://observablehq.com/@observablehq/plot-stack',
-          title: 'From Observable: Plot: Stack',
+          href: 'https://observablehq.com/@observablehq/plot-bar?collection=@observablehq/plot',
+          title: 'From Observable: Plot: Bar',
         })
       )}
     </>
@@ -61,9 +60,9 @@ const StackedBarChart: React.FC<Props> = ({ data }) => {
 export async function getStaticProps(): Promise<{ props: Props }> {
   return {
     props: {
-      data: readData<DeathRecord>('crimea'),
+      data: readData<Letter>('alphabet'),
     },
   };
 }
 
-export default StackedBarChart;
+export default BarChart;

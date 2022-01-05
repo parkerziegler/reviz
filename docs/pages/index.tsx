@@ -6,19 +6,10 @@ import Head from 'next/head';
 
 import { normalizeExampleName } from '../helpers/isomorphic';
 import Card from '../components/Card';
-
-import styles from './index.module.css';
+import { metadata } from '../helpers/metadata';
 
 interface Props {
-  examples: {
-    name: string;
-    description: string;
-    image: {
-      src: string;
-      width: number;
-      height: number;
-    };
-  }[];
+  examples: string[];
 }
 
 const Index: React.FC<Props> = ({ examples }) => {
@@ -27,60 +18,53 @@ const Index: React.FC<Props> = ({ examples }) => {
       <Head>
         <title>reviz: Examples</title>
       </Head>
-      <ul className={styles['example-list']}>
-        {examples.map((example) => {
-          const name = normalizeExampleName(example.name);
+      <div className="flex flex-col stack-md lg:stack-lg lg:justify-center p-12 md:p-20 lg:p-12">
+        <header>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold underline decoration-accent">
+            <code>reviz</code> Examples
+          </h1>
+        </header>
+        <main className="stack-md">
+          <p className="text-xl md:text-2xl lg:text-3xl font-serif">
+            See how <code>reviz</code> generates partial Observable Plot
+            programs from this collection of example data visualizations.
+          </p>
+          <ul className="grid grid-cols-12 gap-8 lg:gap-16 list-none">
+            {examples.map((example) => {
+              const name = normalizeExampleName(example);
 
-          return (
-            <li key={example.name} className={styles['example-list__item']}>
-              <Card
-                name={name}
-                href={`examples/${example.name}`}
-                description={example.description}
-                image={{
-                  ...example.image,
-                  alt: name,
-                }}
-              />
-            </li>
-          );
-        })}
-      </ul>
+              return (
+                <li
+                  key={example}
+                  className="col-span-12 md:col-span-6 lg:col-span-4 self-center"
+                >
+                  <Card
+                    name={name}
+                    href={`examples/${example}`}
+                    description={metadata[example].alt}
+                    image={metadata[example]}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </main>
+      </div>
     </>
   );
 };
 
 export async function getStaticProps(): Promise<{ props: Props }> {
-  const descriptions = {
-    curated:
-      "These examples were reproduced from Mike Bostock's collection of notebooks on Observeable's Plot library.",
-    'real-world':
-      'These examples were copied directly from published outlets like the New York Times, Washington Post and FiveThirtyEight.',
-  };
-
-  const thumbnails = {
-    curated: {
-      src: '/curated.png',
-      width: 1302,
-      height: 804,
-    },
-    'real-world': {
-      src: '/real-world.png',
-      width: 1080,
-      height: 976,
-    },
-  };
-
   const files = fs.readdirSync(path.join(process.cwd(), 'pages', 'examples'));
-  const examples = files.map((file) => {
-    const name = path.basename(file);
-
-    return {
-      name,
-      description: descriptions[name],
-      image: thumbnails[name],
-    };
-  });
+  const examples = files
+    .filter(
+      (file) =>
+        path.extname(file) === '.tsx' && path.basename(file, '.tsx') !== 'index'
+    )
+    .map((file) => {
+      return path.basename(file, '.tsx');
+    })
+    .sort((a, b) => (a.toLowerCase() > b.toLowerCase() ? 1 : -1));
 
   return {
     props: {

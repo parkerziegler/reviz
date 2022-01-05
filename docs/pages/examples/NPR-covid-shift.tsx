@@ -2,7 +2,7 @@ import * as React from 'react';
 import Head from 'next/head';
 import cs from 'classnames';
 
-import { withViewer } from '../../../components/Viewer';
+import { withViewer } from '../../components/Viewer';
 
 import styles from './NPR-covid-shift.module.css';
 

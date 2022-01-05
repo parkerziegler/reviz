@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 import Head from 'next/head';
 
-import { readData } from '../../../helpers/server';
-import { withViewer } from '../../../components/Viewer';
+import { readData } from '../../helpers/server';
+import { withViewer } from '../../components/Viewer';
 
 enum AgeRange {
   '<10',

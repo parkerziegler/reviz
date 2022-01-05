@@ -15,7 +15,12 @@ class MyDocument extends Document {
   render(): JSX.Element {
     return (
       <Html className="no-fouc">
-        <Head />
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro&display=optional"
+            rel="stylesheet"
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />

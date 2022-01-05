@@ -12,7 +12,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     removeFouc(document.documentElement);
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <div className="w-full max-w-screen-xl mx-auto">
+      <Component {...pageProps} />
+    </div>
+  );
 };
 
 export default App;
