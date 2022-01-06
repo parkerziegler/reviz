@@ -1,5 +1,5 @@
-import overEvery from 'lodash.overevery';
 import groupBy from 'lodash.groupby';
+import orderBy from 'lodash.orderby';
 
 import { PRES_ATTR_NAMES } from './constants';
 import type { VizMetaAttrs } from './inference';
@@ -47,6 +47,14 @@ export interface Histogram extends PresAttrs {
   type: 'Histogram';
   width: number;
 }
+
+type VizType =
+  | 'BarChart'
+  | 'BubbleChart'
+  | 'Histogram'
+  | 'Scatterplot'
+  | 'StackedBarChart'
+  | 'StripPlot';
 
 export type VizSpec =
   | Scatterplot
@@ -114,10 +122,20 @@ const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
   // Strip plots will have few lanes with high concentration of elements.
   // If the length of data elements in the largest lane is greater than the
   // number of lanes, it suggests that there is more concentration of data
-  // within langes (StripPlot) than across lanes (Scatterplot).
+  // within lanes (StripPlot) than across lanes (Scatterplot).
   return (
     [...lanes].reduce((acc, el) => Math.max(acc, el.length), 0) > lanes.length
   );
+};
+
+const hasMultipleGroups: Predicate = (vizAttrs): boolean => {
+  const rects = vizAttrs.positionAttrs
+    .filter((d): d is RevizRectPositionDatum => d.type === 'rect')
+    .sort((a, b) => +a.x - +b.x);
+
+  const lanes = Object.values(groupBy(rects, (d) => d.x));
+
+  return lanes.every((lane) => lane.length > 1);
 };
 
 const hasEqualSizedGroups: Predicate = (vizAttrs): boolean => {
@@ -136,81 +154,91 @@ const hasXScaleType =
   (vizAttrs): boolean =>
     vizAttrs.xScaleType === scaleType;
 
-// A higher-order function to return the logical NOT of the supplied predicate function.
-const invertPredicate =
-  (pred: Predicate): Predicate =>
-  (vizAttrs): boolean =>
-    !pred(vizAttrs);
-
-const vizTypeToPredicates = {
-  Scatterplot: overEvery(
-    hasMarkType('circle'),
-    hasConsistentGeomAttr('r'),
-    invertPredicate(hasSiblingsWithConsistentCyAttr)
-  ),
-  BubbleChart: overEvery(
-    hasMarkType('circle'),
-    hasDivergentGeomAttr('r'),
-    invertPredicate(hasSiblingsWithConsistentCyAttr)
-  ),
-  StripPlot: overEvery(
-    hasMarkType('circle'),
-    hasConsistentGeomAttr('r'),
-    hasSiblingsWithConsistentCyAttr
-  ),
-  BarChart: overEvery(
-    hasMarkType('rect'),
-    hasConsistentGeomAttr('width'),
-    hasXScaleType('discrete'),
-    invertPredicate(hasEqualSizedGroups)
-  ),
-  StackedBarChart: overEvery(
-    hasMarkType('rect'),
-    hasConsistentGeomAttr('width'),
-    hasXScaleType('discrete'),
-    hasEqualSizedGroups
-  ),
-  Histogram: overEvery(
-    hasMarkType('rect'),
-    hasConsistentGeomAttr('width'),
-    hasXScaleType('continuous'),
-    invertPredicate(hasEqualSizedGroups)
-  ),
-};
-
-type VizType = keyof typeof vizTypeToPredicates;
+const vizTypeToPredicates = new Map<VizType, Predicate[]>([
+  ['Scatterplot', [hasMarkType('circle'), hasConsistentGeomAttr('r')]],
+  ['BubbleChart', [hasMarkType('circle'), hasDivergentGeomAttr('r')]],
+  [
+    'StripPlot',
+    [
+      hasMarkType('circle'),
+      hasConsistentGeomAttr('r'),
+      hasSiblingsWithConsistentCyAttr,
+    ],
+  ],
+  [
+    'BarChart',
+    [
+      hasMarkType('rect'),
+      hasConsistentGeomAttr('width'),
+      hasXScaleType('discrete'),
+    ],
+  ],
+  [
+    'StackedBarChart',
+    [
+      hasMarkType('rect'),
+      hasConsistentGeomAttr('width'),
+      hasXScaleType('discrete'),
+      hasMultipleGroups,
+      hasEqualSizedGroups,
+    ],
+  ],
+  [
+    'Histogram',
+    [
+      hasMarkType('rect'),
+      hasConsistentGeomAttr('width'),
+      hasXScaleType('continuous'),
+    ],
+  ],
+]);
 
 /**
- * determineVizType takes in a normalized schema containing visualization attributes
- * and checks this schema against the composed predicates associated with each visualization
- * type. It returns the first matching visualization type.
+ * determineVizType takes in a normalized schema containing visualization attributes and
+ * checks this schema against the array of predicates associated with each visualization type.
+ * It returns the visualization type for which it has the highest predicate solve rate, with
+ * number of predicates used as a tie breaker.
  *
  * @param vizAttrs – the schema of visualization attributes.
  * @returns – the visualization type of the svg subtree.
  */
+interface PredicateStats {
+  type: VizType;
+  numPredicates: number;
+  solvedPredicates: number;
+  solveRate: number;
+}
+
 const determineVizType = (vizAttrs: VizAttrs): VizType => {
-  const possibleVizTypes = Object.entries(vizTypeToPredicates).reduce<
-    VizType[]
-  >((acc, [type, predicate]) => {
-    if (predicate(vizAttrs)) {
-      // This cast is safe. We are getting `type` here from the keys of vizTypeToPredicates,
-      // so we can guarantee that type must be one of those keys. TS does not provide a mechanism
-      // for inferring this because it cannot prove that even constant objects are "closed".
-      acc.push(type as VizType);
+  const predicateStats = [...vizTypeToPredicates.entries()].reduce<
+    PredicateStats[]
+  >((acc, [type, predicates]) => {
+    const numPredicates = predicates.length;
+    let solvedPredicates = 0;
+
+    for (const predicate of predicates) {
+      if (predicate(vizAttrs)) {
+        solvedPredicates += 1;
+      }
     }
+
+    acc.push({
+      type: type as VizType,
+      numPredicates,
+      solvedPredicates,
+      solveRate: solvedPredicates / numPredicates,
+    });
 
     return acc;
   }, []);
 
-  if (possibleVizTypes.length === 0) {
-    throw new Error('No matching visualization type found.');
-  } else if (possibleVizTypes.length > 1) {
-    console.warn(
-      'Found multiple matching visualization types. Returning first result.'
-    );
-  }
+  const possibleVizTypes = orderBy(
+    predicateStats,
+    ['solveRate', 'numPredicates'],
+    ['desc', 'desc']
+  );
 
-  return possibleVizTypes[0];
+  return possibleVizTypes[0].type;
 };
 
 /**

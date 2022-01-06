@@ -42,7 +42,7 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
-    "lodash.overevery": "^4.7.0"
+    "lodash.orderby": "^4.6.0"
   },
   "devDependencies": {
     "@observablehq/plot": "^0.3.2",
@@ -51,7 +51,7 @@
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.isplainobject": "^4.0.6",
-    "@types/lodash.overevery": "^4.7.6",
+    "@types/lodash.orderby": "^4.6.6",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
