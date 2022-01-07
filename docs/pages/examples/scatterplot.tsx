@@ -18,11 +18,15 @@ const Chart: React.FC<Props> = ({ data }) => {
   React.useEffect(() => {
     const node = root.current;
 
-    const plot = Plot.dot(data, {
-      x: 'weight',
-      y: 'height',
-      stroke: 'sex',
-    }).plot();
+    const plot = Plot.plot({
+      marks: [
+        Plot.dot(data, {
+          x: 'weight',
+          y: 'height',
+          stroke: 'sex',
+        }),
+      ],
+    });
 
     node.appendChild(plot);
 
