@@ -25,6 +25,8 @@ const Histogram: React.FC = () => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    const node = root.current;
+
     const plot = Plot.plot({
       x: {
         label: 'Stopping Time',
@@ -45,10 +47,10 @@ const Histogram: React.FC = () => {
       ],
     });
 
-    root.current.appendChild(plot);
+    node.appendChild(plot);
 
     return (): void => {
-      root.current?.removeChild(plot);
+      node.removeChild(plot);
     };
   }, []);
 

@@ -255,13 +255,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@observablehq/plot@^0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@observablehq/plot/-/plot-0.2.9.tgz#29787e15969f4d3ab2002463ae52dff3da71f813"
-  integrity sha512-9qXatKkH40lVYnPpNNm2IdKjP0KkBsv9OcV1FaGE+DYPDC60yjc2+a7b0pKKqt66wT/9ld7DKZAKnyoeFwMvCQ==
+"@observablehq/plot@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@observablehq/plot/-/plot-0.3.2.tgz#5d168a9b0b7705d25ecc40ef9ef45279a813b714"
+  integrity sha512-cuVcPnQjcJrSdnlIQ5MdY25o13CxCE96jiI8Zz6ljmojCipkzbLjm85GspdVSyw8dhvYTERHvshsPW/LJ9aGAg==
   dependencies:
-    d3 "^7.1.0"
-    isoformat "^0.2.0"
+    d3 "7"
+    isoformat "0.2"
 
 "@parkerziegler/reviz@^0.1.2":
   version "0.1.2"
@@ -1391,7 +1391,43 @@ d3-zoom@3:
     d3-selection "2 - 3"
     d3-transition "2 - 3"
 
-d3@^7.1.0, d3@^7.1.1:
+d3@7:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-7.2.1.tgz#97eafaa6fc8cd7c564c3ace1e6678cbecf63f3ea"
+  integrity sha512-E/5sP0aeK6YPXI/+4QlefvBFgmcyR2jYftId0PrYWv4Y/gW3c3thp1XG4rQzF0eUwV9tR1x05X5eWuJ6rQXvew==
+  dependencies:
+    d3-array "3"
+    d3-axis "3"
+    d3-brush "3"
+    d3-chord "3"
+    d3-color "3"
+    d3-contour "3"
+    d3-delaunay "6"
+    d3-dispatch "3"
+    d3-drag "3"
+    d3-dsv "3"
+    d3-ease "3"
+    d3-fetch "3"
+    d3-force "3"
+    d3-format "3"
+    d3-geo "3"
+    d3-hierarchy "3"
+    d3-interpolate "3"
+    d3-path "3"
+    d3-polygon "3"
+    d3-quadtree "3"
+    d3-random "3"
+    d3-scale "4"
+    d3-scale-chromatic "3"
+    d3-selection "3"
+    d3-shape "3"
+    d3-time "3"
+    d3-time-format "4"
+    d3-timer "3"
+    d3-transition "3"
+    d3-zoom "3"
+
+d3@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/d3/-/d3-7.1.1.tgz#77b9a0c9893b13643b8e52316ec65dca3a6a115e"
   integrity sha512-8zkLMwSvUAnfN9pcJDfkuxU0Nvg4RLUD0A4BZN1KxJPtlnCGzMx3xM5cRl4m8fym/Vy8rlq52tl90UF3m91OnA==
@@ -1742,6 +1778,11 @@ eslint-plugin-jsx-a11y@^6.4.1:
     jsx-ast-utils "^3.2.1"
     language-tags "^1.0.5"
     minimatch "^3.0.4"
+
+eslint-plugin-next@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-next/-/eslint-plugin-next-0.0.0.tgz#f9ef680e8f68763c716ab44697c4b3cc3e0b2069"
+  integrity sha512-IldNDVb6WNduggwRbYzSGZhaskUwVecJ6fhmqwX01+S1aohwAWNzU4me6y47DDzpD/g0fdayNBGxEdt9vKkUtg==
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.3.0"
@@ -2415,7 +2456,7 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
-isoformat@^0.2.0:
+isoformat@0.2:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/isoformat/-/isoformat-0.2.1.tgz#2526344a4276a101b2881848dc337d1d2ae74494"
   integrity sha512-tFLRAygk9NqrRPhJSnNGh7g7oaVWDwR0wKh/GM2LgmPa50Eg4UfyaCO4I8k6EqJHl1/uh2RAD6g06n5ygEnrjQ==

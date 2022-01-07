@@ -22,7 +22,9 @@ const Chart: React.FC<Props> = ({ data }) => {
   const root = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const chart = Plot.plot({
+    const node = root.current;
+
+    const plot = Plot.plot({
       height: 660,
       grid: true,
       x: { axis: 'top', percent: true, zero: true },
@@ -52,12 +54,12 @@ const Chart: React.FC<Props> = ({ data }) => {
       ],
     });
 
-    root.current?.appendChild(chart);
+    node.appendChild(plot);
 
     return (): void => {
-      root.current?.removeChild(chart);
+      node.removeChild(plot);
     };
-  }, []);
+  }, [data]);
 
   return <div ref={root}></div>;
 };

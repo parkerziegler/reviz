@@ -11,8 +11,8 @@ const NPRCovidShift: React.FC = () => {
     <>
       <Head>
         <title>
-          reviz: NPR — America's 200,000 COVID-19 Deaths: Small Cities And Towns
-          Bear A Growing Share
+          reviz: NPR — America&apos;s 200,000 COVID-19 Deaths: Small Cities And
+          Towns Bear A Growing Share
         </title>
       </Head>
       <svg width="650" height="366">

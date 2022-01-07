@@ -21,7 +21,6 @@ const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
         language="javascript"
         theme={theme}
       >
-        {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
             className={cs(styles['code-pane__body'], className)}
@@ -29,12 +28,13 @@ const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
           >
             {tokens.map((line, i) => (
               <div
-                {...getLineProps({ line, key: i })}
+                {...getLineProps({ line })}
+                key={i}
                 className={styles['code-pane__line']}
               >
                 <span className={styles['code-pane__lineno']}>{i + 1}</span>
                 {line.map((token, key) => (
-                  <span {...getTokenProps({ token, key })} />
+                  <span {...getTokenProps({ token })} key={i} />
                 ))}
               </div>
             ))}
