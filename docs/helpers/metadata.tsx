@@ -6,7 +6,6 @@ import StackedBarThumbnail from '../public/stacked-bar.png';
 import StripPlotThumbnail from '../public/strip-plot.png';
 import NYTVaccineVotingThumbnail from '../public/NYT-vaccine-voting.png';
 import NPRCovidShiftThumbnail from '../public/NPR-covid-shift.png';
-import D3DotPlotThumbnail from '../public/d3-dot-plot.png';
 
 interface ExampleMeta {
   src: StaticImageData;
@@ -37,10 +36,6 @@ export const metadata: Record<string, ExampleMeta> = {
   ['strip-plot']: {
     src: StripPlotThumbnail,
     alt: "A modified strip plot based on the Observable Plot documentation of the Tick Mark. The strip plot shows the age distribution of each state's population.",
-  },
-  ['d3-dot-plot']: {
-    src: D3DotPlotThumbnail,
-    alt: "Mike Bostock's Dot Plot example in D3, showing the age distribution of each state's population.",
   },
   ['NPR-covid-shift']: {
     src: NPRCovidShiftThumbnail,
