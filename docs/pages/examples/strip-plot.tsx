@@ -112,8 +112,8 @@ const StripPlot: React.FC<Props> = ({ data }) => {
       {React.createElement(
         withViewer(Chart, {
           data,
-          href: 'https://observablehq.com/@observablehq/plot-tick',
-          title: 'From Observable: Plot: Tick',
+          href: 'https://observablehq.com/@d3/dot-strip-plot',
+          title: 'From D3 on Observable — Dot Strip Plot',
         })
       )}
     </>

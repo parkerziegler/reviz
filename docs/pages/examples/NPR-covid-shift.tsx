@@ -1660,6 +1660,6 @@ const NPRCovidShift: React.FC = () => {
 export default withViewer(NPRCovidShift, {
   href: 'https://www.npr.org/sections/health-shots/2020/09/22/914578634/americas-200-000-covid-19-deaths-small-cities-and-towns-bear-a-growing-share',
   title:
-    "From NPR: America's 200,000 COVID-19 Deaths: Small Cities And Towns Bear A Growing Share",
+    "From NPR — America's 200,000 COVID-19 Deaths: Small Cities And Towns Bear A Growing Share",
   data: {},
 });

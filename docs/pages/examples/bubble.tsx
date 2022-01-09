@@ -63,7 +63,7 @@ const BubbleChart: React.FC<Props> = ({ data }) => {
         withViewer(Chart, {
           data,
           href: 'https://observablehq.com/@observablehq/plot-dot?collection=@observablehq/plot',
-          title: 'From Observable: Plot: Dot',
+          title: 'From Observable — Plot: Dot',
         })
       )}
     </>

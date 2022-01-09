@@ -52,7 +52,7 @@ const BarChart: React.FC<Props> = ({ data }) => {
         withViewer(Chart, {
           data,
           href: 'https://observablehq.com/@observablehq/plot-bar?collection=@observablehq/plot',
-          title: 'From Observable: Plot: Bar',
+          title: 'From Observable — Plot: Bar',
         })
       )}
     </>

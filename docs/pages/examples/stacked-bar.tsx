@@ -53,7 +53,7 @@ const StackedBarChart: React.FC<Props> = ({ data }) => {
         withViewer(Chart, {
           data,
           href: 'https://observablehq.com/@observablehq/plot-stack',
-          title: 'From Observable: Plot: Stack',
+          title: 'From Observable — Plot: Stack',
         })
       )}
     </>

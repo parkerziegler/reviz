@@ -804,5 +804,5 @@ export default withViewer(NYTVaccineVoting, {
   data: {},
   href: 'https://www.nytimes.com/interactive/2021/04/17/us/vaccine-hesitancy-politics.html',
   title:
-    'From The New York Times: Least Vaccinated U.S. Counties Have Something in Common: Trump Voters',
+    'From The New York Times — Least Vaccinated U.S. Counties Have Something in Common: Trump Voters',
 });

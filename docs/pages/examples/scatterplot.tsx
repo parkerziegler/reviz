@@ -48,7 +48,7 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
         withViewer(Chart, {
           data,
           href: 'https://observablehq.com/@observablehq/plot?collection=@observablehq/plot',
-          title: 'From Observable: Observable Plot',
+          title: 'From Observable — Observable Plot',
         })
       )}
     </>

@@ -31,11 +31,11 @@ export const metadata: Record<string, ExampleMeta> = {
   },
   ['stacked-bar']: {
     src: StackedBarThumbnail,
-    alt: 'The example stacked bar chart from the Observable Plot documentation on the Stack Transform. The chart, based on data from Florence Nightingale, shows deaths in the Crimean War by month, with each group representing the cause of death.',
+    alt: 'The example stacked bar chart from the Observable Plot documentation on the Stack Transform. The chart, based on data from Florence Nightingale, shows deaths in the Crimean War by month, with each bar group representing the cause of death.',
   },
   ['strip-plot']: {
     src: StripPlotThumbnail,
-    alt: "A modified strip plot based on the Observable Plot documentation of the Tick Mark. The strip plot shows the age distribution of each state's population.",
+    alt: "An example strip plot by Mike Bostock using D3. The strip plot shows the age distribution of each US state's population.",
   },
   ['NPR-covid-shift']: {
     src: NPRCovidShiftThumbnail,
