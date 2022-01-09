@@ -80,50 +80,49 @@ const Histogram: React.FC = () => {
       <Head>
         <title>reviz: Histogram</title>
       </Head>
-      <div>
-        <svg
-          width={`${dimensions.width}`}
-          height={`${dimensions.height}`}
-          viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+      <svg
+        className="block h-auto max-w-full"
+        width={`${dimensions.width}`}
+        height={`${dimensions.height}`}
+        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+      >
+        <g>
+          {bins.map((d, i) => (
+            <rect
+              key={i}
+              x={x(d.x0)}
+              y={y(d.length)}
+              width={Math.max(0, x(d.x1) - x(d.x0))}
+              height={y(0) - y(d.length)}
+              fill="steelblue"
+            />
+          ))}
+        </g>
+        <g
+          ref={xAxisRef}
+          transform={`translate(0, ${dimensions.height - margin.bottom})`}
         >
-          <g>
-            {bins.map((d, i) => (
-              <rect
-                key={i}
-                x={x(d.x0)}
-                y={y(d.length)}
-                width={Math.max(0, x(d.x1) - x(d.x0))}
-                height={y(0) - y(d.length)}
-                fill="steelblue"
-              />
-            ))}
-          </g>
-          <g
-            ref={xAxisRef}
-            transform={`translate(0, ${dimensions.height - margin.bottom})`}
+          <text
+            x={`${dimensions.width - margin.right}`}
+            y="15"
+            fill="currentColor"
+            fontWeight="700"
           >
-            <text
-              x={`${dimensions.width - margin.right}`}
-              y="15"
-              fill="currentColor"
-              fontWeight="700"
-            >
-              Stopping Time
-            </text>
-          </g>
-          <g ref={yAxisRef} transform={`translate(${margin.left}, 0)`}>
-            <text
-              x="10"
-              y={`${margin.top}`}
-              fill="currentColor"
-              fontWeight="700"
-              textAnchor="start"
-            >
-              Frequency
-            </text>
-          </g>
-        </svg>
-      </div>
+            Stopping Time
+          </text>
+        </g>
+        <g ref={yAxisRef} transform={`translate(${margin.left}, 0)`}>
+          <text
+            x="10"
+            y={`${margin.top}`}
+            fill="currentColor"
+            fontWeight="700"
+            textAnchor="start"
+          >
+            Frequency
+          </text>
+        </g>
+      </svg>
     </>
   );
 };

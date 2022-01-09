@@ -5,6 +5,7 @@ module.exports = {
       colors: {
         linework: '#e2e2e2',
         accent: '#e7131a',
+        editor: '#fbfbfb',
       },
       fontFamily: {
         serif: ['Source Serif Pro', 'serif'],

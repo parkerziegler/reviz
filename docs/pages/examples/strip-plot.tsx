@@ -82,6 +82,7 @@ const Chart: React.FC<Props> = ({ data }) => {
       width={`${dimensions.width}`}
       height={`${dimensions.height}`}
       viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+      className="block h-auto max-w-full"
     >
       <g>
         {data.map((d) => (

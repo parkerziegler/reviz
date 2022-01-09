@@ -3,8 +3,6 @@ import Highlight, { defaultProps } from 'prism-react-renderer';
 import theme from 'prism-react-renderer/themes/nightOwlLight';
 import cs from 'classnames';
 
-import styles from './CodePane.module.css';
-
 interface Props {
   code: string;
   name: string;
@@ -14,7 +12,7 @@ interface Props {
 
 const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
   return (
-    <div className={styles['code-pane']}>
+    <div className="font-mono relative flex-1 flex flex-col justify-between p-8 bg-editor border border-linework overflow-auto last:border-t-0">
       <Highlight
         {...defaultProps}
         code={code}
@@ -23,28 +21,26 @@ const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
       >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={cs(styles['code-pane__body'], className)}
+            className={cs('text-lg md:text-xl m-0 overflow-auto', className)}
             style={style}
           >
             {tokens.map((line, i) => (
-              <div
-                {...getLineProps({ line })}
-                key={i}
-                className={styles['code-pane__line']}
-              >
-                <span className={styles['code-pane__lineno']}>{i + 1}</span>
+              <div {...getLineProps({ line })} key={i} className="table-row">
+                <span className="table-cell pr-4 text-right select-none opacity-50">
+                  {i + 1}
+                </span>
                 {line.map((token, key) => (
-                  <span {...getTokenProps({ token })} key={i} />
+                  <span {...getTokenProps({ token })} key={key} />
                 ))}
               </div>
             ))}
           </pre>
         )}
       </Highlight>
-      <div className={styles['code-pane__controls']}>
+      <div className="flex justify-between pt-8">
         <button
           onClick={compile}
-          className={styles['code-pane__synthesize']}
+          className="text-xl lg:text-2xl flex items-center p-0 bg-none border-0 text-inherit cursor-pointer"
           type="button"
           name="execute"
         >
@@ -58,18 +54,16 @@ const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden
-            className={styles['code-pane__synthesize-icon']}
+            className="pr-2 scale-75 md:scale-100"
           >
             <path d="m5 3 14 9-14 9V3z" />
           </svg>
           Compile
         </button>
         {perf ? (
-          <p className={styles['code-pane__info']}>Compiled in {perf} ms</p>
+          <p className="text-xl lg:text-2xl m-0">Compiled in {perf} ms</p>
         ) : null}
-        <p className={cs(styles['code-pane__info'], styles['code-pane__name'])}>
-          {name}
-        </p>
+        <p className="text-xl lg:text-2xl absolute top-8 right-8 m-0">{name}</p>
       </div>
     </div>
   );
