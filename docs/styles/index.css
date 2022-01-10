@@ -25,7 +25,7 @@
     grid-template-areas:
       "viz spec"
       "viz program";
-    grid-template-colums: minmax(40rem, 1fr) minmax(20rem, 50rem);
+    grid-template-columns: minmax(40rem, 1fr) minmax(40rem, 50rem);
   }
 
   .viewer-grid :first-child {

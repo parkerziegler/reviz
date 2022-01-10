@@ -118,14 +118,18 @@ const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
     .sort((a, b) => +a.cy - +b.cy);
 
   const lanes = Object.values(groupBy(circles, (d) => d.cy));
+  let laneAnchorCount = 0;
 
-  // Strip plots will have few lanes with high concentration of elements.
-  // If the length of data elements in the largest lane is greater than the
-  // number of lanes, it suggests that there is more concentration of data
-  // within lanes (StripPlot) than across lanes (Scatterplot).
-  return (
-    [...lanes].reduce((acc, el) => Math.max(acc, el.length), 0) > lanes.length
-  );
+  circles.forEach((circle, i, arr) => {
+    const [before, after] = [arr[i - 1]?.cy, arr[i + 1]?.cy];
+    const current = circle.cy;
+
+    if (before === current && after !== current) {
+      laneAnchorCount += 1;
+    }
+  });
+
+  return laneAnchorCount === lanes.length;
 };
 
 const hasMultipleGroups: Predicate = (vizAttrs): boolean => {
