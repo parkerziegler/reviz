@@ -5,6 +5,7 @@
   "main": "dist/reviz.js",
   "module": "dist/reviz.esm.js",
   "types": "dist/types/index.d.ts",
+  "sideEffects": false,
   "contributors": [
     {
       "name": "Parker Ziegler",
