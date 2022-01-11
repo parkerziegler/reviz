@@ -16,14 +16,18 @@ const NYTVaccineVoting: React.FC = () => {
         </title>
       </Head>
       <svg
-        className={cs(styles['layer'], styles['svelte-jdsvwm'])}
+        className={cs(
+          styles['layer'],
+          styles['svelte-jdsvwm'],
+          'block h-auto max-w-full'
+        )}
         viewBox="0 0 346 430"
       >
         <g>
           <line
             className={cs(styles['g-tick'], styles['svelte-jdsvwm'])}
-            y1="450"
-            y2="450"
+            y1="428"
+            y2="428"
             x1="5"
             x2="345"
           ></line>
@@ -46,21 +50,21 @@ const NYTVaccineVoting: React.FC = () => {
             x1="0.6900000000000006"
             x2="0.6900000000000006"
             y1="21.428571428571452"
-            y2="450"
+            y2="428"
           ></line>
           <line
             className={cs(styles['g-tick'], styles['svelte-jdsvwm'])}
             x1="172.5"
             x2="172.5"
             y1="21.428571428571452"
-            y2="450"
+            y2="428"
           ></line>
           <line
             className={cs(styles['g-tick'], styles['svelte-jdsvwm'])}
             x1="345"
             x2="345"
             y1="21.428571428571452"
-            y2="450"
+            y2="428"
           ></line>
           <circle
             cx="256"

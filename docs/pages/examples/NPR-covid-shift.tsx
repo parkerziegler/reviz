@@ -15,7 +15,12 @@ const NPRCovidShift: React.FC = () => {
           Towns Bear A Growing Share
         </title>
       </Head>
-      <svg width="650" height="366">
+      <svg
+        width="650"
+        height="366"
+        viewBox="0 0 650 366"
+        className="block h-auto max-w-full"
+      >
         <g transform="translate(37, 0)">
           <g
             className={styles['axis']}

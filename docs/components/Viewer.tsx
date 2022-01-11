@@ -45,7 +45,7 @@ export function withViewer<T>(
     return (
       <div className="absolute inset-0 flex flex-col lg:grid lg:viewer-grid">
         <div className="flex flex-col items-center">
-          <div className="flex-1 flex items-center p-8">
+          <div className="flex-1 flex items-center p-8 pb-0">
             <Viz data={props.data} />
           </div>
           <a

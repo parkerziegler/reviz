@@ -61,7 +61,9 @@ const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
           Compile
         </button>
         {perf ? (
-          <p className="text-xl lg:text-2xl m-0">Compiled in {perf} ms</p>
+          <p className="text-xl lg:text-2xl m-0">
+            Compiled in {Math.round(perf)} ms
+          </p>
         ) : null}
         <p className="text-xl lg:text-2xl absolute top-8 right-8 m-0">{name}</p>
       </div>
