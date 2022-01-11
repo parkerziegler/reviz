@@ -263,15 +263,15 @@
     d3 "7"
     isoformat "0.2"
 
-"@parkerziegler/reviz@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@parkerziegler/reviz/-/reviz-0.1.2.tgz#624f8f5010515d81c3cb953c3b05fd72bc82f3fa"
-  integrity sha512-R3pvQo7brV53aWguKVJKtETWl6Cl0r9ojvtjtJYm58CY98m6FM+uaNUZbOYLUPglRusIK2RUViSSgGzN1PmTQA==
+"@parkerziegler/reviz@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@parkerziegler/reviz/-/reviz-0.2.0.tgz#7e1dc193e0dd0035e9f1f709b49b616db95a9406"
+  integrity sha512-Q5ewRpOG838KENtw5XgZLJpZdqH0NQXG0lcJqzNsWJNaFrUXDWyl+e6ywM5q1/bgJuiEMiyon0QVd4LqDH4dlA==
   dependencies:
     lodash.camelcase "^4.3.0"
     lodash.groupby "^4.6.0"
     lodash.isplainobject "^4.0.6"
-    lodash.overevery "^4.7.0"
+    lodash.orderby "^4.6.0"
 
 "@rushstack/eslint-patch@^1.0.6":
   version "1.1.0"
@@ -2592,10 +2592,10 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash.overevery@^4.7.0:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/lodash.overevery/-/lodash.overevery-4.7.0.tgz#5549f5a0e27a8a9ff3f94d268ac90dc7c5e7d449"
-  integrity sha1-VUn1oOJ6ip/z+U0miskNx8Xn1Ek=
+lodash.orderby@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.orderby/-/lodash.orderby-4.6.0.tgz#e697f04ce5d78522f54d9338b32b81a3393e4eb3"
+  integrity sha1-5pfwTOXXhSL1TZM4syuBozk+TrM=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
