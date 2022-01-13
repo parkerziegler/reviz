@@ -1,207 +1,170 @@
-import isPlainObject from 'lodash.isplainobject';
 import camelCase from 'lodash.camelcase';
 
-import type {
-  VizSpec,
-  BarChart,
-  StackedBarChart,
-  Histogram,
-  Scatterplot,
-  BubbleChart,
-  StripPlot,
-  PresAttrs,
-} from './ir';
-import { PROGRAM_HOLE } from './constants';
+import type { VizSpec } from './ir';
+import { EVAL_HOLE, PROGRAM_HOLE } from './constants';
 
-interface Scales {
-  x: string;
-  y: string;
-}
+const replaceHole = (program: string, template: string): string => {
+  return program.replace(EVAL_HOLE, template);
+};
 
-interface ScatterData extends Scales {
-  r: string;
-}
+const intersperse = (arr: string[], sep: string): string => {
+  if (arr.length === 0) {
+    return '';
+  }
 
-interface PlotPresData {
-  color?: {
-    type: 'ordinal';
-    range: string[];
-  };
-}
+  return arr
+    .slice(1)
+    .reduce((acc, el) => acc.concat(`${sep}${el}`), `${arr[0]}`);
+};
 
-type Template<T> = (data: T) => string;
+export const generate = (spec: VizSpec): string => {
+  const marks = Object.entries(spec).reduce<string>(
+    (program, [attrName, attrValue], i, arr) => {
+      switch (attrName) {
+        case 'type':
+          return evalType(program, attrValue);
+        case 'r':
+          return evalGeomAttr(program, attrName, attrValue);
+        case 'fill':
+        case 'fill-opacity':
+        case 'stroke':
+        case 'stroke-opacity':
+        case 'stroke-width':
+          return evalPresAttr({ program, attrName, attrValue, arr, i });
+        default:
+          return program;
+      }
+    },
+    `[${EVAL_HOLE}]`
+  );
 
-export function generate(
-  spec: VizSpec
-): Template<Scales> | Template<ScatterData> {
-  switch (spec.type) {
+  const color = evalColor(spec);
+  const r = evalR(spec);
+
+  const members = [
+    `${typeof color !== 'undefined' ? `color: ${color}` : ''}`,
+    `${typeof r !== 'undefined' ? `r: ${r}` : ''}`,
+    `marks: ${marks}`,
+  ].filter(Boolean);
+
+  return `const plot = Plot.plot({
+    ${intersperse(members, ', ')}
+  })`;
+};
+
+const evalType = (program: string, type: string): string => {
+  let nextProgram = '';
+
+  switch (type) {
     case 'BarChart':
     case 'StackedBarChart':
-      return generateBar(spec);
+      nextProgram = `Plot.barY(data, { x: '${PROGRAM_HOLE}', y: '${PROGRAM_HOLE}', ${EVAL_HOLE} })`;
+      break;
     case 'Histogram':
-      return generateHistogram(spec);
-    case 'Scatterplot':
-      return generateScatterplot(spec);
+      nextProgram = `Plot.barY(data, Plot.binX({ y: 'count' }, { x: '${PROGRAM_HOLE}', ${EVAL_HOLE} }))`;
+      break;
     case 'BubbleChart':
-      return generateBubble(spec);
+    case 'Scatterplot':
+      nextProgram = `Plot.dot(data, { x: '${PROGRAM_HOLE}', y: '${PROGRAM_HOLE}', ${EVAL_HOLE} })`;
+      break;
     case 'StripPlot':
-      return generateStrip(spec);
+      nextProgram = `Plot.dotX(data, { x: '${PROGRAM_HOLE}', y: '${PROGRAM_HOLE}', ${EVAL_HOLE} })`;
+      break;
+    default:
+      break;
   }
+
+  return replaceHole(program, nextProgram);
+};
+
+const evalGeomAttr = (
+  program: string,
+  attrName: 'r',
+  attrValue: number | number[]
+): string => {
+  // If our attribute value from the spec is an array it suggests
+  // that the attribute is mapped to a column in the input dataset
+  // rather than being kept static across the entire visualization.
+  //
+  // Return early with a hole ('??') for the associated attribute.
+  if (Array.isArray(attrValue)) {
+    return replaceHole(program, `${attrName}: '${PROGRAM_HOLE}', ${EVAL_HOLE}`);
+  }
+
+  const template = `${attrName}: ${attrValue}, ${EVAL_HOLE}`;
+
+  return replaceHole(program, template);
+};
+
+interface EvalPresAttrParams {
+  program: string;
+  attrName: string;
+  attrValue: string[];
+  arr: [string, unknown][];
+  i: number;
 }
 
-const generateBar = (spec: BarChart | StackedBarChart): Template<Scales> =>
-  withColor(spec, fromSpec(spec, barMark));
+const evalPresAttr = ({
+  program,
+  attrName,
+  attrValue,
+  arr,
+  i,
+}: EvalPresAttrParams): string => {
+  // If this is the last attr to be evaluated, do not leave an eval hole.
+  const isLastAttr = i === arr.length - 1;
 
-const generateHistogram = (spec: Histogram): Template<Scales> =>
-  withColor(spec, fromSpec(spec, histogramMark));
+  // If our attribute value from the spec is an array with length greater than 1,
+  // it suggests that the attribute is mapped to a column in the input dataset
+  // rather than being kept static across the entire visualization.
+  //
+  // Return early with a hole ('??') for the associated attribute.
+  if (attrValue.length > 1) {
+    return replaceHole(
+      program,
+      `${camelCase(attrName)}: '${PROGRAM_HOLE}'${
+        !isLastAttr ? `, ${EVAL_HOLE}` : ''
+      }`
+    );
+  }
 
-const generateScatterplot = (spec: Scatterplot): Template<ScatterData> =>
-  withColor(spec, fromSpec(spec, scatterMark));
+  // Parse all numeric values to floats and single quote all strings.
+  const attrValueFloat = parseFloat(attrValue[0]);
+  const val = Number.isNaN(attrValueFloat)
+    ? `'${attrValue[0]}'`
+    : attrValueFloat;
 
-const generateBubble = (spec: BubbleChart): Template<Scales> =>
-  withColor(spec, fromSpec(spec, bubbleMark));
+  const template = `${camelCase(attrName)}: ${val}${
+    !isLastAttr ? `, ${EVAL_HOLE}` : ''
+  }`;
 
-const generateStrip = (spec: StripPlot): Template<Scales> =>
-  withColor(spec, fromSpec(spec, stripMark));
+  return replaceHole(program, template);
+};
 
-const withColor = <S extends PresAttrs, T>(
-  spec: S,
-  t: Template<{ color?: { scale: 'ordinal'; range: string[] } } & T>
-): Template<T> => {
+const evalColor = (spec: VizSpec): string | undefined => {
+  // Return early if fill or stroke are static across the visualization.
+  if (spec.fill.length <= 1 && spec.stroke.length <= 1) {
+    return undefined;
+  }
+
   let range: string[] = [];
 
-  // If our fill or stroke attributes have length > 1 in the spec, it suggests
-  // the use of color as a third visual variable. In this case, we need to specify
-  // a top-level colors property defining the range of the attribute.
-  if (Array.isArray(spec.fill) && spec.fill.length > 1) {
+  if (spec.fill.length > 1) {
     range = spec.fill;
-  } else if (Array.isArray(spec.stroke) && spec.stroke.length > 1) {
+  } else if (spec.stroke.length > 1) {
     range = spec.stroke;
   }
 
-  const color =
-    range.length > 0 ? { scale: <const>'ordinal', range } : undefined;
-
-  return partial({ color }, t);
+  return `{ type: "categorical", range: [${intersperse(
+    range.map((color) => `'${color}'`),
+    ', '
+  )}] }`;
 };
 
-const fromSpec = <S extends PresAttrs, T>(
-  spec: S,
-  markTemplate: Template<S & T>
-): Template<PlotPresData & T> => {
-  return partial(spec, plot(markTemplate));
+const evalR = (spec: VizSpec): string | undefined => {
+  if (spec.type !== 'BubbleChart') {
+    return undefined;
+  }
+
+  return `{ range: [0, ${Math.max(...Array.from(spec.r))}] }`;
 };
-
-const plot = <T>(markTemplate: Template<T>): Template<PlotPresData & T> => {
-  return wrap(
-    'const plot = Plot.plot(',
-    json(plotPresFields, wrap('marks: [ ', markTemplate, ' ]')),
-    ');'
-  );
-};
-
-const json = <S, T>(s: Template<S>, t?: Template<T>): Template<S & T> => {
-  return wrap('{ ', t ? comma(s, t) : s, ' }');
-};
-
-const splat = <T>(fnName: string, t: Template<T>): Template<T> =>
-  wrap(`...${fnName}(`, t, ')');
-
-function comma<S, T>(s: Template<S>, t: Template<T>): Template<S & T> {
-  return (data: S & T): string => {
-    const a = s(data),
-      b = t(data);
-    return a && b ? `${a}, ${b}` : a || b;
-  };
-}
-
-function wrap<S, T>(
-  pre: string,
-  mid: Template<S>,
-  post: string | Template<T>
-): Template<S & T> {
-  return (data: S & T): string =>
-    pre + mid(data) + (typeof post === 'string' ? post : post(data));
-}
-
-function partial<S, T>(
-  data: S,
-  template: Template<S & T>,
-  override = true
-): Template<T> {
-  return (d: T): string =>
-    template(override ? { ...d, ...data } : { ...data, ...d });
-}
-
-function fields<T>(...fieldNames: (keyof T)[]): Template<T> {
-  return (data: T): string => {
-    return fieldNames
-      .map((fName) => data[fName] !== undefined && field(fName)(data))
-      .filter(Boolean)
-      .join(', ');
-  };
-}
-
-function field<T>(fieldName: keyof T): Template<T> {
-  return (data: T): string => {
-    // Plot cannot understand strokeWidth values provided as strings like "1px",
-    // but it does correctly apply ['stroke-width']: 1px.
-    const fName =
-      fieldName === 'stroke-width' ? fieldName : camelCase(`${fieldName}`);
-    const fData = data[fieldName];
-
-    // If our fill or stroke attributes in the spec are arrays with length > 1
-    // we can assume they are being used as visual variables that must be encoded
-    // using the top-level "color" key. Return a hole for them in the output spec,
-    // since they would need to have a data column mapped to them.
-    if (
-      Array.isArray(fData) &&
-      fData.length > 1 &&
-      (fieldName === 'fill' || fieldName === 'stroke')
-    ) {
-      return `'${fName}': '${PROGRAM_HOLE}'`;
-    }
-
-    // If our field data is an object, preserve it using JSON.stringify.
-    if (isPlainObject(fData)) {
-      return `'${fName}': ${JSON.stringify(fData)}`;
-    }
-
-    // If our field data is a number, don't surround with quotes.
-    const fDataStr =
-      !isNaN(+fData) && !isNaN(parseFloat(`${fData}`)) ? fData : `'${fData}'`;
-    return `'${fName}': ` + fDataStr;
-  };
-}
-
-const plotPresFields: Template<PlotPresData> = fields('color');
-const scaleFields: Template<Scales> = fields('x', 'y');
-const scatterFields: Template<ScatterData> = fields('x', 'y', 'r');
-
-const presAttrsFields: Template<PresAttrs> = fields(
-  'fill',
-  'stroke',
-  'fill-opacity',
-  'stroke-opacity',
-  'stroke-width'
-);
-
-const mark = <S extends PresAttrs, T>(
-  markType: string,
-  specialFields: Template<T>
-): Template<S & T> =>
-  wrap(`Plot.${markType}(data, `, json(presAttrsFields, specialFields), ')');
-
-const barMark: Template<PresAttrs & Scales> = mark('barY', scaleFields);
-
-const histogramMark: Template<PresAttrs & Scales> = mark(
-  'rectY',
-  splat('Plot.binX', comma(json(field('y')), json(field('x'))))
-);
-
-const scatterMark: Template<PresAttrs & ScatterData> = mark(
-  'dot',
-  scatterFields
-);
-const bubbleMark: Template<PresAttrs & Scales> = mark('dot', scaleFields);
-const stripMark: Template<PresAttrs & Scales> = mark('dotX', scaleFields);

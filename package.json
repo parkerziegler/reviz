@@ -28,7 +28,7 @@
     "clean": "rimraf ./dist ./node_modules/.cache",
     "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
     "format": "prettier --write **/*.{ts,tsx} **/*.json",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint 'src/**/*.ts'",
     "preversion": "yarn clean && yarn check:ts && yarn build",
     "test": "jest"
   },
@@ -42,7 +42,6 @@
   "dependencies": {
     "lodash.camelcase": "^4.3.0",
     "lodash.groupby": "^4.6.0",
-    "lodash.isplainobject": "^4.0.6",
     "lodash.orderby": "^4.6.0"
   },
   "devDependencies": {
@@ -51,7 +50,6 @@
     "@types/jest": "^27.0.3",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.groupby": "^4.6.6",
-    "@types/lodash.isplainobject": "^4.0.6",
     "@types/lodash.orderby": "^4.6.6",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.1.0",

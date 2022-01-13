@@ -18,7 +18,6 @@ import {
   GeomAttrNames,
   PresAttrNames,
   PRES_ATTR_NAMES,
-  PROGRAM_HOLE,
   RECT_ATTR_NAMES,
 } from './constants';
 
@@ -64,6 +63,6 @@ export const analyzeVisualization = (root: SVGElement): RevizOutput => {
 
   return {
     spec: vizSpec,
-    program: program({ x: PROGRAM_HOLE, y: PROGRAM_HOLE, r: PROGRAM_HOLE }),
+    program,
   };
 };

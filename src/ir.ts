@@ -1,7 +1,7 @@
 import groupBy from 'lodash.groupby';
 import orderBy from 'lodash.orderby';
 
-import { PRES_ATTR_NAMES } from './constants';
+import { OBSERVABLE_DEFAULT_R, PRES_ATTR_NAMES } from './constants';
 import type { VizMetaAttrs } from './inference';
 import type {
   AttrSets,
@@ -19,31 +19,32 @@ export interface PresAttrs {
   ['stroke-width']: string[];
 }
 
-export interface Scatterplot extends PresAttrs {
+interface Scatterplot extends PresAttrs {
   type: 'Scatterplot';
   r: number;
 }
 
-export interface BubbleChart extends PresAttrs {
+interface BubbleChart extends PresAttrs {
   type: 'BubbleChart';
+  r: number[];
 }
 
-export interface StripPlot extends PresAttrs {
+interface StripPlot extends PresAttrs {
   type: 'StripPlot';
   r: number;
 }
 
-export interface BarChart extends PresAttrs {
+interface BarChart extends PresAttrs {
   type: 'BarChart';
   width: number;
 }
 
-export interface StackedBarChart extends PresAttrs {
+interface StackedBarChart extends PresAttrs {
   type: 'StackedBarChart';
   width: number;
 }
 
-export interface Histogram extends PresAttrs {
+interface Histogram extends PresAttrs {
   type: 'Histogram';
   width: number;
 }
@@ -266,12 +267,17 @@ export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
     case 'StripPlot':
       return {
         type: vizType,
-        r: Number(Array.from(vizAttrs.geomAttrs.get('r') ?? ['3'])[0]),
+        r: +Array.from(
+          vizAttrs.geomAttrs.get('r') ?? [`${OBSERVABLE_DEFAULT_R}`]
+        )[0],
         ...presAttrs,
       };
     case 'BubbleChart':
       return {
         type: vizType,
+        r: Array.from(
+          vizAttrs.geomAttrs.get('r') ?? [`${OBSERVABLE_DEFAULT_R}`]
+        ).map((r) => +r),
         ...presAttrs,
       };
     case 'BarChart':
