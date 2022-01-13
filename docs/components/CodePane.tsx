@@ -21,16 +21,23 @@ const CodePane: React.FC<Props> = ({ code, name, compile, perf }) => {
       >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={cs('text-lg md:text-xl m-0 overflow-auto', className)}
+            className={cs(
+              'text-lg md:text-xl flex-1 m-0 overflow-auto',
+              className
+            )}
             style={style}
           >
             {tokens.map((line, i) => (
-              <div {...getLineProps({ line })} key={i} className="table-row">
+              // key is already supplied by spreading the return value of getLineProps
+              // eslint-disable-next-line react/jsx-key
+              <div {...getLineProps({ line, key: i })} className="table-row">
                 <span className="table-cell pr-4 text-right select-none opacity-50">
                   {i + 1}
                 </span>
                 {line.map((token, key) => (
-                  <span {...getTokenProps({ token })} key={key} />
+                  // key is already supplied by spreading the return value of getTokenProps
+                  // eslint-disable-next-line react/jsx-key
+                  <span {...getTokenProps({ token, key })} />
                 ))}
               </div>
             ))}
