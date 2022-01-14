@@ -30,7 +30,7 @@ npm install --save @plait-lab/reviz
 The `reviz` API is very small; in fact, it consists of only a single function, `analyzeVisualization`!
 
 ```js
-import { analyzeVisualization } from `@plait-lab/reviz`;
+import { analyzeVisualization } from '@plait-lab/reviz';
 
 const viz = document.querySelector('#my-viz');
 

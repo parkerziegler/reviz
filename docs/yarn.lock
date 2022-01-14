@@ -263,14 +263,13 @@
     d3 "7"
     isoformat "0.2"
 
-"@parkerziegler/reviz@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@parkerziegler/reviz/-/reviz-0.2.0.tgz#7e1dc193e0dd0035e9f1f709b49b616db95a9406"
-  integrity sha512-Q5ewRpOG838KENtw5XgZLJpZdqH0NQXG0lcJqzNsWJNaFrUXDWyl+e6ywM5q1/bgJuiEMiyon0QVd4LqDH4dlA==
+"@plait-lab/reviz@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@plait-lab/reviz/-/reviz-0.3.0.tgz#14b12243b9b2cd6c21409f507f607b14e6ea80dc"
+  integrity sha512-w538rNtsWezcFnUBEADn3jdrMJEKlTGUkDOJfpgeXj72A9Zysir8JDAMs6PEp4fbhj3AztAcc7CEBGXXpKvJjw==
   dependencies:
     lodash.camelcase "^4.3.0"
     lodash.groupby "^4.6.0"
-    lodash.isplainobject "^4.0.6"
     lodash.orderby "^4.6.0"
 
 "@rushstack/eslint-patch@^1.0.6":
@@ -2749,11 +2748,6 @@ lodash.groupby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.groupby/-/lodash.groupby-4.6.0.tgz#0b08a1dcf68397c397855c3239783832df7403d1"
   integrity sha1-Cwih3PaDl8OXhVwyOXg4Mt90A9E=
-
-lodash.isplainobject@^4.0.6:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
-  integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
 
 lodash.merge@^4.6.2:
   version "4.6.2"

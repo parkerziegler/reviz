@@ -1,7 +1,7 @@
 import * as React from 'react';
 import prettier from 'prettier/standalone';
 import babylon from 'prettier/parser-babel';
-import { analyzeVisualization } from '@parkerziegler/reviz';
+import { analyzeVisualization } from '@plait-lab/reviz';
 
 import CodePane from './CodePane';
 
