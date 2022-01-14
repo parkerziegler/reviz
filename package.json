@@ -1,6 +1,6 @@
 {
   "name": "@plait-lab/reviz",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An engine for reverse engineering data visualizations from the DOM.",
   "main": "dist/reviz.js",
   "module": "dist/reviz.esm.js",
