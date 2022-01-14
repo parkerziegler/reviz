@@ -31,7 +31,7 @@ export const metadata: Record<string, ExampleMeta> = {
   },
   ['stacked-bar']: {
     src: StackedBarThumbnail,
-    alt: 'The example stacked bar chart from the Observable Plot documentation on the Stack Transform. The chart, based on data from Florence Nightingale, shows deaths in the Crimean War by month, with each bar group representing the cause of death.',
+    alt: "A modification of Mike Bostock's Stacked Bar Chart example using D3. The chart, based on data from Florence Nightingale, shows deaths in the Crimean War by month, with each bar group representing the cause of death.",
   },
   ['strip-plot']: {
     src: StripPlotThumbnail,
