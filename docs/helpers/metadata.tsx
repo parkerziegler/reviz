@@ -15,7 +15,7 @@ interface ExampleMeta {
 export const metadata: Record<string, ExampleMeta> = {
   bar: {
     src: BarThumbnail,
-    alt: 'The example bar chart used in the Observable Plot documentation on the Bar Mark. The chart shows the frequency of each letter in the English language.',
+    alt: "A modification of Mike Bostock's Bar Chart example using D3. The chart shows the frequency of each letter in the English language.",
   },
   bubble: {
     src: BubbleThumbnail,

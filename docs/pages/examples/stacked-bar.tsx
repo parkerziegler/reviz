@@ -66,23 +66,23 @@ const Chart: React.FC<Props> = ({ data }) => {
   const yDomain = d3.extent(series.flat(2));
 
   // Set up x, y, and color scales.
-  const xScale = d3
+  const x = d3
     .scaleBand(xDomain, [margin.left, dimensions.width - margin.right])
     .paddingInner(0.1);
-  const yScale = d3.scaleLinear(yDomain, [
+  const y = d3.scaleLinear(yDomain, [
     dimensions.height - margin.bottom,
     margin.top,
   ]);
-  const colorScale = d3.scaleOrdinal(zDomain, d3.schemeTableau10);
+  const color = d3.scaleOrdinal(zDomain, d3.schemeTableau10);
 
   // Define axis generators.
   const xAxis = d3
-    .axisBottom(xScale)
+    .axisBottom(x)
     .tickSizeOuter(0)
     .tickFormat((d) =>
       new Date(d).toLocaleString('default', { month: 'short' })
     );
-  const yAxis = d3.axisLeft(yScale).ticks(dimensions.height / 60);
+  const yAxis = d3.axisLeft(y).ticks(dimensions.height / 60);
 
   const xAxisRef = React.useRef<SVGGElement>(null);
   const yAxisRef = React.useRef<SVGGElement>(null);
@@ -116,20 +116,20 @@ const Chart: React.FC<Props> = ({ data }) => {
       viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
       className="block h-auto max-w-full"
     >
-      <g ref={xAxisRef} transform={`translate(0, ${yScale(0)})`}></g>
+      <g ref={xAxisRef} transform={`translate(0, ${y(0)})`}></g>
       <g ref={yAxisRef} transform={`translate(${margin.left},0)`}></g>
       <g>
         {series.map((datum, i) => {
-          const fill = colorScale(datum.key);
+          const fill = color(datum.key);
           return (
             <g key={i} fill={fill}>
               {datum.map((d, i) => (
                 <rect
                   key={i}
-                  x={xScale(Array.from(xDomain)[i])}
-                  y={Math.min(yScale(d[0]), yScale(d[1]))}
-                  height={Math.abs(yScale(d[0]) - yScale(d[1]))}
-                  width={xScale.bandwidth()}
+                  x={x(Array.from(xDomain)[i])}
+                  y={Math.min(y(d[0]), y(d[1]))}
+                  height={Math.abs(y(d[0]) - y(d[1]))}
+                  width={x.bandwidth()}
                 />
               ))}
             </g>
@@ -150,7 +150,7 @@ const StackedBarChart: React.FC<Props> = ({ data }) => {
         withViewer(Chart, {
           data,
           href: 'https://observablehq.com/@d3/stacked-bar-chart',
-          title: 'From D3 — Stacked Bar Chart',
+          title: 'From D3 on Observable — Stacked Bar Chart',
         })
       )}
     </>
