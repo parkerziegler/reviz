@@ -48,7 +48,7 @@ module.exports = {
 2. Change `Viewer.tsx` to import `analyzeVisualization` from `src`.
 
 ```diff
-- import { analyzeVisualization } from '@parkerziegler/reviz';
+- import { analyzeVisualization } from '@plait-lab/reviz';
 + import { analyzeVisualization } from '../../src';
 ```
 

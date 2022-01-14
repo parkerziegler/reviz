@@ -7,6 +7,19 @@ All notable changes to this project will be documented in this file. If a change
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0]
+
+### Minor Changes
+
+- ⚠️ Publish package under `@plait-lab` scope as `@plait-lab/reviz`.
+- ✨ Properly infer the range for radii on bubble charts.
+- Add a program hole (`'??'`) for the `r` attribute on bubble charts.
+
+### Patch Changes
+
+- Rewrite internal code generation logic to follow the formalized contextual semantics documented in [the accompanying paper](/paper/reviz.pdf).
+- Flag package as side effect-free in `package.json`.
+
 ## [0.2.0]
 
 ### Minor Changes

@@ -19,10 +19,10 @@
 ### Installation
 
 ```sh
-yarn add @parkerziegler/reviz
+yarn add @plait-lab/reviz
 
 # If using npm:
-npm install --save @parkerziegler/reviz
+npm install --save @plait-lab/reviz
 ```
 
 ### API
@@ -30,7 +30,7 @@ npm install --save @parkerziegler/reviz
 The `reviz` API is very small; in fact, it consists of only a single function, `analyzeVisualization`!
 
 ```js
-import { analyzeVisualization } from `@parkerziegler/reviz`;
+import { analyzeVisualization } from `@plait-lab/reviz`;
 
 const viz = document.querySelector('#my-viz');
 
