@@ -1,9 +1,8 @@
 <div align="center">
   <img
-    src="assets/reviz.png"
+    src="assets/reviz-logo.svg"
     alt="reviz"
-    width="500"
-    style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
+    width="300"
   />
   <br />
   <br />     
@@ -60,7 +59,7 @@ Let's look at an example to see how `reviz` works in practice. We'll use [this v
   <img
     src="assets/nyt-example.png"
     alt="A scatterplot visualization from the New York Times"
-    width="400"
+    width="500"
     style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
   />
 </div>
@@ -123,7 +122,7 @@ The result that we get is a new visualization that takes the _appearance_ of the
   <img
     src="assets/penguin-example.png"
     alt="A scatterplot visualization of penguins."
-    width="400"
+    width="500"
     style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
   />
 </div>
