@@ -18,6 +18,19 @@
     }
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parkerziegler/reviz.git"
+  },
+  "bugs": "https://github.com/parkerziegler/reviz/issues",
+  "homepage": "https://github.com/parkerziegler/reviz#readme",
+  "keywords": [
+    "data visualization",
+    "reverse engineering",
+    "observable",
+    "observable plot",
+    "typescript"
+  ],
   "scripts": {
     "build": "yarn check:ts && yarn emit:types && yarn build:esm:dev && yarn build:esm:prod && yarn build:cjs:dev && yarn build:cjs:prod",
     "build:esm:dev": "esbuild src/index.ts --bundle --sourcemap --format=esm --outfile=dist/reviz.esm.js",
