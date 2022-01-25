@@ -26,7 +26,7 @@ interface RevizOutput {
   program: string;
 }
 
-export const analyzeVisualization = (root: SVGElement): RevizOutput => {
+export const analyzeVisualization = (root: SVGSVGElement): RevizOutput => {
   const markTypes: string[] = [];
   const geomAttrs: AttrSets<GeomAttrNames> = initializeAttrSets<GeomAttrNames>([
     ...CIRCLE_ATTR_NAMES,
