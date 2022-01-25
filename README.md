@@ -1,6 +1,6 @@
 <div align="center">
   <img
-    src="assets/reviz-logo.svg"
+    src="https://raw.githubusercontent.com/parkerziegler/reviz/main/assets/reviz-logo.svg"
     alt="reviz"
     width="300"
   />
@@ -9,22 +9,26 @@
   <strong>
     A lightweight engine for reverse engineering data visualizations from the DOM
   </strong>
+  <br />
+  <br />
+  <a href="https://npmjs.com/package/@plait-lab/reviz">
+    <img alt="NPM Version" src="https://img.shields.io/npm/v/@plait-lab/reviz.svg" />
+  </a>
+  <br />
+  <br />
 </div>
-
-## `reviz`
 
 `reviz` is a lightweight engine for reverse engineering data visualizations from the DOM. Its core goal is to assist in rapid visualization sketching and prototyping by automatically generating partial programs written using [Observable Plot](https://observablehq.com/@observablehq/plot) from input `svg` subtrees.
 
-### Installation
+For a hands-on, interactive introduction to `reviz`, check out [the `Hello reviz!` notebook on Observable](https://observablehq.com/@parkerziegler/hello-reviz).
+
+## Installation
 
 ```sh
 yarn add @plait-lab/reviz
-
-# If using npm:
-npm install --save @plait-lab/reviz
 ```
 
-### API
+## API
 
 The `reviz` API is very small; in fact, it consists of only a single function, `analyzeVisualization`!
 
@@ -39,37 +43,37 @@ const { spec, program } = analyzeVisualization(viz);
 #### `analyzeVisualization`
 
 ```ts
-export declare const analyzeVisualization: (root: SVGElement) => {
+export declare const analyzeVisualization: (root: SVGSVGElement) => {
   spec: VizSpec;
   program: string;
 };
 ```
 
-`analyzeVisualization` is a function that takes in an `SVGElement` as input and returns an `Object` containing two properties, `spec` and `program`.
+`analyzeVisualization` is a function that takes in an `svg` `Element` as input and returns an `Object` containing two properties, `spec` and `program`.
 
-`spec` refers to the intermediate representation used by `reviz` to generate partial Observable Plot programs. It encodes semantic information about the input `svg` subtree, including its inferred visualization type, geometric attributes of its marks (currently either `circle` or `rect` elements), and presentational attributes of its marks. `reviz`'s architecture mimics that of a traditional compiler, with `spec` representing the IR. It can be useful to inspect `spec` to see whether or not `reviz` has inferred the correct visualization type for your input `svg` subtree.
+`spec` refers to the intermediate representation used by `reviz` to generate partial Observable Plot programs. It encodes semantic information about the input `svg` subtree, including its inferred visualization type, geometric attributes of its marks (either `circle` or `rect` elements), and presentational attributes of its marks. `reviz`'s architecture mimics that of a traditional compiler, with `spec` acting as the intermediate representation (IR). It can be useful to examine `spec` to see whether or not `reviz` has inferred the correct visualization type for your input `svg` subtree.
 
 `program` refers to the _partial_ Observable Plot program that `reviz` generates. These programs are intentionally _incomplete_ and contain "holes" represented by the string `'??'`. The presence of a hole indicates that the value for a particular attribute (e.g. the `r` attribute of a bubble chart or the `fill` attribute of a stacked bar chart) should be mapped to a column in a user's input dataset rather than kept static across all data elements. After filling in holes with column names from your input dataset, you'll have a complete visualization program ready to run in the browser!
 
-### An Example
+### An example
 
 Let's look at an example to see how `reviz` works in practice. We'll use [this visualization](https://www.nytimes.com/interactive/2021/04/17/us/vaccine-hesitancy-politics.html) from the New York Times:
 
 <div align="center">
   <img
-    src="assets/nyt-example.png"
+    src="https://raw.githubusercontent.com/parkerziegler/reviz/main/assets/nyt-example.png"
     alt="A scatterplot visualization from the New York Times"
     width="500"
     style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
   />
 </div>
 
-If we point `reviz` at the root `svg` `Node` of this visualization, it generates the following (partial) program:
+If we point `reviz` at the root `svg` `Element` of this visualization, it generates the following (partial) program:
 
 ```js
 const plot = Plot.plot({
   color: {
-    scale: 'ordinal',
+    scale: 'categorical',
     range: ['#C67371', '#ccc', '#709DDE', '#A7B9D3', '#C23734'],
   },
   marks: [
@@ -78,7 +82,7 @@ const plot = Plot.plot({
       stroke: '??',
       fillOpacity: 0.8,
       strokeOpacity: 1,
-      'stroke-width': '1px',
+      strokeWidth: 1,
       x: '??',
       y: '??',
       r: 7,
@@ -87,14 +91,14 @@ const plot = Plot.plot({
 });
 ```
 
-Notice that `fill`, `stroke`, `x` and `y` are all inferred to be holes (indicated by`'??'`) that must be mapped to columns of an input dataset. Conversely, attributes like `fill-opacity` and `stroke-width` are automatically inferred because they are found to be consistent across all mark elements. We can also see that `reviz` has inferred that the visualization is using an [ordinal color scale](https://observablehq.com/@observablehq/plot-scales#cell-75) and automatically configures the scale for us.
+Notice that `fill`, `stroke`, `x` and `y` are all inferred to be holes (indicated by`'??'`) that must be mapped to columns of an input dataset. Conversely, attributes like `fillOpacity` and `strokeWidth` are automatically inferred because they are found to be consistent across all mark elements. We can also see that `reviz` has inferred that the visualization is using a [categorical color scale](https://observablehq.com/@observablehq/plot-scales#cell-75) and automatically configures the scale for us.
 
-We can now apply this partial program to a new dataset. Let's use [this delightful dataset about penguins](https://observablehq.com/@observablehq/plot-exploration-penguins) from the Observable Plot docs. We can choose input columns from this dataset to "fill in" the holes like so:
+We can now apply this partial program to a new dataset. Let's use [this delightful dataset about penguins](https://observablehq.com/@observablehq/plot-exploration-penguins) from @Fil's Plot Exploration notebook. We can choose input columns from this dataset to "fill in" the holes like so:
 
 ```diff
 const plot = Plot.plot({
   color: {
-    scale: 'ordinal',
+    scale: 'categorical',
     range: ['#C67371', '#ccc', '#709DDE', '#A7B9D3', '#C23734'],
   },
   marks: [
@@ -105,7 +109,7 @@ const plot = Plot.plot({
 +     stroke: 'island',
       fillOpacity: 0.8,
       strokeOpacity: 1,
-      'stroke-width': '1px',
+      strokeWidth: 1,
 -     x: '??',
 +     x: 'flipper_length_mm',
 -     y: '??',
@@ -120,7 +124,7 @@ The result that we get is a new visualization that takes the _appearance_ of the
 
 <div align="center">
   <img
-    src="assets/penguin-example.png"
+    src="https://raw.githubusercontent.com/parkerziegler/reviz/main/assets/penguin-example.png"
     alt="A scatterplot visualization of penguins."
     width="500"
     style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
