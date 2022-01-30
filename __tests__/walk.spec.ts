@@ -3,19 +3,19 @@
  */
 import * as Plot from '@observablehq/plot';
 
-import { walk } from './walk';
+import { walk } from '../src/walk';
+
+import { getRandInt } from './test-utils';
 
 const NUM_NODES = 100;
 const PLOT_SUPPLIED_NODE_COUNT = 13;
-
-const generateRandomInteger = (): number => {
-  return Math.floor(Math.random() * 600);
-};
+const PLOT_DEFAULT_WIDTH = 640;
+const PLOT_DEFAULT_HEIGHT = 400;
 
 const createSubtree = (): Node => {
   const data = new Array(NUM_NODES).fill({
-    x: generateRandomInteger(),
-    y: generateRandomInteger(),
+    x: getRandInt(PLOT_DEFAULT_WIDTH),
+    y: getRandInt(PLOT_DEFAULT_HEIGHT),
   });
 
   const plot = Plot.dot(data, { x: 'x', y: 'y' }).plot();

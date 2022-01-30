@@ -10,13 +10,15 @@ import {
   RevizPositionDatum,
   collectPositionAttrs,
   collectMarkType,
-} from './attributes';
+} from '../src/attributes';
 import {
   ATTR_NAMES,
   CIRCLE_ATTR_NAMES,
   RECT_ATTR_NAMES,
   OBSERVABLE_DEFAULT_R,
-} from './constants';
+} from '../src/constants';
+
+import { getRandInt } from './test-utils';
 
 describe('attributes', () => {
   describe('initializeAttrSets', () => {
@@ -33,24 +35,18 @@ describe('attributes', () => {
   });
 
   describe('collectMarkTypes', () => {
-    it.each<'circle' | 'rect' | 'text' | 'g' | 'svg'>([
-      'circle',
-      'rect',
-      'text',
-      'g',
-      'svg',
-    ])(
-      'should collect the mark type of elements in the svg subtree',
+    it.each<'circle' | 'rect'>(['circle', 'rect'])(
+      'should collect the counts of nodeNames in the svg subtree',
       (nodeName) => {
         const element = document.createElementNS(
           'http://www.w3.org/2000/svg',
           nodeName
         );
 
-        const marks: string[] = [];
+        const marks = new Map<'circle' | 'rect', number>();
         collectMarkType(marks)(element);
 
-        expect(marks).toContain(nodeName);
+        expect(marks.get(nodeName)).toBe(1);
       }
     );
   });
@@ -62,8 +58,8 @@ describe('attributes', () => {
         'circle'
       );
 
-      const cx = Math.floor(Math.random() * 100).toString();
-      const cy = Math.floor(Math.random() * 100).toString();
+      const cx = `${getRandInt(100)}`;
+      const cy = `${getRandInt(100)}`;
       circle.setAttribute('cx', cx);
       circle.setAttribute('cy', cy);
       circle.setAttribute('r', OBSERVABLE_DEFAULT_R.toString());
@@ -116,7 +112,7 @@ describe('attributes', () => {
 
       const [width, height, x, y] = new Array(4)
         .fill(undefined)
-        .map(() => Math.floor(Math.random() * 100).toString());
+        .map(() => `${getRandInt(100)}`);
 
       rect.setAttribute('width', width);
       rect.setAttribute('height', height);
@@ -265,8 +261,8 @@ describe('attributes', () => {
         'circle'
       );
 
-      const cx = Math.floor(Math.random() * 100).toString();
-      const cy = Math.floor(Math.random() * 100).toString();
+      const cx = `${getRandInt(100)}`;
+      const cy = `${getRandInt(100)}`;
       circle.setAttribute('cx', cx);
       circle.setAttribute('cy', cy);
       circle.setAttribute('r', OBSERVABLE_DEFAULT_R.toString());
@@ -286,7 +282,7 @@ describe('attributes', () => {
 
       const [width, height, x, y] = new Array(4)
         .fill(undefined)
-        .map(() => Math.floor(Math.random() * 100).toString());
+        .map(() => `${getRandInt(100)}`);
 
       rect.setAttribute('width', width);
       rect.setAttribute('height', height);
