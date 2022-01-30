@@ -2,13 +2,11 @@ import groupBy from 'lodash.groupby';
 import orderBy from 'lodash.orderby';
 
 import { OBSERVABLE_DEFAULT_R, PRES_ATTR_NAMES } from './constants';
-import type { VizMetaAttrs } from './inference';
 import type {
   AttrSets,
   RevizCirclePositionDatum,
   RevizPositionDatum,
   RevizRectPositionDatum,
-  RevizTextDatum,
 } from './attributes';
 
 export interface PresAttrs {
@@ -73,10 +71,11 @@ export type VizSpec =
  * We then use lodash's overEvery function to compose these predicates; a visualization is of a
  * particular type if it returns true for all of that visualization's associated predicates.
  */
-interface VizAttrs extends VizMetaAttrs {
+interface VizAttrs {
+  markType: 'circle' | 'rect';
+  xScaleType: 'continuous' | 'discrete';
   geomAttrs: AttrSets;
   presAttrs: AttrSets;
-  textAttrs: RevizTextDatum[];
   positionAttrs: RevizPositionDatum[];
 }
 

@@ -10,7 +10,7 @@ import {
   collectPositionAttrs,
   RevizPositionDatum,
 } from './attributes';
-import { inferVizMetaAttrs } from './inference';
+import { inferXScaleType } from './scales';
 import { buildVizSpec, VizSpec } from './ir';
 import { generate } from './generate';
 import {
@@ -27,7 +27,10 @@ interface RevizOutput {
 }
 
 export const analyzeVisualization = (root: SVGSVGElement): RevizOutput => {
-  const markTypes: string[] = [];
+  const markTypes = new Map<'circle' | 'rect', number>([
+    ['circle', 0],
+    ['rect', 0],
+  ]);
   const geomAttrs: AttrSets<GeomAttrNames> = initializeAttrSets<GeomAttrNames>([
     ...CIRCLE_ATTR_NAMES,
     ...RECT_ATTR_NAMES,
@@ -47,16 +50,13 @@ export const analyzeVisualization = (root: SVGSVGElement): RevizOutput => {
     collectPositionAttrs(positionAttrs),
   ]);
 
-  const vizMetaAttrs = inferVizMetaAttrs({
-    markTypes,
-    textAttrs,
-  });
-
   const vizSpec = buildVizSpec({
-    ...vizMetaAttrs,
+    markType: [...markTypes.entries()].reduce((acc, el) =>
+      el[1] > acc[1] ? el : acc
+    )[0],
+    xScaleType: inferXScaleType(textAttrs),
     geomAttrs,
     presAttrs,
-    textAttrs,
     positionAttrs,
   });
   const program = generate(vizSpec);

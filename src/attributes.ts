@@ -20,9 +20,14 @@ export const initializeAttrSets = <T extends string = string>(
 };
 
 export const collectMarkType =
-  (markTypes: string[]): WalkCallback =>
+  (markTypes: Map<'circle' | 'rect', number>): WalkCallback =>
   (element): void => {
-    markTypes.push(element.nodeName);
+    if (element.nodeName === 'circle' || element.nodeName === 'rect') {
+      markTypes.set(
+        element.nodeName,
+        (markTypes.get(element.nodeName) ?? 0) + 1
+      );
+    }
   };
 
 const readAttrs = <T extends string = string>(
