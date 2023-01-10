@@ -23,16 +23,18 @@ interface Point {
   r: string;
 }
 
+const DEFAULT_RADIUS = 3;
+
 export const generatePointDataset = (
   max = 1000,
-  { createLanes } = { createLanes: false }
+  { createLanes, varyRadius } = { createLanes: false, varyRadius: false }
 ): Point[] => {
   // Generate a semi-random point dataset.
   const points = new Array(getRandInt(max)).fill(undefined).map(() => {
     return {
       cx: getRandInt().toString(),
       cy: getRandInt().toString(),
-      r: getRandInt().toString(),
+      r: varyRadius ? getRandInt().toString() : DEFAULT_RADIUS.toString(),
     };
   });
 
