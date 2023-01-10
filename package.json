@@ -39,6 +39,7 @@
     "build:cjs:prod": "esbuild src/index.ts --bundle --minify --outfile=dist/reviz.min.js",
     "check:ts": "tsc --noEmit",
     "clean": "rimraf ./dist ./node_modules/.cache",
+    "coverage": "jest --collectCoverage",
     "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
     "format": "prettier --write **/*.{ts,tsx} **/*.json",
     "lint": "eslint 'src/**/*.ts'",
@@ -62,6 +63,7 @@
     "@sucrase/jest-plugin": "^2.2.0",
     "@types/jest": "^27.0.3",
     "@types/lodash.camelcase": "^4.3.6",
+    "@types/lodash.chunk": "^4.2.7",
     "@types/lodash.groupby": "^4.6.6",
     "@types/lodash.orderby": "^4.6.6",
     "@types/node": "^16.11.6",
@@ -72,6 +74,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "jest": "^27.4.5",
+    "lodash.chunk": "^4.2.0",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.4"
@@ -104,7 +107,10 @@
       "d3": "<rootDir>/node_modules/d3/dist/d3.min.js"
     },
     "testMatch": [
-      "**/__tests__/**/*.spec.ts"
+      "<rootDir>/__tests__/*.spec.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts"
     ]
   }
 }
