@@ -9,13 +9,13 @@ export const getRandChar = (): string =>
   String.fromCharCode(65 + Math.floor(Math.random() * 26));
 
 /**
- * Generate a random integer in the range [0, max).
+ * Generate a random integer in the range [1, max).
  *
  * @param max - the upper bound of the random integer to generate.
- * @returns - a random integer in the range [0, max).
+ * @returns - a random integer in the range [1, max).
  */
 export const getRandInt = (max = 1000): number =>
-  Math.floor(Math.random() * max);
+  Math.floor(Math.random() * max) + 1;
 
 interface Point {
   cx: string;
@@ -25,6 +25,16 @@ interface Point {
 
 const DEFAULT_RADIUS = 3;
 
+/**
+ * Generate a random dataset of points to simulate circle-based charts.
+ *
+ * @param - the maximum number of points to generate.
+ * @param - options to control the generation of the dataset.
+ *  createLanes – place points in "lanes" (shared cy attribute) to simulate strip plots.
+ *  varyRadius – vary the radius of points to simulate bubble charts.
+ *
+ * @returns – a Point dataset.
+ */
 export const generatePointDataset = (
   max = 1000,
   { createLanes, varyRadius } = { createLanes: false, varyRadius: false }
@@ -60,6 +70,37 @@ export const generatePointDataset = (
   }
 
   return points;
+};
+
+interface Rect {
+  x: string;
+  y: string;
+  width: string;
+  height: string;
+}
+
+/**
+ * Generate a random dataset of rectangles to simulate rect-based charts.
+ *
+ * @param max - the maximum number of rectangles to generate.
+ * @returns – a Rect dataset.
+ */
+export const generateRectDataset = (max = 100): Rect[] => {
+  // Define a standard width and y to use for all rects.
+  const width = getRandInt().toString();
+  const y = (1000 - getRandInt()).toString(); // Simulate all bars having the same baseline in SVG.
+
+  // Generate a semi-random rect dataset.
+  const rects = new Array(getRandInt(max)).fill(undefined).map(() => {
+    return {
+      x: getRandInt().toString(),
+      y,
+      width,
+      height: getRandInt().toString(),
+    };
+  });
+
+  return rects;
 };
 
 // Default presentational attributes for tests.
