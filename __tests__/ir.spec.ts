@@ -135,8 +135,11 @@ describe('IR', () => {
       2. A consistent width attribute for all marks,
       3. A discrete xScale
       `, () => {
+        // Generate a semi-random bar chart dataset.
         const rects = generateRectDataset();
 
+        // Construct visualization attributes that would be inferred
+        // by our TreeWalker implementation.
         const vizAttrs = {
           markType: 'rect' as const,
           xScaleType: 'discrete' as const,
@@ -155,8 +158,90 @@ describe('IR', () => {
           }),
         };
 
+        // Assert that we correctly infer the type of the visualization
+        // (Bar Chart) and build the visualization specification.
         expect(buildVizSpec(vizAttrs)).toEqual({
           type: 'BarChart',
+          width: +rects[0].width,
+          ...defaultPresAttrs,
+        });
+      });
+    });
+
+    describe('Histogram', () => {
+      it(`should infer a Histogram for charts with:
+      1. markType === 'rect',
+      2. A consistent width attribute for all marks,
+      3. A continuous xScale
+      `, () => {
+        // Generate a semi-random histogram dataset.
+        const rects = generateRectDataset();
+
+        // Construct visualization attributes that would be inferred
+        // by our TreeWalker implementation.
+        const vizAttrs = {
+          markType: 'rect' as const,
+          xScaleType: 'continuous' as const,
+          geomAttrs: new Map<string, Set<string>>([
+            ['x', new Set(rects.map((d) => d.x.toString()))],
+            ['y', new Set(rects.map((d) => d.y.toString()))],
+            ['width', new Set(rects.map((d) => d.width.toString()))],
+            ['height', new Set(rects.map((d) => d.height.toString()))],
+          ]),
+          presAttrs: new Map(),
+          positionAttrs: rects.map((d) => {
+            return {
+              type: 'rect' as const,
+              x: d.x.toString(),
+            };
+          }),
+        };
+
+        // Assert that we correctly infer the type of the visualization
+        // (Histogram) and build the visualization specification.
+        expect(buildVizSpec(vizAttrs)).toEqual({
+          type: 'Histogram',
+          width: +rects[0].width,
+          ...defaultPresAttrs,
+        });
+      });
+    });
+
+    describe('StackedBarChart', () => {
+      it(`should infer a StackedBarChart for charts with:
+      1. markType === 'rect',
+      2. A consistent width attribute for all marks,
+      3. A discrete xScale,
+      4. Multiple sibling elements with the same x attribute,
+      5. The same number of sibling elements with a common x attribute
+      `, () => {
+        // Generate a semi-random stacked bar chart dataset.
+        const rects = generateRectDataset(100, { createLanes: true });
+
+        // Construct visualization attributes that would be inferred
+        // by our TreeWalker implementation.
+        const vizAttrs = {
+          markType: 'rect' as const,
+          xScaleType: 'discrete' as const,
+          geomAttrs: new Map<string, Set<string>>([
+            ['x', new Set(rects.map((d) => d.x.toString()))],
+            ['y', new Set(rects.map((d) => d.y.toString()))],
+            ['width', new Set(rects.map((d) => d.width.toString()))],
+            ['height', new Set(rects.map((d) => d.height.toString()))],
+          ]),
+          presAttrs: new Map(),
+          positionAttrs: rects.map((d) => {
+            return {
+              type: 'rect' as const,
+              x: d.x.toString(),
+            };
+          }),
+        };
+
+        // Assert that we correctly infer the type of the visualization
+        // (Stacked Bar Chart) and build the visualization specification.
+        expect(buildVizSpec(vizAttrs)).toEqual({
+          type: 'StackedBarChart',
           width: +rects[0].width,
           ...defaultPresAttrs,
         });

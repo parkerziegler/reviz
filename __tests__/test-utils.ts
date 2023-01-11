@@ -85,7 +85,10 @@ interface Rect {
  * @param max - the maximum number of rectangles to generate.
  * @returns – a Rect dataset.
  */
-export const generateRectDataset = (max = 100): Rect[] => {
+export const generateRectDataset = (
+  max = 100,
+  { createLanes } = { createLanes: false }
+): Rect[] => {
   // Define a standard width and y to use for all rects.
   const width = getRandInt().toString();
   const y = (1000 - getRandInt()).toString(); // Simulate all bars having the same baseline in SVG.
@@ -99,6 +102,24 @@ export const generateRectDataset = (max = 100): Rect[] => {
       height: getRandInt().toString(),
     };
   });
+
+  if (createLanes) {
+    const lanes = chunk(rects, getRandInt(max / 4));
+    lanes.pop();
+
+    const strips = lanes.flatMap((lane) => {
+      const x = getRandInt().toString();
+
+      return lane.map((rect) => {
+        return {
+          ...rect,
+          x,
+        };
+      });
+    });
+
+    return strips;
+  }
 
   return rects;
 };
