@@ -9,13 +9,14 @@ export const getRandChar = (): string =>
   String.fromCharCode(65 + Math.floor(Math.random() * 26));
 
 /**
- * Generate a random integer in the range [1, max).
+ * Generate a random integer in the range [min, max).
  *
+ * @param min - the lower bound of the random integer to generate.
  * @param max - the upper bound of the random integer to generate.
- * @returns - a random integer in the range [1, max).
+ * @returns - a random integer in the range [min, max).
  */
-export const getRandInt = (max = 1000): number =>
-  Math.floor(Math.random() * max) + 1;
+export const getRandInt = (min = 0, max = 1000): number =>
+  Math.floor(Math.random() * max) + min;
 
 interface Point {
   cx: string;
@@ -28,19 +29,20 @@ const DEFAULT_RADIUS = 3;
 /**
  * Generate a random dataset of points to simulate circle-based charts.
  *
- * @param - the maximum number of points to generate.
- * @param - options to control the generation of the dataset.
- *  createLanes – place points in "lanes" (shared cy attribute) to simulate strip plots.
- *  varyRadius – vary the radius of points to simulate bubble charts.
+ * @param max - the maximum number of points to generate.
+ * @param options - options to control the generation of the dataset.
+ *   createLanes – place points in "lanes" (shared cy attribute) to simulate strip plots.
+ *   varyRadius – vary the radius of points to simulate bubble charts.
  *
  * @returns – a Point dataset.
  */
 export const generatePointDataset = (
-  max = 1000,
+  max = 100,
   { createLanes, varyRadius } = { createLanes: false, varyRadius: false }
 ): Point[] => {
-  // Generate a semi-random point dataset.
-  const points = new Array(getRandInt(max)).fill(undefined).map(() => {
+  const numPoints = getRandInt(2, max);
+
+  const points = new Array(numPoints).fill(undefined).map(() => {
     return {
       cx: getRandInt().toString(),
       cy: getRandInt().toString(),
@@ -48,14 +50,11 @@ export const generatePointDataset = (
     };
   });
 
-  // If creating lanes, partition the dataset into n < max lanes.
-  // For each point in a given lane, ensure its cy attribute is
-  // consistent with its siblings.
+  // If creating lanes, partition the dataset into n < numPoints lanes.
+  // For each point in a given lane, ensure its cy attribute is consistent with its siblings.
   if (createLanes) {
-    // Generate fewer lanes than there are points by dividing max by 4.
-    const lanes = chunk(points, getRandInt(max / 4));
+    const lanes = chunk(points, getRandInt(2, numPoints / 4));
     const strips = lanes.flatMap((lane) => {
-      // All points in a lane should use the same cy.
       const cy = getRandInt().toString();
 
       return lane.map((point) => {
@@ -83,40 +82,60 @@ interface Rect {
  * Generate a random dataset of rectangles to simulate rect-based charts.
  *
  * @param max - the maximum number of rectangles to generate.
+ * @param options - options to control the generation of the dataset.
+ *  createLanes – place rects in "lanes" (shared x attribute) to simulate stacked bar charts.
+ *
  * @returns – a Rect dataset.
  */
 export const generateRectDataset = (
   max = 100,
   { createLanes } = { createLanes: false }
 ): Rect[] => {
-  // Define a standard width and y to use for all rects.
-  const width = getRandInt().toString();
-  const y = (1000 - getRandInt()).toString(); // Simulate all bars having the same baseline in SVG.
+  const numRects = getRandInt(2, max);
+  const width = getRandInt();
 
-  // Generate a semi-random rect dataset.
-  const rects = new Array(getRandInt(max)).fill(undefined).map(() => {
+  // Define a standard baseline to use for all rects.
+  const height = getRandInt();
+  const y = 1000 - height;
+
+  const rects = new Array(numRects).fill(undefined).map(() => {
     return {
       x: getRandInt().toString(),
-      y,
-      width,
-      height: getRandInt().toString(),
+      y: y.toString(),
+      width: width.toString(),
+      height: height.toString(),
     };
   });
 
+  // If creating lanes, partition the dataset into n < numRects lanes.
+  // For each rect in a given lane, ensure its x attribute is consistent with its siblings.
   if (createLanes) {
-    const lanes = chunk(rects, getRandInt(max / 4));
-    lanes.pop();
+    const numBarsInLane = getRandInt(2, numRects / 4);
+    const lanes = chunk(rects, numBarsInLane);
 
-    const strips = lanes.flatMap((lane) => {
+    // Ensure that each lane has the same number of bars.
+    if (lanes[lanes.length - 1].length < lanes[0].length) {
+      lanes.pop();
+    }
+
+    const strips = lanes.reduce((acc, el) => {
       const x = getRandInt().toString();
 
-      return lane.map((rect) => {
+      // If a lane with this x attribute already exists, skip it.
+      if (acc.find((lane) => lane.x === x)) {
+        return acc;
+      }
+
+      const bars = el.map((rect) => {
         return {
           ...rect,
           x,
+          y: (1000 - height).toString(),
         };
       });
-    });
+
+      return acc.concat(bars);
+    }, []);
 
     return strips;
   }

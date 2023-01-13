@@ -118,18 +118,31 @@ const hasSiblingsWithConsistentCyAttr: Predicate = (vizAttrs): boolean => {
     .sort((a, b) => +a.cy - +b.cy);
 
   const lanes = Object.values(groupBy(circles, (d) => d.cy));
-  let laneAnchorCount = 0;
 
-  circles.forEach((circle, i, arr) => {
-    const [before, after] = [arr[i - 1]?.cy, arr[i + 1]?.cy];
-    const current = circle.cy;
+  let laneStartCount = 0;
+  let laneMiddleCount = 0;
+  let laneEndCount = 0;
+  let singleDatumCount = 0;
 
-    if (before === current && after !== current) {
-      laneAnchorCount += 1;
+  circles.forEach(({ cy }, i, arr) => {
+    const [prevCy, nextCy] = [arr[i - 1]?.cy, arr[i + 1]?.cy];
+
+    if (cy !== prevCy && cy === nextCy) {
+      laneStartCount += 1;
+    } else if (cy === prevCy && cy === nextCy) {
+      laneMiddleCount += 1;
+    } else if (cy === prevCy && cy !== nextCy) {
+      laneEndCount += 1;
+    } else {
+      singleDatumCount += 1;
     }
   });
 
-  return laneAnchorCount === lanes.length;
+  const distinctLanes = laneStartCount + singleDatumCount === lanes.length;
+  const majorityInLane =
+    laneStartCount + laneMiddleCount + laneEndCount > singleDatumCount;
+
+  return distinctLanes && majorityInLane;
 };
 
 const hasMultipleGroups: Predicate = (vizAttrs): boolean => {
