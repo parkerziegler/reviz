@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file. If a change
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0]
+
+### Minor Changes
+
+- Restrict analysis of marks to `<circle>` and `<rect>` elements.
+- ✨ Automatically infer the type of the x-axis scale, either `'discrete'` or `'continuous'`.
+
+### Patch Changes
+
+- ⚠️ Correctly infer strip plots when a given category contains only a single data point.
+
 ## [0.3.1]
 
 ### Patch Changes
