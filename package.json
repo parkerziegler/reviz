@@ -59,7 +59,7 @@
     "lodash.orderby": "^4.6.0"
   },
   "devDependencies": {
-    "@observablehq/plot": "^0.3.2",
+    "@observablehq/plot": "^0.6.6",
     "@sucrase/jest-plugin": "^2.2.0",
     "@types/jest": "^27.0.3",
     "@types/lodash.camelcase": "^4.3.6",

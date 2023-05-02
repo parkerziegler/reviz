@@ -8,7 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@observablehq/plot": "^0.3.2",
+    "@observablehq/plot": "^0.6.6",
     "@plait-lab/reviz": "^0.3.0",
     "classnames": "^2.3.1",
     "d3": "^7.1.1",
