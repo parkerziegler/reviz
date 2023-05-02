@@ -1,4 +1,6 @@
 import chunk from 'lodash.chunk';
+import prettier from 'prettier/standalone';
+import babel from 'prettier/parser-babel';
 
 /**
  * Generate a random character from A-Z using ASCII codes.
@@ -151,3 +153,15 @@ export const defaultPresAttrs = {
   'stroke-opacity': [],
   'stroke-width': [],
 };
+
+/**
+ * Format a raw program string using Prettier.
+ *
+ * @param program – the raw program string to format.
+ * @returns – the formatted program string.
+ */
+export const formatProgram = (program: string): string =>
+  prettier.format(program, {
+    parser: 'babel',
+    plugins: [babel],
+  });

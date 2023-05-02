@@ -1,6 +1,6 @@
 import * as React from 'react';
 import prettier from 'prettier/standalone';
-import babylon from 'prettier/parser-babel';
+import babel from 'prettier/parser-babel';
 import { analyzeVisualization } from '@plait-lab/reviz';
 
 import CodePane from './CodePane';
@@ -36,7 +36,7 @@ export function withViewer<T>(
       setVizProgram(
         prettier.format(program, {
           parser: 'babel',
-          plugins: [babylon],
+          plugins: [babel],
         })
       );
       setPerf(result[0]);

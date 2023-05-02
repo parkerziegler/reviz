@@ -3,20 +3,44 @@ import camelCase from 'lodash.camelcase';
 import type { VizSpec } from './ir';
 import { EVAL_HOLE, PROGRAM_HOLE } from './constants';
 
-const replaceHole = (program: string, template: string): string => {
-  return program.replace(EVAL_HOLE, template);
+/**
+ * Replace a hole ('??') with a given replacement string.
+ *
+ * @param program – The program being generated.
+ * @param replacement – A replacement string to replace the hole in the
+ * generated program.
+ * @returns – A program with the earliest hole encountered replaced by the
+ * replacement string.
+ */
+const replaceHole = (program: string, replacement: string): string => {
+  return program.replace(EVAL_HOLE, replacement);
 };
 
-const intersperse = (arr: string[], sep: string): string => {
-  if (arr.length === 0) {
+/**
+ * Interperse a set of values by a separator (without leaving a dangling
+ * separator after the last value).
+ *
+ * @param values — The input array of values to separate.
+ * @param sep – A string separator between values.
+ * @returns – A string with values separated by @param sep.
+ */
+const intersperse = (values: string[], sep: string): string => {
+  if (values.length === 0) {
     return '';
   }
 
-  return arr
+  return values
     .slice(1)
-    .reduce((acc, el) => acc.concat(`${sep}${el}`), `${arr[0]}`);
+    .reduce((acc, el) => acc.concat(`${sep}${el}`), `${values[0]}`);
 };
 
+/**
+ * Generate a partial Observable Plot program from the reviz IR.
+ *
+ * @param spec – The reviz IR.
+ * @returns – A partial Observable Plot program, with fields that are inferred
+ * to map to data represented by a hole ('??').
+ */
 export const generate = (spec: VizSpec): string => {
   const marks = Object.entries(spec).reduce<string>(
     (program, [attrName, attrValue], i, arr) => {
@@ -52,6 +76,14 @@ export const generate = (spec: VizSpec): string => {
   })`;
 };
 
+/**
+ * Apply rules of reviz's reduction semantics to incrementally write a partial
+ * Observable Plot program for a given visualization type.
+ *
+ * @param program – The program being generated.
+ * @param type – The visualization type, as specified in the reviz IR.
+ * @returns – An Observable Plot partial program fragment.
+ */
 const evalType = (program: string, type: string): string => {
   let nextProgram = '';
 
@@ -77,23 +109,32 @@ const evalType = (program: string, type: string): string => {
   return replaceHole(program, nextProgram);
 };
 
+/**
+ * Apply rules of reviz's reduction semantics to incrementally write a partial
+ * Observable Plot program for a given geometric attribute.
+ *
+ * @param program – The program being generated.
+ * @param attrName – The name of the geometric attribute being written.
+ * @param attrValue – The value the geometric attribute is mapped to in the
+ * reviz IR.
+ * @returns – An Observable Plot partial program fragment.
+ */
 const evalGeomAttr = (
   program: string,
   attrName: 'r',
   attrValue: number | number[]
 ): string => {
-  // If our attribute value from the spec is an array it suggests
-  // that the attribute is mapped to a column in the input dataset
-  // rather than being kept static across the entire visualization.
-  //
-  // Return early with a hole ('??') for the associated attribute.
+  // If our attribute value from the spec is an array, this suggests that the
+  // attribute is mapped to a column in the input dataset rather than kept
+  // static across the visualization. Return early with a hole ('??') for the
+  // associated attribute.
   if (Array.isArray(attrValue)) {
     return replaceHole(program, `${attrName}: '${PROGRAM_HOLE}', ${EVAL_HOLE}`);
   }
 
-  const template = `${attrName}: ${attrValue}, ${EVAL_HOLE}`;
+  const replacement = `${attrName}: ${attrValue}, ${EVAL_HOLE}`;
 
-  return replaceHole(program, template);
+  return replaceHole(program, replacement);
 };
 
 interface EvalPresAttrParams {
@@ -104,6 +145,16 @@ interface EvalPresAttrParams {
   i: number;
 }
 
+/**
+ * Apply rules of reviz's reduction semantics to incrementally write a partial
+ * Observable Plot program for a given presentational attribute.
+ *
+ * @param program – The program being generated.
+ * @param attrName – The name of the presentational attribute being written.
+ * @param attrValue – The value the presentational attribute is mapped to in the
+ * reviz IR.
+ * @returns – An Observable Plot partial program fragment.
+ */
 const evalPresAttr = ({
   program,
   attrName,
@@ -114,11 +165,10 @@ const evalPresAttr = ({
   // If this is the last attr to be evaluated, do not leave an eval hole.
   const isLastAttr = i === arr.length - 1;
 
-  // If our attribute value from the spec is an array with length greater than 1,
-  // it suggests that the attribute is mapped to a column in the input dataset
-  // rather than being kept static across the entire visualization.
-  //
-  // Return early with a hole ('??') for the associated attribute.
+  // If our attribute value from the spec is an array with length > 1, this
+  // suggests that the attribute is mapped to a column in the input dataset
+  // rather than kept static across the entire visualization. Return early with
+  // a hole ('??') for the associated attribute.
   if (attrValue.length > 1) {
     return replaceHole(
       program,
@@ -134,13 +184,21 @@ const evalPresAttr = ({
     ? `'${attrValue[0]}'`
     : attrValueFloat;
 
-  const template = `${camelCase(attrName)}: ${val}${
+  const replacement = `${camelCase(attrName)}: ${val}${
     !isLastAttr ? `, ${EVAL_HOLE}` : ''
   }`;
 
-  return replaceHole(program, template);
+  return replaceHole(program, replacement);
 };
 
+/**
+ * Apply reviz's reduction semantics to incrementally write a partial
+ * Observable Plot program for a categorical color scale.
+ *
+ * @param spec – The reviz IR.
+ * @returns – An Observable Plot partial program fragment for a categorical
+ * color scale, or undefined if color is static across the visualization.
+ */
 const evalColor = (spec: VizSpec): string | undefined => {
   // Return early if fill or stroke are static across the visualization.
   if (spec.fill.length <= 1 && spec.stroke.length <= 1) {
@@ -161,6 +219,14 @@ const evalColor = (spec: VizSpec): string | undefined => {
   )}] }`;
 };
 
+/**
+ * Apply reviz's reduction semantics to incrementally write a partial Observable
+ * Plot program for the "r" attribute when marks have variable radii.
+ *
+ * @param spec – The reviz IR.
+ * @returns – An Observable Plot partial program fragment for the "r" attribute,
+ * or undefined if mark radii are kept static across the visualization.
+ */
 const evalR = (spec: VizSpec): string | undefined => {
   if (spec.type !== 'BubbleChart') {
     return undefined;
