@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 
 interface Props {
   name: string;

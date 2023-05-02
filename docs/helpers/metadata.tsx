@@ -1,3 +1,5 @@
+import type { StaticImageData } from 'next/image';
+
 import BarThumbnail from '../public/bar.png';
 import BubbleThumbnail from '../public/bubble.png';
 import HistogramThumbnail from '../public/histogram.png';
