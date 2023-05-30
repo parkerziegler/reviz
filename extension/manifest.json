@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "reviz",
-  "description": "Base Level Extension",
-  "version": "1.0",
+  "description": "Adds tools for reverse engineering data visualizations to Chrome Developer tools.",
+  "version": "0.4.0",
   "devtools_page": "devtools.html",
   "action": {
     "default_icon": "reviz.png"
