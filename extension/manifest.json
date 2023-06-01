@@ -6,5 +6,16 @@
   "devtools_page": "devtools.html",
   "action": {
     "default_icon": "reviz.png"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "js": [
+        "inspect.js"
+      ]
+    }
+  ]
 }
