@@ -1,10 +1,10 @@
 import { analyzeVisualization } from '@plait-lab/reviz';
 
-function inspectSelectedElement(el: Element) {
+function inspectSelectedElement(
+  el: Element
+): ReturnType<typeof analyzeVisualization> | undefined {
   if (isSVGElement(el)) {
-    const { spec, program } = analyzeVisualization(el);
-
-    return { spec, program };
+    return analyzeVisualization(el);
   }
 }
 

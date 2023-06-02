@@ -22,7 +22,7 @@ function App() {
                 ? `Error details: ${exception.details.join('\n')}`
                 : 'An error occurred.')
           );
-        } else {
+        } else if (result) {
           const { program } = result as ReturnType<typeof analyzeVisualization>;
           setProgram(program);
         }
@@ -41,7 +41,6 @@ function App() {
           <ElementSelect />
         </ExtensionErrorBoundary>
       )}
-      <p>Refresh notice.</p>
     </main>
   );
 }
