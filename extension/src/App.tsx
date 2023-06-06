@@ -1,33 +1,27 @@
 import * as React from 'react';
-import { analyzeVisualization } from '@plait-lab/reviz';
 
 import ElementSelect from './components/ElementSelect';
 import ExtensionErrorBoundary from './components/ExtensionErrorBoundary';
 
 function App() {
-  const [_program, setProgram] = React.useState<string>('');
-  const [error, setError] = React.useState<string>('');
+  const [program, setProgram] = React.useState<string>('');
+  const [error] = React.useState<string>('');
 
   React.useEffect(() => {
-    chrome.devtools.inspectedWindow.eval(
-      'inspectSelectedElement($0)',
-      {
-        useContentScriptContext: true,
-      },
-      (result, exception) => {
-        if (exception?.isException) {
-          setError(
-            exception.description ||
-              (exception.details?.length > 0
-                ? `Error details: ${exception.details.join('\n')}`
-                : 'An error occurred.')
-          );
-        } else if (result) {
-          const { program } = result as ReturnType<typeof analyzeVisualization>;
-          setProgram(program);
-        }
-      }
-    );
+    // Establish a long-lived connection to the service worker.
+    const serviceWorkerConnection = chrome.runtime.connect({
+      name: 'panel',
+    });
+
+    serviceWorkerConnection.postMessage({
+      name: 'init',
+      tabId: chrome.devtools.inspectedWindow.tabId,
+    });
+
+    // Listen for messages from the content script sent via the service worker.
+    serviceWorkerConnection.onMessage.addListener((message) => {
+      setProgram(message.program);
+    });
   }, []);
 
   return (
@@ -41,6 +35,8 @@ function App() {
           <ElementSelect />
         </ExtensionErrorBoundary>
       )}
+      <p>Program:</p>
+      <pre>{program}</pre>
     </main>
   );
 }

@@ -1,0 +1,7 @@
+:root {
+  --inspect-color: #419af7;
+}
+
+.mouse-visited {
+  outline: 2px dotted var(--inspect-color);
+}
