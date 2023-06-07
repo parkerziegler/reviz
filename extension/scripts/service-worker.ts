@@ -1,5 +1,7 @@
-// Skeleton implementation taken from:
-// https://developer.chrome.com/docs/extensions/mv3/devtools/#content-script-to-devtools
+/**
+ * Skeleton implementation taken from:
+ * https://developer.chrome.com/docs/extensions/mv3/devtools/#content-script-to-devtools
+ */
 const connections: Record<number, chrome.runtime.Port> = {};
 
 chrome.runtime.onConnect.addListener((port) => {
@@ -30,8 +32,8 @@ chrome.runtime.onConnect.addListener((port) => {
   });
 });
 
-// When we receive a message from the content script, forward it to the
-// DevTools page to handle.
+// When we receive a message from the content script, forward it to the DevTools
+// page to handle.
 chrome.runtime.onMessage.addListener((request, sender) => {
   if (sender.tab) {
     const tabId = sender.tab.id;
