@@ -1,7 +1,7 @@
-import { analyzeVisualization } from '@plait-lab/reviz';
+import { analyzeVisualization } from "@plait-lab/reviz";
 
 // The class name to apply to an element when hovered.
-const MOUSE_VISITED_CLASSNAME = 'mouse-visited';
+const MOUSE_VISITED_CLASSNAME = "mouse-visited";
 
 /**
  * Adds a class to an SVG element on mouseenter to visually indicate selection.
@@ -44,10 +44,10 @@ function onClick(event: MouseEvent) {
  * the inspected document.
  */
 function activateInspector() {
-  document.querySelectorAll('svg').forEach((el) => {
-    el.addEventListener('mouseenter', onMouseEnter);
-    el.addEventListener('mouseleave', onMouseLeave);
-    el.addEventListener('click', onClick);
+  document.querySelectorAll("svg").forEach((el) => {
+    el.addEventListener("mouseenter", onMouseEnter);
+    el.addEventListener("mouseleave", onMouseLeave);
+    el.addEventListener("click", onClick);
   });
 }
 
@@ -56,10 +56,10 @@ function activateInspector() {
  * the inspected document.
  */
 function deactivateInspector() {
-  document.querySelectorAll('svg').forEach((el) => {
-    el.removeEventListener('mouseenter', onMouseEnter);
-    el.removeEventListener('mouseleave', onMouseLeave);
-    el.removeEventListener('click', onClick);
+  document.querySelectorAll("svg").forEach((el) => {
+    el.removeEventListener("mouseenter", onMouseEnter);
+    el.removeEventListener("mouseleave", onMouseLeave);
+    el.removeEventListener("click", onClick);
   });
 }
 
