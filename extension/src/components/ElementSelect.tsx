@@ -22,9 +22,19 @@ const ElementSelect: React.FC = () => {
   const [isElementSelectActive, setElementSelectActive] = React.useState(false);
 
   function toggleElementSelectActive() {
-    setElementSelectActive(
-      (prevElementSelectActive) => !prevElementSelectActive
-    );
+    setElementSelectActive((prevElementSelectActive) => {
+      if (prevElementSelectActive) {
+        chrome.devtools.inspectedWindow.eval('deactivateInspector()', {
+          useContentScriptContext: true,
+        });
+      } else {
+        chrome.devtools.inspectedWindow.eval('activateInspector()', {
+          useContentScriptContext: true,
+        });
+      }
+
+      return !prevElementSelectActive;
+    });
   }
 
   return (

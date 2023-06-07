@@ -12,10 +12,14 @@ export default defineConfig({
         devtools: resolve(__dirname, 'devtools.html'),
         panel: resolve(__dirname, 'panel.html'),
         inspect: resolve(__dirname, 'scripts', 'inspect.ts'),
+        'service-worker': resolve(__dirname, 'scripts', 'service-worker.ts'),
       },
       output: {
         entryFileNames: (chunkInfo: PreRenderedChunk) =>
-          chunkInfo.name.includes('inspect') ? '[name].js' : '[name]-[hash].js',
+          chunkInfo.name.includes('inspect') ||
+          chunkInfo.name.includes('service-worker')
+            ? '[name].js'
+            : '[name]-[hash].js',
       },
     },
   },

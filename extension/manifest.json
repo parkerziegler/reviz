@@ -15,7 +15,13 @@
       ],
       "js": [
         "inspect.js"
+      ],
+      "css": [
+        "inspect.css"
       ]
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  }
 }
