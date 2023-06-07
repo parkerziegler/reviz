@@ -21,7 +21,7 @@ import {
   RECT_ATTR_NAMES,
 } from './constants';
 
-interface RevizOutput {
+export interface RevizOutput {
   spec: VizSpec;
   program: string;
 }
