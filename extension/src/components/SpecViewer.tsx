@@ -1,7 +1,6 @@
 import * as React from "react";
 import { RevizOutput } from "@plait-lab/reviz";
 
-import SpecCell from "./SpecCell";
 import { formatOneOrMoreValues } from "../utils/formatters";
 
 interface Props {
@@ -15,18 +14,30 @@ const SpecViewer: React.FC<Props> = ({ spec }) => {
         Visualization Attributes
       </h2>
       {spec ? (
-        <div className="grid grid-cols-2 border-x border-t border-slate-400">
-          <SpecCell header>Property</SpecCell>
-          <SpecCell header>Value</SpecCell>
-          {Object.entries(spec).map(([property, value]) => {
-            return (
-              <React.Fragment key={property}>
-                <SpecCell>{property}</SpecCell>
-                <SpecCell>{formatOneOrMoreValues(property, value)}</SpecCell>
-              </React.Fragment>
-            );
-          })}
-        </div>
+        <table className="w-full table-fixed border-collapse font-mono">
+          <thead>
+            <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-white">
+              Property
+            </th>
+            <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-white">
+              Value
+            </th>
+          </thead>
+          <tbody>
+            {Object.entries(spec).map(([property, value]) => {
+              return (
+                <tr key={property}>
+                  <td className="border border-slate-400 px-2 py-1 text-slate-400">
+                    {property}
+                  </td>
+                  <td className="border border-slate-400 px-2 py-1">
+                    {formatOneOrMoreValues(property, value)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       ) : (
         <p>Waiting for visualization selection...</p>
       )}
