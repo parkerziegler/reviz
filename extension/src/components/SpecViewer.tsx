@@ -16,10 +16,10 @@ const SpecViewer: React.FC<Props> = ({ spec }) => {
       {spec ? (
         <table className="w-full table-fixed border-collapse font-mono">
           <thead>
-            <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-white">
+            <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-left font-normal text-white">
               Property
             </th>
-            <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-white">
+            <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-left font-normal text-white">
               Value
             </th>
           </thead>
