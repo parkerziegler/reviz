@@ -42,7 +42,7 @@ const ElementSelect: React.FC = () => {
       <button
         onClick={toggleElementSelectActive}
         className={cs(
-          "border-r border-r-slate-500 px-3 py-2 transition-all hover:opacity-75",
+          "border-r border-r-slate-500 px-3 py-2 transition-opacity hover:opacity-75",
           isElementSelectActive ? "text-blue-400" : "text-white"
         )}
       >
