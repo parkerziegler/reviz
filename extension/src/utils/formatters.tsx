@@ -3,10 +3,12 @@ import ColorValue from "../components/ColorValue";
 /**
  * Formats a value or array of values to a friendlier format for display.
  *
+ * @example
  * // returns "1px"
- * @example formatOneOrMoreValues("stroke-width", 1)
+ * formatOneOrMoreValues("stroke-width", 1)
+ * @example
  * // returns ["#f2df16", "steelblue"]
- * @example formatOneOrMoreValues("fill", ["#f2df16", "steelblue"])
+ * formatOneOrMoreValues("fill", ["#f2df16", "steelblue"])
  * @param property – The property in the reviz spec.
  * @param values – The value or array of values to format.
  * @returns – The formatted value or array of values as a React node.
@@ -34,10 +36,12 @@ export function formatOneOrMoreValues(
 /**
  * Format a reviz spec value to a friendlier format for display.
  *
- * // returns "#f2df16"
- * @example formatValue("fill", "#f2df16")
+ * @example
+ * // returns <ColorValue color={"#f2df16"} />
+ * formatValue("fill", "#f2df16")
+ * @example
  * // returns "1px"
- * @example formatValue("stroke-width", 1)
+ * formatValue("stroke-width", 1)
  * @param property – The property in the reviz spec.
  * @param value – The value to format.
  * @returns – The formatted value as a React node.
@@ -64,7 +68,7 @@ function formatValue(
  * @param sep – The separator to use between elements.
  * @returns – The interspersed array.
  */
-function intersperse<T>(arr: T[], sep: any): T[] {
+function intersperse<T>(arr: T[], sep: T): T[] {
   if (arr.length === 0) {
     return [];
   }

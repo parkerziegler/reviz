@@ -51,7 +51,7 @@ const ElementSelect: React.FC = () => {
       <p className="px-3 py-2">
         Select an{" "}
         <code className="rounded bg-blue-50 px-1 py-0.5 text-primary">svg</code>{" "}
-        element to inspect
+        element to inspect.
       </p>
     </div>
   );

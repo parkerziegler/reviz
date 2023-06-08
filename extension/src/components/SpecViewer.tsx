@@ -14,7 +14,7 @@ const SpecViewer: React.FC<Props> = ({ spec }) => {
         Visualization Attributes
       </h2>
       {spec ? (
-        <table className="w-full table-fixed border-collapse font-mono">
+        <table className="table-fixed border-collapse font-mono">
           <thead>
             <th className="border border-slate-400 bg-slate-600 px-2 py-1 text-left font-normal text-white">
               Property
