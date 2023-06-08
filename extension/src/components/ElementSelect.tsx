@@ -1,5 +1,5 @@
-import * as React from 'react';
-import cs from 'classnames';
+import * as React from "react";
+import cs from "classnames";
 
 const MousePointer = (
   <svg
@@ -24,11 +24,11 @@ const ElementSelect: React.FC = () => {
   function toggleElementSelectActive() {
     setElementSelectActive((prevElementSelectActive) => {
       if (prevElementSelectActive) {
-        chrome.devtools.inspectedWindow.eval('deactivateInspector()', {
+        chrome.devtools.inspectedWindow.eval("deactivateInspector()", {
           useContentScriptContext: true,
         });
       } else {
-        chrome.devtools.inspectedWindow.eval('activateInspector()', {
+        chrome.devtools.inspectedWindow.eval("activateInspector()", {
           useContentScriptContext: true,
         });
       }
@@ -38,15 +38,22 @@ const ElementSelect: React.FC = () => {
   }
 
   return (
-    <button
-      onClick={toggleElementSelectActive}
-      className={cs(
-        'transition-all hover:opacity-75',
-        isElementSelectActive ? 'text-blue-400' : 'text-white'
-      )}
-    >
-      {MousePointer}
-    </button>
+    <div className="flex border-b border-b-slate-500">
+      <button
+        onClick={toggleElementSelectActive}
+        className={cs(
+          "border-r border-r-slate-500 px-3 py-2 transition-opacity hover:opacity-75",
+          isElementSelectActive ? "text-blue-400" : "text-white"
+        )}
+      >
+        {MousePointer}
+      </button>
+      <p className="px-3 py-2">
+        Select an{" "}
+        <code className="rounded bg-blue-50 px-1 py-0.5 text-primary">svg</code>{" "}
+        element to inspect.
+      </p>
+    </div>
   );
 };
 
