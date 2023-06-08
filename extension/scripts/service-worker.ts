@@ -46,6 +46,4 @@ chrome.runtime.onMessage.addListener((request, sender) => {
   } else {
     console.log("sender.tab not defined.");
   }
-
-  // return true;
 });
