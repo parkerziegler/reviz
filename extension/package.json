@@ -8,7 +8,7 @@
     "build": "tsc && vite build && cp manifest.json public/reviz.png scripts/inspect.css dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "format": "prettier --plugin-search-dir . --write ."
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@plait-lab/reviz": "^0.4.1",
