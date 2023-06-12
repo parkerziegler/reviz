@@ -38,7 +38,7 @@ const ElementSelect: React.FC = () => {
   }
 
   return (
-    <div className="flex border-b border-b-slate-500">
+    <div className="col-span-12 flex self-start border-b border-b-slate-500">
       <button
         onClick={toggleElementSelectActive}
         className={cs(
