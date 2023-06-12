@@ -9,16 +9,9 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://*/*",
-        "http://*/*"
-      ],
-      "js": [
-        "inspect.js"
-      ],
-      "css": [
-        "inspect.css"
-      ]
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["inspect.js"],
+      "css": ["inspect.css"]
     }
   ],
   "background": {
