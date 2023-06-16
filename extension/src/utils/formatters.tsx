@@ -1,4 +1,7 @@
-import ColorValue from "../components/ColorValue";
+import prettier from "prettier/standalone";
+import babel from "prettier/parser-babel";
+
+import ColorValue from "../components/spec/ColorValue";
 
 /**
  * Formats a value or array of values to a friendlier format for display.
@@ -62,8 +65,9 @@ function formatValue(
 /**
  * Intersperse an array of elements, including ReactNodes, with a separator.
  *
+ * @example
  * // returns [<Color value="#f2df16" />, <Color value="steelblue" />]
- * @example intersperse(["#f2df16", "steelblue"], ", ")
+ * intersperse(["#f2df16", "steelblue"], ", ")
  * @param arr – The array to intersperse.
  * @param sep – The separator to use between elements.
  * @returns – The interspersed array.
@@ -74,4 +78,40 @@ function intersperse<T>(arr: T[], sep: T): T[] {
   }
 
   return arr.slice(1).reduce((acc, el) => acc.concat([sep, el]), [arr[0]]);
+}
+
+/**
+ * Turn a space-separated string of classNames into a period-separated string of
+ * classNames.
+ *
+ * @example
+ * // returns ".bg-slate-600.text-white"
+ * formatClasses("bg-slate-600 text-white")
+ * @param classNames – The space-separated string of classNames returned by
+ * el.getAttribute("class").
+ * @returns – The period-separated string of classNames.
+ */
+export function formatClassNames(classNames: string): string {
+  return "." + classNames.split(" ").join(".");
+}
+
+/**
+ * Format a program string using Prettier and Babel's JavaScript parser.
+ *
+ * @param program – The program string to format.
+ * @returns – The formatted program string.
+ */
+export function formatProgram(program: string): string {
+  return prettier.format(program, {
+    parser: "babel",
+    plugins: [babel],
+  });
+}
+
+export function formatExecutableProgram(program: string): string {
+  return formatProgram(
+    program
+      .replace("const plot = ", "function plot(Plot, data) { return ")
+      .concat("}")
+  );
 }

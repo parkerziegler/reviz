@@ -1,4 +1,4 @@
-import { analyzeVisualization } from "@plait-lab/reviz";
+import { RevizOutput, analyzeVisualization } from "@plait-lab/reviz";
 
 // The class name to apply to an element when hovered.
 const MOUSE_VISITED_CLASSNAME = "mouse-visited";
@@ -27,6 +27,13 @@ function onMouseLeave(event: MouseEvent) {
   el.classList.remove(MOUSE_VISITED_CLASSNAME);
 }
 
+export interface AnalyzedVisualization {
+  spec?: RevizOutput["spec"];
+  program: RevizOutput["program"];
+  nodeName: string;
+  classNames: string;
+}
+
 /**
  * Analyzes a visualization on click and sends the result to the extension
  * service worker. The element cast is safe because we only register this event
@@ -36,7 +43,17 @@ function onMouseLeave(event: MouseEvent) {
  */
 function onClick(event: MouseEvent) {
   const el = event.target as SVGSVGElement;
-  chrome.runtime.sendMessage(analyzeVisualization(el));
+
+  const nodeName = el.nodeName;
+  const classNames = el.getAttribute("class") ?? "";
+  const { spec, program } = analyzeVisualization(el);
+
+  chrome.runtime.sendMessage<AnalyzedVisualization>({
+    nodeName,
+    classNames,
+    spec,
+    program,
+  });
 }
 
 /**

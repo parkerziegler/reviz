@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Code Mirror */
+.cm-editor {
+  @apply h-full;
+}
+
 @layer utilities {
   /* Block Stack */
   .stack {
@@ -55,5 +60,22 @@
 
   .stack-h-lg > * + * {
     margin-inline-start: 2rem;
+  }
+}
+
+@layer components {
+  .tab-trigger[data-state="active"] {
+    @apply relative;
+  }
+
+  .tab-trigger[data-state="active"]::after {
+    @apply absolute bottom-0 left-0 h-1 w-full;
+    content: "";
+    background: radial-gradient(theme("colors.primary") 25%, transparent 25%);
+    background-size: 2px 2px;
+  }
+
+  .tab-content[data-state="inactive"] {
+    @apply hidden;
   }
 }
