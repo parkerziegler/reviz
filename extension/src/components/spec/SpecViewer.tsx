@@ -1,8 +1,8 @@
 import * as React from "react";
 import { RevizOutput } from "@plait-lab/reviz";
 
-import { formatOneOrMoreValues } from "../utils/formatters";
-import Heading from "./shared/Heading";
+import { formatOneOrMoreValues } from "../../utils/formatters";
+import Heading from "../shared/Heading";
 
 interface Props {
   spec?: RevizOutput["spec"];
@@ -10,7 +10,7 @@ interface Props {
 
 const SpecViewer: React.FC<Props> = ({ spec }) => {
   return (
-    <div className="stack stack-sm col-span-12 border-b border-slate-500 px-3 py-2 md:col-span-6 md:border-b-0 md:border-r">
+    <div className="stack stack-sm basis-1/2 border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">
       <Heading className="self-start">Visualization Attributes</Heading>
       {spec ? (
         <table className="table-fixed border-collapse font-mono">

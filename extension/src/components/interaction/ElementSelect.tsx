@@ -1,6 +1,9 @@
 import * as React from "react";
 import cs from "classnames";
 
+import type { VisualizationState } from "../../App";
+import { formatClassNames } from "../../utils/formatters";
+
 const MousePointer = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +21,9 @@ const MousePointer = (
   </svg>
 );
 
-const ElementSelect: React.FC = () => {
+type Props = Pick<VisualizationState, "nodeName" | "classNames">;
+
+const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
   const [isElementSelectActive, setElementSelectActive] = React.useState(false);
 
   function toggleElementSelectActive() {
@@ -38,7 +43,7 @@ const ElementSelect: React.FC = () => {
   }
 
   return (
-    <div className="col-span-12 flex self-start border-b border-b-slate-500">
+    <div className="flex flex-1 overflow-hidden border-r border-slate-500">
       <button
         onClick={toggleElementSelectActive}
         className={cs(
@@ -48,11 +53,22 @@ const ElementSelect: React.FC = () => {
       >
         {MousePointer}
       </button>
-      <p className="px-3 py-2">
-        Select an{" "}
-        <code className="rounded bg-blue-50 px-1 py-0.5 text-primary">svg</code>{" "}
-        element to inspect.
-      </p>
+      {nodeName ? (
+        <p className="flex truncate px-3 py-2 text-primary">
+          <code className="truncate rounded bg-blue-50 px-1 py-0.5">
+            <span className="text-secondary">{nodeName}</span>
+            {classNames ? <span>{formatClassNames(classNames)}</span> : null}
+          </code>
+        </p>
+      ) : (
+        <p className="px-3 py-2">
+          Select an{" "}
+          <code className="rounded bg-blue-50 px-1 py-0.5 text-primary">
+            svg
+          </code>{" "}
+          element to inspect.
+        </p>
+      )}
     </div>
   );
 };

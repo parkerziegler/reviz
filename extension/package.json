@@ -11,8 +11,13 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.9",
+    "@observablehq/plot": "^0.6.8",
     "@plait-lab/reviz": "^0.4.1",
+    "@radix-ui/react-tabs": "^1.0.4",
     "classnames": "^2.3.2",
+    "codemirror": "^6.0.1",
+    "d3-dsv": "^3.0.1",
     "prettier": "^2.8.8",
     "prism-react-renderer": "^2.0.5",
     "react": "^18.2.0",
@@ -20,6 +25,7 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.237",
+    "@types/d3-dsv": "^3.0.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
