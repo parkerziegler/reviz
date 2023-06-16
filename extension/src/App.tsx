@@ -12,9 +12,15 @@ import ProgramOutput from "./components/program/ProgramOutput";
 import ProgramViewer from "./components/program/ProgramViewer";
 import SpecViewer from "./components/spec/SpecViewer";
 
+export type VisualizationState = {
+  [Property in keyof AnalyzedVisualization]: Property extends "spec"
+    ? AnalyzedVisualization[Property] | undefined
+    : AnalyzedVisualization[Property];
+};
+
 function App() {
   const [{ spec, program, nodeName, classNames }, setViz] =
-    React.useState<AnalyzedVisualization>({
+    React.useState<VisualizationState>({
       spec: undefined,
       program: "",
       nodeName: "",

@@ -27,9 +27,7 @@ function onMouseLeave(event: MouseEvent) {
   el.classList.remove(MOUSE_VISITED_CLASSNAME);
 }
 
-export interface AnalyzedVisualization {
-  spec?: RevizOutput["spec"];
-  program: RevizOutput["program"];
+export interface AnalyzedVisualization extends RevizOutput {
   nodeName: string;
   classNames: string;
 }

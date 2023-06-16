@@ -1,8 +1,7 @@
 import * as React from "react";
 import cs from "classnames";
 
-import { AnalyzedVisualization } from "../../../scripts/inspect";
-
+import type { VisualizationState } from "../../App";
 import { formatClassNames } from "../../utils/formatters";
 
 const MousePointer = (
@@ -22,7 +21,7 @@ const MousePointer = (
   </svg>
 );
 
-type Props = Pick<AnalyzedVisualization, "nodeName" | "classNames">;
+type Props = Pick<VisualizationState, "nodeName" | "classNames">;
 
 const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
   const [isElementSelectActive, setElementSelectActive] = React.useState(false);
