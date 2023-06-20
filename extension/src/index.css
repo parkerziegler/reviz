@@ -78,4 +78,18 @@
   .tab-content[data-state="inactive"] {
     @apply hidden;
   }
+
+  .data-grid tr::before {
+    @apply absolute left-0 top-0 w-full border-b border-slate-400;
+    content: "";
+  }
+
+  .data-grid tr::after {
+    @apply absolute bottom-0 left-0 w-full border-t border-slate-400;
+    content: "";
+  }
+
+  .data-grid tr:first-child td {
+    border-top: 0;
+  }
 }

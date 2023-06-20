@@ -15,6 +15,7 @@
     "@observablehq/plot": "^0.6.8",
     "@plait-lab/reviz": "^0.4.1",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@tanstack/react-table": "^8.9.2",
     "classnames": "^2.3.2",
     "codemirror": "^6.0.1",
     "d3-dsv": "^3.0.1",

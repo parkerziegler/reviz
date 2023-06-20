@@ -1,8 +1,9 @@
 import * as React from "react";
-import { DSVRowArray, csvParse } from "d3-dsv";
+import { csvParseRows } from "d3-dsv";
+import { Data } from "../../types/data";
 
 interface Props {
-  setData: (data: unknown | DSVRowArray) => void;
+  setData: (data: Data) => void;
 }
 
 const DataUpload: React.FC<Props> = ({ setData }) => {
@@ -19,11 +20,25 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
           ) {
             switch (type) {
               case "application/json":
-                setData(JSON.parse(theFile.target.result));
+                setData({
+                  type: "json",
+                  data: JSON.parse(theFile.target.result),
+                });
                 break;
-              case "text/csv":
-                setData(csvParse(theFile.target.result));
+              case "text/csv": {
+                const cols = csvParseRows(theFile.target.result)[0];
+
+                setData({
+                  type: "csv",
+                  data: csvParseRows(theFile.target.result, (d) => {
+                    return cols.reduce((acc, col, i) => {
+                      acc[col] = d[i];
+                      return acc;
+                    }, {} as Record<string, any>);
+                  }),
+                });
                 break;
+              }
             }
           }
         };
