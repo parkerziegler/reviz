@@ -96,6 +96,6 @@ input[type="file"]::-webkit-file-upload-button {
   }
 
   .data-grid tr:first-child td {
-    border-top: 0;
+    @apply border-t-0;
   }
 }
