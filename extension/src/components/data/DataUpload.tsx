@@ -26,11 +26,17 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
                 });
                 break;
               case "text/csv": {
-                const cols = csvParseRows(theFile.target.result)[0];
+                let cols: string[] = [];
 
                 setData({
                   type: "csv",
-                  data: csvParseRows(theFile.target.result, (d) => {
+                  data: csvParseRows(theFile.target.result, (d, i) => {
+                    // Treat the first row as the column names.
+                    if (i === 0) {
+                      cols = d;
+                      return;
+                    }
+
                     return cols.reduce((acc, col, i) => {
                       acc[col] = d[i];
                       return acc;
