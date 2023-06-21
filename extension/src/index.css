@@ -7,6 +7,12 @@
   @apply h-full;
 }
 
+/* File Input */
+input[type="file"],
+input[type="file"]::-webkit-file-upload-button {
+  @apply cursor-pointer;
+}
+
 @layer utilities {
   /* Block Stack */
   .stack {
