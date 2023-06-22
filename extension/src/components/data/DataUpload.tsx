@@ -1,6 +1,7 @@
 import * as React from "react";
 import { csvParseRows } from "d3-dsv";
-import { Data } from "../../types/data";
+
+import type { Data } from "../../types/data";
 
 interface Props {
   setData: (data: Data) => void;

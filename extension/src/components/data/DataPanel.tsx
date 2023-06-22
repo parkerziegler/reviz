@@ -1,5 +1,5 @@
 import Heading from "../shared/Heading";
-import { Data } from "../../types/data";
+import type { Data } from "../../types/data";
 
 import DataGrid from "./DataGrid";
 import DataUpload from "./DataUpload";

@@ -1,11 +1,11 @@
 import * as React from "react";
-import type { DSVRowArray } from "d3-dsv";
 
 import Heading from "../shared/Heading";
+import type { Data } from "../../types/data";
 
 interface Props {
   program: string;
-  data: unknown | DSVRowArray;
+  data: Data;
 }
 
 const ProgramOutput: React.FC<Props> = () => {
