@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as Tabs from "@radix-ui/react-tabs";
-import type { DSVRowArray } from "d3-dsv";
 
 import type { AnalyzedVisualization } from "../scripts/inspect";
 
@@ -11,6 +10,7 @@ import ProgramEditor from "./components/program/ProgramEditor";
 import ProgramOutput from "./components/program/ProgramOutput";
 import ProgramViewer from "./components/program/ProgramViewer";
 import SpecViewer from "./components/spec/SpecViewer";
+import type { Data } from "./types/data";
 
 export type VisualizationState = {
   [Property in keyof AnalyzedVisualization]: Property extends "spec"
@@ -26,7 +26,7 @@ function App() {
       nodeName: "",
       classNames: "",
     });
-  const [data, setData] = React.useState<unknown | DSVRowArray>();
+  const [data, setData] = React.useState<Data>();
 
   React.useEffect(() => {
     // Establish a long-lived connection to the service worker.
@@ -50,7 +50,10 @@ function App() {
       <ExtensionErrorBoundary
         fallback={(message) => <p>An error occurred. {message}</p>}
       >
-        <Tabs.Root defaultValue="analyze" className="flex flex-1 flex-col">
+        <Tabs.Root
+          defaultValue="analyze"
+          className="flex basis-full flex-col overflow-hidden"
+        >
           <div className="flex border-b border-b-slate-500">
             <ElementSelect nodeName={nodeName} classNames={classNames} />
             <Tabs.List className="flex shrink-0">
@@ -70,14 +73,14 @@ function App() {
           </div>
           <Tabs.Content
             value="analyze"
-            className="tab-content flex flex-1 flex-col lg:flex-row"
+            className="tab-content flex grow flex-col lg:flex-row"
           >
             <SpecViewer spec={spec} />
             <ProgramViewer program={program} />
           </Tabs.Content>
           <Tabs.Content
             value="visualize"
-            className="tab-content flex flex-1 flex-col lg:flex-row"
+            className="tab-content flex grow flex-col overflow-hidden lg:flex-row"
           >
             <ProgramOutput program={program} data={data} />
             <ProgramEditor program={program} />
