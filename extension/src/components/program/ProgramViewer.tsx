@@ -11,8 +11,8 @@ interface Props {
 
 const ProgramViewer: React.FC<Props> = ({ program }) => {
   return (
-    <div className="stack stack-sm relative basis-1/2 px-3 py-2">
-      <Heading className="self-start">Program</Heading>
+    <div className="relative flex basis-1/2 flex-col px-3 py-2">
+      <Heading className="mb-4 self-start">Program</Heading>
       {program ? (
         <Highlight
           code={formatProgram(program)}
@@ -21,7 +21,10 @@ const ProgramViewer: React.FC<Props> = ({ program }) => {
         >
           {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre
-              className={cs("-mx-3 overflow-auto px-3 py-2 text-xs", className)}
+              className={cs(
+                "-mx-3 -mb-2 overflow-auto px-3 py-2 text-xs",
+                className
+              )}
               style={style}
             >
               {tokens.map((line, i) => (

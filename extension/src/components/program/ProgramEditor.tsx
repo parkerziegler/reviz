@@ -59,12 +59,13 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
   }, [program, data]);
 
   return (
-    <div className="stack stack-sm relative shrink-0 basis-1/3 overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">
-      <Heading className="self-start">Program</Heading>
+    <div className="relative flex shrink-0 basis-1/3 flex-col overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">
+      <Heading className="mb-4 self-start">Program</Heading>
       {program ? (
         <div
           ref={editorRef}
-          className="relative -mx-3 h-full overflow-auto bg-white text-xs text-black"
+          className="relative -mx-3 -mb-2 h-full overflow-auto bg-white text-xs text-black"
+          style={{ marginBottom: "-0.75rem !important" }}
         >
           <button
             onClick={onExecute}
@@ -87,7 +88,13 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
       ) : (
         <p>Waiting for visualization selection...</p>
       )}
-      <iframe ref={iframeRef} src="/sandbox.html" width={0} height={0} />
+      <iframe
+        ref={iframeRef}
+        src="/sandbox.html"
+        className="hidden"
+        width={0}
+        height={0}
+      />
     </div>
   );
 };
