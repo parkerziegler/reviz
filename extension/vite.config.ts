@@ -11,6 +11,7 @@ export default defineConfig({
       input: {
         devtools: resolve(__dirname, "devtools.html"),
         panel: resolve(__dirname, "panel.html"),
+        sandbox: resolve(__dirname, "sandbox.html"),
         inspect: resolve(__dirname, "scripts", "inspect.ts"),
         "service-worker": resolve(__dirname, "scripts", "service-worker.ts"),
       },

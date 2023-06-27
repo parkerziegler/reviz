@@ -34,7 +34,7 @@ const DataGrid: React.FC<Props> = ({ data }) => {
   });
 
   return (
-    <div className="overflow-auto">
+    <div className="-mx-3 -mb-2 overflow-auto">
       <table className="data-grid relative border-collapse font-mono">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

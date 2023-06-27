@@ -27,6 +27,7 @@ function App() {
       classNames: "",
     });
   const [data, setData] = React.useState<Data>();
+  const [output, setOutput] = React.useState<string>("");
 
   React.useEffect(() => {
     // Establish a long-lived connection to the service worker.
@@ -82,8 +83,12 @@ function App() {
             value="visualize"
             className="tab-content flex grow flex-col overflow-hidden lg:flex-row"
           >
-            <ProgramOutput program={program} data={data} />
-            <ProgramEditor program={program} />
+            <ProgramOutput output={output} />
+            <ProgramEditor
+              program={program}
+              data={data}
+              setOutput={setOutput}
+            />
             <DataPanel data={data} setData={setData} />
           </Tabs.Content>
         </Tabs.Root>
