@@ -58,7 +58,7 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
         "*"
       );
     }
-  }, [program, data]);
+  }, [data]);
 
   return (
     <div className="relative flex shrink-0 basis-1/3 flex-col overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">
@@ -67,7 +67,6 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
         <div
           ref={editorRef}
           className="relative -mx-3 -mb-2 h-full overflow-auto bg-white text-xs text-black"
-          style={{ marginBottom: "-0.75rem !important" }}
         >
           <button
             onClick={onExecute}
