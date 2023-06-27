@@ -1,15 +1,9 @@
 import * as Plot from "@observablehq/plot";
 
-import { Data } from "../src/types/data";
+import type { ExecuteMessage } from "../src/types/message";
 import { formatExecutableProgram } from "../src/utils/formatters";
 
-interface RenderMessage {
-  name: "execute";
-  data: Data;
-  program: string;
-}
-
-window.addEventListener("message", (event: MessageEvent<RenderMessage>) => {
+window.addEventListener("message", (event: MessageEvent<ExecuteMessage>) => {
   if (event.data.name !== "execute") {
     return;
   }

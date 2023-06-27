@@ -4,7 +4,8 @@ import { javascript } from "@codemirror/lang-javascript";
 
 import Heading from "../shared/Heading";
 import { formatProgram } from "../../utils/formatters";
-import { Data } from "../../types/data";
+import type { Data } from "../../types/data";
+import type { RenderMessage } from "../../types/message";
 
 interface Props {
   program: string;
@@ -17,31 +18,32 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
   let editor = React.useRef<EditorView>();
 
   React.useEffect(() => {
-    const ed = new EditorView({
+    editor.current = new EditorView({
       extensions: [basicSetup, javascript()],
       parent: editorRef.current!,
       doc: formatProgram(program),
     });
 
-    editor.current = ed;
-
     return () => {
-      ed.destroy();
+      editor.current?.destroy();
       editor.current = undefined;
     };
   }, [program]);
 
   React.useEffect(() => {
-    window.addEventListener(
-      "message",
-      (event: MessageEvent<{ name: "render"; plot: string }>) => {
-        if (event.data.name !== "render") {
-          return;
-        }
-
-        setOutput(event.data.plot);
+    const listener = (event: MessageEvent<RenderMessage>) => {
+      if (event.data.name !== "render") {
+        return;
       }
-    );
+
+      setOutput(event.data.plot);
+    };
+
+    window.addEventListener("message", listener);
+
+    return () => {
+      window.removeEventListener("message", listener);
+    };
   }, []);
 
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
