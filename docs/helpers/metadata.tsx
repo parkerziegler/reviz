@@ -6,12 +6,15 @@ import HistogramThumbnail from '../public/histogram.png';
 import ScatterplotThumbnail from '../public/scatterplot.png';
 import StackedBarThumbnail from '../public/stacked-bar.png';
 import StripPlotThumbnail from '../public/strip-plot.png';
-import NYTVaccineVotingThumbnail from '../public/NYT-vaccine-voting.png';
+import NewYorkTimesVaccineVotingThumbnail from '../public/new-york-times-vaccine-voting.png';
 import NPRCovidShiftThumbnail from '../public/NPR-covid-shift.png';
+
+import { NYTimesLogo, NPRLogo } from './logos';
 
 interface ExampleMeta {
   src: StaticImageData;
   alt: string;
+  icon?: React.ReactNode;
 }
 
 export const metadata: Record<string, ExampleMeta> = {
@@ -42,9 +45,11 @@ export const metadata: Record<string, ExampleMeta> = {
   ['NPR-covid-shift']: {
     src: NPRCovidShiftThumbnail,
     alt: 'A stacked bar chart from NPR showing how deaths related to Covid-19 have shifted away from urban centers to rural towns over the course of the pandemic.',
+    icon: NPRLogo,
   },
-  ['NYT-vaccine-voting']: {
-    src: NYTVaccineVotingThumbnail,
+  ['new-york-times-vaccine-voting']: {
+    src: NewYorkTimesVaccineVotingThumbnail,
     alt: 'A scatterplot from the New York Times showing correlations between voting patterns and vaccination status.',
+    icon: NYTimesLogo,
   },
 };

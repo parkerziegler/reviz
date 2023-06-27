@@ -4,7 +4,7 @@ import cs from 'classnames';
 
 import { withViewer } from '../../components/Viewer';
 
-import styles from './NYT-vaccine-voting.module.css';
+import styles from './new-york-times-vaccine-voting.module.css';
 
 const NYTVaccineVoting: React.FC = () => {
   return (

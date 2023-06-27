@@ -92,6 +92,7 @@ const Index: React.FC<Props> = ({ examples }) => {
                     href={`examples/${example}`}
                     description={metadata[example].alt}
                     image={metadata[example]}
+                    icon={metadata[example].icon}
                   />
                 </li>
               );
