@@ -1,0 +1,97 @@
+{
+  "name": "@reviz/compiler",
+  "version": "0.4.1",
+  "description": "An engine for reverse engineering data visualizations from the DOM.",
+  "main": "dist/reviz.js",
+  "module": "dist/reviz.esm.js",
+  "types": "dist/types/src/index.d.ts",
+  "sideEffects": false,
+  "contributors": [
+    {
+      "name": "Parker Ziegler",
+      "email": "peziegler@berkeley.edu",
+      "url": "https://parkie-doo.sh/"
+    },
+    {
+      "name": "Logan Caraco",
+      "email": "logan_caraco@berkeley.edu"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parkerziegler/reviz.git"
+  },
+  "bugs": "https://github.com/parkerziegler/reviz/issues",
+  "homepage": "https://github.com/parkerziegler/reviz#readme",
+  "keywords": [
+    "data visualization",
+    "reverse engineering",
+    "observable",
+    "observable plot",
+    "typescript"
+  ],
+  "scripts": {
+    "build": "yarn check:ts && yarn emit:types && yarn build:esm:dev && yarn build:esm:prod && yarn build:cjs:dev && yarn build:cjs:prod",
+    "build:esm:dev": "esbuild src/index.ts --bundle --sourcemap --format=esm --outfile=dist/reviz.esm.js",
+    "build:esm:prod": "esbuild src/index.ts --bundle --minify --format=esm --outfile=dist/reviz.esm.min.js",
+    "build:cjs:dev": "esbuild src/index.ts --bundle --sourcemap --format=cjs --outfile=dist/reviz.js",
+    "build:cjs:prod": "esbuild src/index.ts --bundle --minify --outfile=dist/reviz.min.js",
+    "check:ts": "tsc --noEmit",
+    "clean": "rimraf ./dist ./node_modules/.cache",
+    "coverage": "jest --collectCoverage",
+    "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "preversion": "yarn clean && yarn check:ts && yarn build",
+    "test": "jest"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "dist/",
+    "!dist/types/tsconfig.tsbuildinfo"
+  ],
+  "dependencies": {
+    "lodash.camelcase": "^4.3.0",
+    "lodash.groupby": "^4.6.0",
+    "lodash.orderby": "^4.6.0"
+  },
+  "devDependencies": {
+    "@observablehq/plot": "^0.6.9",
+    "@sucrase/jest-plugin": "^2.2.0",
+    "@types/jest": "^27.0.3",
+    "@types/lodash.camelcase": "^4.3.6",
+    "@types/lodash.chunk": "^4.2.7",
+    "@types/lodash.groupby": "^4.6.6",
+    "@types/lodash.orderby": "^4.6.6",
+    "@types/node": "^16.11.6",
+    "esbuild": "^0.13.8",
+    "jest": "^27.4.5",
+    "lodash.chunk": "^4.2.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^5.1.3"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-typescript"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "@sucrase/jest-plugin"
+    },
+    "moduleNameMapper": {
+      "@observablehq/plot": "<rootDir>/node_modules/@observablehq/plot/dist/plot.umd.min.js",
+      "d3": "<rootDir>/node_modules/d3/dist/d3.min.js"
+    },
+    "testMatch": [
+      "<rootDir>/__tests__/*.spec.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ]
+  },
+  "workspaces": [
+    "packages/docs"
+  ]
+}

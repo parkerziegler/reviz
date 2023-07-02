@@ -1,4 +1,4 @@
-dist
 .eslintrc.js
-next.config.js
+vite.config.ts
 tailwind.config.js
+dist

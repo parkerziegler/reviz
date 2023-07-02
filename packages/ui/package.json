@@ -1,0 +1,32 @@
+{
+  "name": "@reviz/ui",
+  "version": "0.4.1",
+  "description": "Shared React components for reviz, an engine for reverse engineering data visualizations from the DOM.",
+  "author": "Parker Ziegler <peziegler@berkeley.edu>",
+  "types": "dist/types/index.d.ts",
+  "main": "dist/ui.js",
+  "module": "dist/ui.esm.js",
+  "scripts": {
+    "build": "npm run check:ts && npm run emit:types && npm run build:esm:dev && npm run build:esm:prod && npm run build:cjs:dev && npm run build:cjs:prod",
+    "build:esm:dev": "esbuild src/index.ts --bundle --sourcemap --format=esm --external:react --external:react-dom --outfile=dist/ui.esm.js",
+    "build:esm:prod": "esbuild src/index.ts --bundle --minify --format=esm --external:react --external:react-dom  --outfile=dist/ui.esm.min.js",
+    "build:cjs:dev": "esbuild src/index.ts --bundle --sourcemap --format=cjs --external:react --external:react-dom  --outfile=dist/ui.js",
+    "build:cjs:prod": "esbuild src/index.ts --bundle --minify --external:react --external:react-dom --outfile=dist/ui.min.js",
+    "check:ts": "tsc --noEmit",
+    "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types"
+  },
+  "dependencies": {
+    "classnames": "^2.3.2",
+    "prism-react-renderer": "^2.0.6"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "esbuild": "^0.18.10",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

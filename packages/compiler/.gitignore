@@ -1,0 +1,30 @@
+# Build
+dist
+
+# System
+.DS_Store
+
+# Node
+node_modules
+
+# Editor
+.vscode
+
+# Next
+.next
+
+# TypeScript
+tsconfig.tsbuildinfo
+
+# Jest
+coverage
+
+# Latex
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
