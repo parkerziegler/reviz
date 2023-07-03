@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.4.1",
   "description": "The Chrome extension for reviz, an engine for reverse engineering data visualizations from the DOM.",
-  "author": "Parker Ziegler <peziegler@berkeley.edu>",
+  "author": {
+    "name": "Parker Ziegler",
+    "email": "peziegler@cs.berkeley.edu"
+  },
   "type": "module",
   "repository": {
     "type": "git",

@@ -1,0 +1,279 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{16}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{??}{cre}{[n.d.]}]%
+        {createTreeWalker_mozilla:2021}
+ \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Document.{createTreeWalker}() - {Web} {APIs}
+  {\textbar} {MDN}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{veg}{[n.d.]}]%
+        {vega-lite:2021}
+ \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{A {High}-{Level} {Grammar} of {Interactive}
+  {Graphics}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://vega.github.io/vega-lite/}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{typ}{[n.d.]}]%
+        {typescript:2021}
+ \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{{JavaScript} {With} {Syntax} {For} {Types}.}
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.typescriptlang.org/}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{obs}{[n.d.]}]%
+        {observable_plot_docs:2021}
+ \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Observable {Plot} / {Observable} / {Observable}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://observablehq.com/@observablehq/plot}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{obs}{2021}]%
+        {observable_plot:2021}
+ \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{Observable {Plot}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://github.com/observablehq/plot}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{original-date: 2020-10-29T22:30:31Z.}
+
+
+\bibitem[\protect\citeauthoryear{Bostock}{Bostock}{[n.d.]a}]%
+        {bostock:2021}
+\bibfield{author}{\bibinfo{person}{Mike Bostock}.}
+  \bibinfo{year}{[n.d.]}\natexlab{a}.
+\newblock \bibinfo{title}{10 {Years} of {Open}-{Source} {Visualization} /
+  {Mike} {Bostock} / {Observable}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://observablehq.com/@mbostock/10-years-of-open-source-visualization}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Bostock}{Bostock}{[n.d.]b}]%
+        {bostock_dotplot:2018}
+\bibfield{author}{\bibinfo{person}{Mike Bostock}.}
+  \bibinfo{year}{[n.d.]}\natexlab{b}.
+\newblock \bibinfo{title}{Dot {Plot} / {D3} / {Observable}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://observablehq.com/@d3/dot-plot}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Bostock}{Bostock}{2013}]%
+        {bostock:2013}
+\bibfield{author}{\bibinfo{person}{Mike Bostock}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \bibinfo{title}{Eyeo 2013 - {Mike} {Bostock}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://vimeo.com/69448223}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Harper and Agrawala}{Harper and
+  Agrawala}{2014}]%
+        {harper_agrawala:2014}
+\bibfield{author}{\bibinfo{person}{Jonathan Harper} {and}
+  \bibinfo{person}{Maneesh Agrawala}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Deconstructing and restyling {D3} visualizations}.
+  In \bibinfo{booktitle}{\emph{Proceedings of the 27th annual {ACM} symposium
+  on {User} interface software and technology}} \emph{(\bibinfo{series}{{UIST}
+  '14})}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{253--262}.
+\newblock
+\showISBNx{978-1-4503-3069-5}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2642918.2647411}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ivory, Leatherby, and Gebeloff}{Ivory
+  et~al\mbox{.}}{2021}]%
+        {ivory_nyt:2021}
+\bibfield{author}{\bibinfo{person}{Danielle Ivory}, \bibinfo{person}{Lauren
+  Leatherby}, {and} \bibinfo{person}{Robert Gebeloff}.}
+  \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Least {Vaccinated} {U}.{S}. {Counties} {Have}
+  {Something} in {Common}: {Trump} {Voters}}.
+\newblock \bibinfo{journal}{\emph{The New York Times}} (\bibinfo{date}{April}
+  \bibinfo{year}{2021}).
+\newblock
+\showISSN{0362-4331}
+\urldef\tempurl%
+\url{https://www.nytimes.com/interactive/2021/04/17/us/vaccine-hesitancy-politics.html}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Jung, Kim, Song, Hwang, Lee, Kim, and
+  Seo}{Jung et~al\mbox{.}}{2017}]%
+        {jung_etal:2017}
+\bibfield{author}{\bibinfo{person}{Daekyoung Jung}, \bibinfo{person}{Wonjae
+  Kim}, \bibinfo{person}{Hyunjoo Song}, \bibinfo{person}{Jeong-in Hwang},
+  \bibinfo{person}{Bongshin Lee}, \bibinfo{person}{Bohyoung Kim}, {and}
+  \bibinfo{person}{Jinwook Seo}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{{ChartSense}: {Interactive} {Data} {Extraction}
+  from {Chart} {Images}}. In \bibinfo{booktitle}{\emph{Proceedings of the 2017
+  {CHI} {Conference} on {Human} {Factors} in {Computing} {Systems}}}
+  \emph{(\bibinfo{series}{{CHI} '17})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{6706--6717}.
+\newblock
+\showISBNx{978-1-4503-4655-9}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3025453.3025957}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{McMinn, Talbot, and Eng}{McMinn
+  et~al\mbox{.}}{2020}]%
+        {mcminn_npr:2020}
+\bibfield{author}{\bibinfo{person}{Sean McMinn}, \bibinfo{person}{Ruth Talbot},
+  {and} \bibinfo{person}{Jess Eng}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{America's 200,000 {COVID}-19 {Deaths}: {Small}
+  {Cities} {And} {Towns} {Bear} {A} {Growing} {Share}}.
+\newblock \bibinfo{journal}{\emph{NPR}} (\bibinfo{date}{Sept.}
+  \bibinfo{year}{2020}).
+\newblock
+\urldef\tempurl%
+\url{https://www.npr.org/sections/health-shots/2020/09/22/914578634/americas-200-000-covid-19-deaths-small-cities-and-towns-bear-a-growing-share}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Poco and Heer}{Poco and Heer}{2017}]%
+        {poco_heer:2017}
+\bibfield{author}{\bibinfo{person}{Jorge Poco} {and} \bibinfo{person}{Jeffrey
+  Heer}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Reverse-{Engineering} {Visualizations}:
+  {Recovering} {Visual} {Encodings} from {Chart} {Images}}.
+\newblock \bibinfo{journal}{\emph{Computer Graphics Forum}}
+  \bibinfo{volume}{36}, \bibinfo{number}{3} (\bibinfo{date}{June}
+  \bibinfo{year}{2017}), \bibinfo{pages}{353--363}.
+\newblock
+\showISSN{0167-7055}
+\urldef\tempurl%
+\url{https://doi.org/10.1111/cgf.13193}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Savva, Kong, Chhajta, Fei-Fei, Agrawala, and
+  Heer}{Savva et~al\mbox{.}}{2011}]%
+        {savva_etal:2011}
+\bibfield{author}{\bibinfo{person}{Manolis Savva}, \bibinfo{person}{Nicholas
+  Kong}, \bibinfo{person}{Arti Chhajta}, \bibinfo{person}{Li Fei-Fei},
+  \bibinfo{person}{Maneesh Agrawala}, {and} \bibinfo{person}{Jeffrey Heer}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{{ReVision}: automated classification, analysis and
+  redesign of chart images}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  24th annual {ACM} symposium on {User} interface software and technology}}
+  \emph{(\bibinfo{series}{{UIST} '11})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{393--402}.
+\newblock
+\showISBNx{978-1-4503-0716-1}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2047196.2047247}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wang, Feng, Bodik, Cheung, and Dillig}{Wang
+  et~al\mbox{.}}{2019}]%
+        {wang_etal:2019}
+\bibfield{author}{\bibinfo{person}{Chenglong Wang}, \bibinfo{person}{Yu Feng},
+  \bibinfo{person}{Rastislav Bodik}, \bibinfo{person}{Alvin Cheung}, {and}
+  \bibinfo{person}{Isil Dillig}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Visualization by example}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{4}, \bibinfo{number}{POPL} (\bibinfo{date}{Dec.}
+  \bibinfo{year}{2019}), \bibinfo{pages}{49:1--49:28}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3371117}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wilkinson}{Wilkinson}{2005}]%
+        {wilkinson:2005}
+\bibfield{author}{\bibinfo{person}{Leland Wilkinson}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{The Grammar of Graphics (Statistics and
+  Computing)}}.
+\newblock \bibinfo{publisher}{Springer-Verlag}, \bibinfo{address}{Berlin,
+  Heidelberg}.
+\newblock
+\showISBNx{0387245448}
+
+
+\end{thebibliography}

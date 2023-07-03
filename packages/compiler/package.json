@@ -2,18 +2,21 @@
   "name": "@reviz/compiler",
   "version": "0.4.1",
   "description": "An engine for reverse engineering data visualizations from the DOM.",
-  "author": "Parker Ziegler <peziegler@cs.berkeley.edu>",
+  "author": {
+    "name": "Parker Ziegler",
+    "email": "peziegler@cs.berkeley.edu"
+  },
   "main": "dist/reviz.js",
   "module": "dist/reviz.esm.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/types/src/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
+  "homepage": "https://reviz.vercel.app",
   "repository": {
     "type": "git",
     "url": "https://github.com/parkerziegler/reviz.git"
   },
   "bugs": "https://github.com/parkerziegler/reviz/issues",
-  "homepage": "https://reviz.vercel.app",
   "keywords": [
     "data visualization",
     "reverse engineering",

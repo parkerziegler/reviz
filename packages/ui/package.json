@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.4.1",
   "description": "Shared React components for the reviz ecosystem.",
-  "author": "Parker Ziegler <peziegler@berkeley.edu>",
+  "author": {
+    "name": "Parker Ziegler",
+    "email": "peziegler@cs.berkeley.edu"
+  },
   "types": "dist/types/index.d.ts",
   "main": "dist/ui.js",
   "module": "dist/ui.esm.js",

@@ -1,0 +1,84 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{bostock:2021,bostock:2013}
+\citation{observable_plot_docs:2021}
+\citation{ivory_nyt:2021}
+\citation{mcminn_npr:2020}
+\citation{observable_plot:2021}
+\citation{createTreeWalker_mozilla:2021}
+\providecommand \oddpage@label [2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Implementation}{1}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Walking the input \texttt  {svg} subtree}{1}{subsection.2.1}\protected@file@percent }
+\citation{poco_heer:2017,wang_etal:2019}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {A high-level overview of how \texttt  {reviz} reverse-engineers and retargets data visualizations. The \texttt  {reviz} architecture is somewhat akin to a traditional compiler, transforming \texttt  {svg} subtrees into partial visualization programs. \texttt  {reviz} uses deductive search over attribute \texttt  {Set}s to infer a visualization type and produce its IR, which is then used to generate the partial visualization program. A user fills holes in this program (denoted by \texttt  {"??"}) to generate an output visualization (g).}\relax }}{2}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:reviz}{{1}{2}{\textbf {A high-level overview of how \code {reviz} reverse-engineers and retargets data visualizations. The \code {reviz} architecture is somewhat akin to a traditional compiler, transforming \code {svg} subtrees into partial visualization programs. \code {reviz} uses deductive search over attribute \code {Set}s to infer a visualization type and produce its IR, which is then used to generate the partial visualization program. A user fills holes in this program (denoted by \code {"??"}) to generate an output visualization (g).}\relax }{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Inferring the visualization type from attribute \texttt  {Set}s}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Restricting visualization types}{2}{subsubsection.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Predicate functions over attribute \texttt  {Set}s}{2}{subsubsection.2.2.2}\protected@file@percent }
+\citation{typescript:2021}
+\citation{wilkinson:2005}
+\citation{vega-lite:2021}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {The grammar describing the encoding of the \texttt  {reviz} IR. Metavariables $s$ and $n$ refer to string constants and numeric constants (any value encoded by the JavaScript \texttt  {Number type}), respectively.}\relax }}{3}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:grammar}{{2}{3}{\textbf {The grammar describing the encoding of the \code {reviz} IR. Metavariables $s$ and $n$ refer to string constants and numeric constants (any value encoded by the JavaScript \code {Number type}), respectively.}\relax }{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Constructing the intermediate representation (IR)}{3}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Code generation}{3}{subsection.2.4}\protected@file@percent }
+\citation{observable_plot_docs:2021}
+\citation{ivory_nyt:2021}
+\citation{mcminn_npr:2020}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {The redexes (r) and contexts (H) of the contextual semantics defining how the \texttt  {reviz} IR is evaluated to an incomplete JavaScript program. Non-reducible expressions include geometric and presentational attributes encoded in the IR, which fill the options context \texttt  {\{H\}} but are not themselves reduced. Metavariable \texttt  {a} refers to the rest of the IR object not under evaluation.}\relax }}{4}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:consem}{{3}{4}{\textbf {The redexes (r) and contexts (H) of the contextual semantics defining how the \code {reviz} IR is evaluated to an incomplete JavaScript program. Non-reducible expressions include geometric and presentational attributes encoded in the IR, which fill the options context \code {\{H\}} but are not themselves reduced. Metavariable \code {a} refers to the rest of the IR object not under evaluation.}\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {Reduction rules defining redex evaluation. Visualization types in the \texttt  {reviz} IR act almost as template generators for Plot API calls. Redex evaluation in \texttt  {reviz} leads to the creation of a hole \{•\}, which becomes the next context of evaluation after the visualization type.}\relax }}{4}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:redrules}{{4}{4}{\textbf {Reduction rules defining redex evaluation. Visualization types in the \code {reviz} IR act almost as template generators for Plot API calls. Redex evaluation in \code {reviz} leads to the creation of a hole \{•\}, which becomes the next context of evaluation after the visualization type.}\relax }{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.1}A contextual semantics for \texttt  {reviz}'s code generation}{4}{subsubsection.2.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Evaluation}{4}{section.3}\protected@file@percent }
+\citation{bostock_dotplot:2018}
+\citation{harper_agrawala:2014}
+\citation{poco_heer:2017,jung_etal:2017,savva_etal:2011}
+\citation{poco_heer:2017}
+\citation{jung_etal:2017}
+\bibstyle{ACM-Reference-Format}
+\bibdata{refs}
+\bibcite{createTreeWalker_mozilla:2021}{{1}{[n.d.]}{{cre}}{{??}}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Related Work}{5}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{5}{section.5}\protected@file@percent }
+\bibcite{vega-lite:2021}{{2}{[n.d.]}{{veg}}{{??}}}
+\bibcite{typescript:2021}{{3}{[n.d.]}{{typ}}{{??}}}
+\bibcite{observable_plot_docs:2021}{{4}{[n.d.]}{{obs}}{{??}}}
+\bibcite{observable_plot:2021}{{5}{2021}{{obs}}{{??}}}
+\bibcite{bostock:2021}{{6}{[n.d.]a}{{Bostock}}{{Bostock}}}
+\bibcite{bostock_dotplot:2018}{{7}{[n.d.]b}{{Bostock}}{{Bostock}}}
+\bibcite{bostock:2013}{{8}{2013}{{Bostock}}{{Bostock}}}
+\bibcite{harper_agrawala:2014}{{9}{2014}{{Harper and Agrawala}}{{Harper and Agrawala}}}
+\bibcite{ivory_nyt:2021}{{10}{2021}{{Ivory et~al\mbox  {.}}}{{Ivory, Leatherby, and Gebeloff}}}
+\bibcite{jung_etal:2017}{{11}{2017}{{Jung et~al\mbox  {.}}}{{Jung, Kim, Song, Hwang, Lee, Kim, and Seo}}}
+\bibcite{mcminn_npr:2020}{{12}{2020}{{McMinn et~al\mbox  {.}}}{{McMinn, Talbot, and Eng}}}
+\bibcite{poco_heer:2017}{{13}{2017}{{Poco and Heer}}{{Poco and Heer}}}
+\bibcite{savva_etal:2011}{{14}{2011}{{Savva et~al\mbox  {.}}}{{Savva, Kong, Chhajta, Fei-Fei, Agrawala, and Heer}}}
+\bibcite{wang_etal:2019}{{15}{2019}{{Wang et~al\mbox  {.}}}{{Wang, Feng, Bodik, Cheung, and Dillig}}}
+\bibcite{wilkinson:2005}{{16}{2005}{{Wilkinson}}{{Wilkinson}}}
+\newlabel{tocindent-1}{0pt}
+\newlabel{tocindent0}{0pt}
+\newlabel{tocindent1}{4.65pt}
+\newlabel{tocindent2}{11.49998pt}
+\newlabel{tocindent3}{20.22pt}
+\@writefile{toc}{\contentsline {section}{References}{6}{section*.6}\protected@file@percent }
+\newlabel{TotPages}{{6}{6}{}{page.6}{}}
+\gdef \@abspage@last{6}

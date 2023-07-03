@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.4.1",
   "description": "Documentation for reviz, an engine for reverse engineering data visualizations from the DOM.",
-  "author": "Parker Ziegler <peziegler@berkeley.edu>",
+  "author": {
+    "name": "Parker Ziegler",
+    "email": "peziegler@cs.berkeley.edu"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/parkerziegler/reviz.git"
