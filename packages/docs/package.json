@@ -1,9 +1,23 @@
 {
   "name": "@reviz/docs",
+  "private": true,
   "version": "0.4.1",
   "description": "Documentation for reviz, an engine for reverse engineering data visualizations from the DOM.",
   "author": "Parker Ziegler <peziegler@berkeley.edu>",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parkerziegler/reviz.git"
+  },
+  "bugs": "https://github.com/parkerziegler/reviz/issues",
+  "homepage": "https://reviz.vercel.app",
+  "keywords": [
+    "data visualization",
+    "documentation",
+    "reverse engineering",
+    "observable",
+    "observable plot",
+    "typescript"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

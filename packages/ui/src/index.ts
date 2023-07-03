@@ -1,3 +1,3 @@
-import CodePane from './CodePane';
+import CodePane from './components/CodePane';
 
 export { CodePane };

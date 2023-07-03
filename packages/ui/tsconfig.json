@@ -19,6 +19,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["src/*"],
+  "include": ["src/index.ts", "src/components/*.tsx"],
   "exclude": ["node_modules"]
 }

@@ -8,7 +8,7 @@ import { walk } from '../src/walk';
 import { getRandInt } from './test-utils';
 
 const NUM_NODES = 100;
-const PLOT_SUPPLIED_NODE_COUNT = 13;
+const PLOT_SUPPLIED_NODE_COUNT = 15;
 const PLOT_DEFAULT_WIDTH = 640;
 const PLOT_DEFAULT_HEIGHT = 400;
 

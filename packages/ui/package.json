@@ -1,11 +1,27 @@
 {
   "name": "@reviz/ui",
+  "private": true,
   "version": "0.4.1",
-  "description": "Shared React components for reviz, an engine for reverse engineering data visualizations from the DOM.",
+  "description": "Shared React components for the reviz ecosystem.",
   "author": "Parker Ziegler <peziegler@berkeley.edu>",
   "types": "dist/types/index.d.ts",
   "main": "dist/ui.js",
   "module": "dist/ui.esm.js",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parkerziegler/reviz.git"
+  },
+  "bugs": "https://github.com/parkerziegler/reviz/issues",
+  "homepage": "https://reviz.vercel.app",
+  "keywords": [
+    "data visualization",
+    "reverse engineering",
+    "observable",
+    "observable plot",
+    "typescript",
+    "ui components"
+  ],
   "scripts": {
     "build": "npm run check:ts && npm run emit:types && npm run build:esm:dev && npm run build:esm:prod && npm run build:cjs:dev && npm run build:cjs:prod",
     "build:esm:dev": "esbuild src/index.ts --bundle --sourcemap --format=esm --external:react --external:react-dom --outfile=dist/ui.esm.js",
@@ -13,7 +29,9 @@
     "build:cjs:dev": "esbuild src/index.ts --bundle --sourcemap --format=cjs --external:react --external:react-dom  --outfile=dist/ui.js",
     "build:cjs:prod": "esbuild src/index.ts --bundle --minify --external:react --external:react-dom --outfile=dist/ui.min.js",
     "check:ts": "tsc --noEmit",
-    "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types"
+    "clean": "rimraf ./dist ./node_modules/.cache",
+    "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "preversion": "npm run clean && npm run check:ts && npm run build"
   },
   "dependencies": {
     "classnames": "^2.3.2",
@@ -22,7 +40,8 @@
   "devDependencies": {
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "esbuild": "^0.18.10",
+    "esbuild": "^0.18.11",
+    "rimraf": "^5.0.1",
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
