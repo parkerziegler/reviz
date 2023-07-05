@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as d3 from 'd3';
 
-import type { State } from '../../../src/data/states';
+import type { State } from '../../data/states';
 
 const dimensions = {
   width: 640,

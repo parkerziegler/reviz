@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as Plot from '@observablehq/plot';
 
-import type { Athlete } from '../../../src/data/athletes';
+import type { Athlete } from '../../data/athletes';
 
 interface Props {
   data: Athlete[];

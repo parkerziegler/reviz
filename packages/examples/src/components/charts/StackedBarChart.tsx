@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as d3 from 'd3';
 import groupBy from 'lodash.groupby';
 
-import type { DeathRecord, StackRecord } from '../../../src/data/crimea';
+import type { DeathRecord, StackRecord } from '../../data/crimea';
 
 const dimensions = {
   width: 640,

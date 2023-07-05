@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as d3 from 'd3';
 
-import type { Letter } from '../../../src/data/alphabet';
+import type { Letter } from '../../data/alphabet';
 
 const dimensions = {
   width: 640,

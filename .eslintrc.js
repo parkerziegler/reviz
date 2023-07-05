@@ -44,7 +44,7 @@ module.exports = {
   },
   settings: {
     next: {
-      rootDir: 'packages/docs/',
+      rootDir: 'packages/examples/',
     },
   },
 };
