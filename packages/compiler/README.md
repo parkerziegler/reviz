@@ -15,7 +15,13 @@
 
 `reviz` is a lightweight engine for reverse engineering data visualizations from the DOM. Its core goal is to assist in rapid visualization sketching and prototyping by automatically generating partial programs written using [Observable Plot](https://observablehq.com/@observablehq/plot) from input `svg` subtrees.
 
-At the heart of `reviz` is its compiler—this very package.
+At the heart of `reviz` is its compiler.
+
+## Installation
+
+```sh
+npm install @reviz/compiler
+```
 
 ## API
 
