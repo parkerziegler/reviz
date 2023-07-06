@@ -240,7 +240,7 @@ const determineVizType = (vizAttrs: VizAttrs): VizType => {
     }
 
     acc.push({
-      type: type,
+      type,
       numPredicates,
       solvedPredicates,
       solveRate: solvedPredicates / numPredicates,
