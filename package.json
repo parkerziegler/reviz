@@ -1,7 +1,7 @@
 {
   "name": "@reviz/monorepo",
-  "description": "An engine for reverse engineering data visualizations from the DOM.",
   "version": "0.0.0",
+  "description": "An engine for reverse engineering data visualizations from the DOM.",
   "private": true,
   "author": {
     "name": "Parker Ziegler",

@@ -13,15 +13,28 @@
   <br />
 </div>
 
-`reviz` is a lightweight engine for reverse engineering data visualizations from the DOM. Its core goal is to assist in rapid visualization sketching and prototyping by automatically generating partial programs written using [Observable Plot](https://observablehq.com/@observablehq/plot) from input `svg` subtrees. `reviz` can be used directly through the core library, [`@reviz/compiler`](https://github.com/parkerziegler/reviz/tree/main/packages/compiler/README.md), or the Chrome extension, [`@reviz/extension`](https://github.com/parkerziegler/reviz/tree/main/packages/extension/README.md).
+`reviz` is a lightweight engine for reverse engineering data visualizations from the DOM. Its core goal is to assist in rapid visualization sketching and prototyping by automatically generating partial programs written using [Observable Plot](https://observablehq.com/@observablehq/plot) from input `svg` subtrees. `reviz` can be used directly through the core library, [`@reviz/compiler`](./packages/compiler/README.md), or the Chrome extension, [`@reviz/extension`](./packages/extension/README.md).
 
 For a hands-on, interactive introduction to `reviz`, check out [the `Hello reviz!` notebook on Observable](https://observablehq.com/@parkerziegler/hello-reviz).
 
+To get familiar with the various packages in this codebase, check out their respective READMEs.
+
+- [`@reviz/compiler`]('./packages/compiler/README.md) – The core library and compiler.
+- [`@reviz/examples`]('./packages/examples/README.md) – The [examples site](https://reviz.vercel.app).
+- [`@reviz/extension`]('./packages/extension/README.md) – The Chrome extension.
+- [`@reviz/ui`]('./packages/ui/README.md) – Shared UI components used across the `reviz` ecosystem.
+
 ## Installation
 
+### Compiler
+
 ```sh
-npm install @reviz/compiler --save
+npm install @reviz/compiler
 ```
+
+### Extension
+
+🚧 Under Construction 🚧
 
 ## API
 
@@ -126,7 +139,7 @@ The result that we get is a new visualization that takes the _appearance_ of the
 
 In this way, `reviz` allows end users to quickly experiment with _seeing_ their data in the form of a visualization they encounter anywhere in the wild.
 
-To see more examples of the partial programs `reviz` generates, check out [our example site](https://reviz.vercel.app). To understand how `reviz` works at a deeper level, consider reading [our paper](/paper/reviz.pdf).
+To see more examples of the partial programs `reviz` generates, check out [our examples site](https://reviz.vercel.app). To understand how `reviz` works at a deeper level, consider reading [our paper](/paper/reviz.pdf).
 
 ### Supported Visualization Types
 

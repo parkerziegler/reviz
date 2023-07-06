@@ -1,4 +1,11 @@
-.eslintrc.js
-vite.config.ts
-tailwind.config.js
+# Build
 dist
+
+# ESLint
+.eslintrc.js
+
+# Vite
+vite.config.ts
+
+# Tailwind
+tailwind.config.js
