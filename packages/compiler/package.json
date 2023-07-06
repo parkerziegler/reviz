@@ -11,13 +11,14 @@
   "types": "dist/types/src/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
-  "homepage": "https://reviz.vercel.app",
+  "homepage": "https://github.com/parkerziegler/reviz/blob/main/packages/compiler/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/parkerziegler/reviz.git"
   },
   "bugs": "https://github.com/parkerziegler/reviz/issues",
   "keywords": [
+    "compiler",
     "data visualization",
     "reverse engineering",
     "observable",
@@ -42,7 +43,8 @@
     "CHANGELOG.md",
     "LICENSE",
     "dist/",
-    "!dist/types/tsconfig.tsbuildinfo"
+    "!dist/types/tsconfig.tsbuildinfo",
+    "!dist/types/__tests__/"
   ],
   "dependencies": {
     "lodash.camelcase": "^4.3.0",
