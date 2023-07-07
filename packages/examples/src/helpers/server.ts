@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 /**
  * Reads a JSON file synchronously from the file system and returns the parsed
@@ -9,9 +9,9 @@ import * as path from 'path';
  * @returns – The parsed JSON.
  */
 export function readData<T extends object>(jsonName: string): T[] {
-  const json = fs
-    .readFileSync(path.join(process.cwd(), `src/data/${jsonName}.json`))
-    .toString();
+  const json = readFileSync(
+    path.join(process.cwd(), `src/data/${jsonName}.json`)
+  ).toString();
 
   return JSON.parse(json) as T[];
 }

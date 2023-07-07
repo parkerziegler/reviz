@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Metadata } from 'next';
 
 import RevizBarChart from '../../../src/components/charts/BarChart';

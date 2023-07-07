@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Metadata } from 'next';
 
 import Vizualization from '../../../src/components/shared/Visualization';

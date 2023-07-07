@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Metadata } from 'next';
 
 import RevizBubbleChart from '../../../src/components/charts/BubbleChart';
@@ -17,7 +16,7 @@ const BubbleChart: React.FC = () => {
 
   return (
     <Visualization
-      title="From Observable — Plot: Dot"
+      title="Adapted from Observable — Plot: Dot"
       href="'https://observablehq.com/@observablehq/plot-dot?collection=@observablehq/plot'"
     >
       <RevizBubbleChart data={data} />

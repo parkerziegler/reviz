@@ -48,13 +48,6 @@ const BarChart: React.FC<Props> = ({ data }) => {
       .call((g) => g.select('.domain').remove())
       .call((g) =>
         g
-          .selectAll('.tick line')
-          .clone()
-          .attr('x2', dimensions.width - margin.left - margin.right)
-          .attr('stroke-opacity', 0.1)
-      )
-      .call((g) =>
-        g
           .append('text')
           .attr('x', -margin.left)
           .attr('y', margin.top)
@@ -63,8 +56,9 @@ const BarChart: React.FC<Props> = ({ data }) => {
           .text('↑ Frequency')
       );
 
-    return () => {
+    return (): void => {
       d3.select(yAx).call((g) => g.selectAll('.tick line ~ line').remove());
+      d3.select(yAx).call((g) => g.selectAll('text').remove());
     };
   }, [xAxis, yAxis]);
 

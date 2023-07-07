@@ -93,7 +93,7 @@ const StackedBarChart: React.FC<Props> = ({ data }) => {
           .attr('stroke-opacity', 0.1)
       );
 
-    return () => {
+    return (): void => {
       d3.select(yAx).call((g) => g.selectAll('.tick line ~ line').remove());
     };
   }, [data, xAxis, yAxis]);
@@ -106,15 +106,16 @@ const StackedBarChart: React.FC<Props> = ({ data }) => {
       className="block h-auto max-w-full"
     >
       <g ref={xAxisRef} transform={`translate(0, ${y(0)})`}></g>
-      <g ref={yAxisRef} transform={`translate(${margin.left},0)`}></g>
+      <g ref={yAxisRef} transform={`translate(${margin.left}, 0)`}></g>
       <g>
         {series.map((datum, i) => {
           const fill = color(datum.key);
+
           return (
-            <g key={i} fill={fill}>
+            <g key={`${datum.key}-${i}`} fill={fill}>
               {datum.map((d, i) => (
                 <rect
-                  key={i}
+                  key={`${d[0]}-${i}`}
                   x={x(Array.from(xDomain)[i])}
                   y={Math.min(y(d[0]), y(d[1]))}
                   height={Math.abs(y(d[0]) - y(d[1]))}

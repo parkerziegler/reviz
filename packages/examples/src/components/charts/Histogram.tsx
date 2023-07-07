@@ -92,7 +92,7 @@ const Histogram: React.FC = () => {
       <g>
         {bins.map((d, i) => (
           <rect
-            key={i}
+            key={`${d.x0}-${i}`}
             x={x(d.x0)}
             y={y(d.length)}
             width={Math.max(0, x(d.x1) - x(d.x0))}

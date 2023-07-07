@@ -16,7 +16,7 @@ const Card: React.FC<Props> = ({ name, href, description, image, icon }) => {
   return (
     <a
       href={href}
-      className="stack-sm border-linework flex flex-col rounded-2xl border p-8 text-3xl font-bold text-black no-underline shadow-lg transition-transform hover:-translate-y-2"
+      className="stack stack-sm border-linework rounded-2xl border p-8 text-3xl font-semibold text-black no-underline shadow-lg transition-transform hover:-translate-y-2"
     >
       <Image src={image.src} alt={image.alt} />
       {icon ? (

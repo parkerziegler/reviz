@@ -28,7 +28,7 @@ const Scatterplot: React.FC<Props> = ({ data }) => {
     node.appendChild(plot);
 
     return (): void => {
-      node.removeChild(plot);
+      plot.remove();
     };
   }, [data]);
 

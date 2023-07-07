@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Metadata } from 'next';
 
 import RevizStackedBarChart from '../../../src/components/charts/StackedBarChart';

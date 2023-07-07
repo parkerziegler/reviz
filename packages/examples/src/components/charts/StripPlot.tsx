@@ -65,7 +65,7 @@ const StripPlot: React.FC<Props> = ({ data }) => {
       )
       .call((g) => g.selectAll('.domain').remove());
 
-    return () => {
+    return (): void => {
       d3.select(xAx).call((g) => g.selectAll('.tick line ~ line').remove());
       d3.select(yAx).call((g) => g.selectAll('.tick line ~ line').remove());
     };
@@ -91,7 +91,7 @@ const StripPlot: React.FC<Props> = ({ data }) => {
           />
         ))}
       </g>
-      <g ref={xAxisRef} transform={`translate(0,${margin.top})`}></g>
+      <g ref={xAxisRef} transform={`translate(0, ${margin.top})`}></g>
       <g ref={yAxisRef} transform={`translate(${margin.left}, 0)`}></g>
     </svg>
   );

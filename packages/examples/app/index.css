@@ -2,21 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .stack-sm > * + * {
-    @apply mt-4;
+@layer base {
+  * {
+    box-sizing: border-box;
   }
 
-  .stack-md > * + * {
+  html {
+    font-size: 10px;
+  }
+
+  svg {
+    font: 10px system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .stack {
+    @apply flex flex-col justify-start;
+  }
+
+  .stack-base > * + * {
     @apply mt-8;
   }
 
   .stack-lg > * + * {
     @apply mt-16;
-  }
-
-  .stack-xl > * + * {
-    @apply mt-20;
   }
 }
 
@@ -39,18 +49,6 @@
   .viz-grid :last-child {
     grid-area: program;
   }
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 10px;
-}
-
-svg {
-  font: 10px system-ui, sans-serif;
 }
 
 /* Transferred CSS for New York Times – Least Vaccinated U.S. Counties Have Something in Common:Trump Voters */

@@ -1,4 +1,8 @@
-/** @type {import('next').NextConfig} */
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ */
 module.exports = {
   reactStrictMode: true,
   productionBrowserSourceMaps: true,

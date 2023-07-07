@@ -4,7 +4,7 @@ import { Source_Serif_4 } from 'next/font/google';
 import './index.css';
 
 const sourceSerifPro = Source_Serif_4({
-  weight: ['300', '400', '700'],
+  weight: ['400', '600'],
   subsets: ['latin'],
 });
 

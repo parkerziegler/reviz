@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Metadata } from 'next';
 
 import RevizScatterplot from '../../../src/components/charts/Scatterplot';
@@ -18,7 +17,7 @@ const Scatterplot: React.FC = () => {
   return (
     <Visualization
       title="From Observable — Observable Plot"
-      href="https://observablehq.com/@observablehq/plot?collection=@observablehq/plot"
+      href="https://observablehq.com/plot/what-is-plot"
     >
       <RevizScatterplot data={data} />
     </Visualization>
