@@ -19,10 +19,10 @@ For a hands-on, interactive introduction to `reviz`, check out [the `Hello reviz
 
 To get familiar with the various packages in this codebase, check out their respective READMEs.
 
-- [`@reviz/compiler`]('./packages/compiler/README.md) – The core library and compiler.
-- [`@reviz/examples`]('./packages/examples/README.md) – The [examples site](https://reviz.vercel.app).
-- [`@reviz/extension`]('./packages/extension/README.md) – The Chrome extension.
-- [`@reviz/ui`]('./packages/ui/README.md) – Shared UI components used across the `reviz` ecosystem.
+- [`@reviz/compiler`](/packages/compiler/README.md) – The core library and compiler.
+- [`@reviz/examples`](/packages/examples/README.md) – The [examples site](https://reviz.vercel.app).
+- [`@reviz/extension`](/packages/extension/README.md) – The Chrome extension.
+- [`@reviz/ui`](/packages/ui/README.md) – Shared UI components used across the `reviz` ecosystem.
 
 ## Installation
 
