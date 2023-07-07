@@ -13,7 +13,7 @@
     "url": "https://github.com/parkerziegler/reviz.git"
   },
   "bugs": "https://github.com/parkerziegler/reviz/issues",
-  "homepage": "https://reviz.vercel.app",
+  "homepage": "https://github.com/parkerziegler/reviz/blob/main/packages/extension/README.md",
   "keywords": [
     "chrome extension",
     "data visualization",

@@ -1,57 +1,57 @@
-import * as React from "react";
-import * as Tabs from "@radix-ui/react-tabs";
+import * as React from 'react';
+import * as Tabs from '@radix-ui/react-tabs';
 
-import ExtensionErrorBoundary from "./components/ExtensionErrorBoundary";
-import DataPanel from "./components/data/DataPanel";
-import ElementSelect from "./components/interaction/ElementSelect";
-import ProgramEditor from "./components/program/ProgramEditor";
-import ProgramOutput from "./components/program/ProgramOutput";
-import ProgramViewer from "./components/program/ProgramViewer";
-import SpecViewer from "./components/spec/SpecViewer";
-import type { Data } from "./types/data";
-import type { AnalyzeMessage } from "./types/message";
+import ExtensionErrorBoundary from './components/ExtensionErrorBoundary';
+import DataPanel from './components/data/DataPanel';
+import ElementSelect from './components/interaction/ElementSelect';
+import ProgramEditor from './components/program/ProgramEditor';
+import ProgramOutput from './components/program/ProgramOutput';
+import ProgramViewer from './components/program/ProgramViewer';
+import SpecViewer from './components/spec/SpecViewer';
+import type { Data } from './types/data';
+import type { AnalyzeMessage } from './types/message';
 
 // Here we use a mapped type to make the spec property optional.
 // Additionally, we omit the message name property, since we don't need it.
 export type VisualizationState = Omit<
   {
-    [Property in keyof AnalyzeMessage]: Property extends "spec"
+    [Property in keyof AnalyzeMessage]: Property extends 'spec'
       ? AnalyzeMessage[Property] | undefined
       : AnalyzeMessage[Property];
   },
-  "name"
+  'name'
 >;
 
 const App: React.FC = () => {
   const [{ spec, program, nodeName, classNames }, setViz] =
     React.useState<VisualizationState>({
       spec: undefined,
-      program: "",
-      nodeName: "",
-      classNames: "",
+      program: '',
+      nodeName: '',
+      classNames: '',
     });
   const [data, setData] = React.useState<Data>();
-  const [output, setOutput] = React.useState<string>("");
+  const [output, setOutput] = React.useState<string>('');
 
   React.useEffect(() => {
     // Establish a long-lived connection to the service worker.
     const serviceWorkerConnection = chrome.runtime.connect({
-      name: "panel",
+      name: 'panel',
     });
 
     serviceWorkerConnection.postMessage({
-      name: "init",
+      name: 'init',
       tabId: chrome.devtools.inspectedWindow.tabId,
     });
 
     // Listen for messages from the content script sent via the service worker.
     serviceWorkerConnection.onMessage.addListener((message: AnalyzeMessage) => {
-      if (message.name !== "analyze") {
+      if (message.name !== 'analyze') {
         return;
       }
 
-      const { spec, program, nodeName, classNames } = message;
-      setViz({ spec, program, nodeName, classNames });
+      const { name: _name, ...viz } = message;
+      setViz(viz);
     });
   }, []);
 

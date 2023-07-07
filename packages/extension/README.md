@@ -19,7 +19,9 @@ This package contains the source for the `reviz` Chrome extension.
 
 ## Local Development
 
-To develop the Chrome extension locally, ensure you have [dependencies installed](../../CONTRIBUTING.md#local-development). From there, development largely follows [the standard pattern for Chrome extension development](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/). To summarize, this will involve:
+To develop the Chrome extension locally, ensure you have [dependencies installed](../../CONTRIBUTING.md#local-development). From there, development largely follows [the standard pattern for Chrome extension development](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/). To summarize, this involves:
 
-- Running `npm run build` to build the extension. This runs [Vite](https://vitejs.dev/), our build tool of choice, to produce the production extension build in the `dist` directory.
+- Running `npm run build` to build the extension. This script invokes [Vite](https://vitejs.dev/), our build tool of choice, to produce the production extension build in the `dist` directory.
 - Uploading the extension to your browser by clicking the `Load Unpacked` button on the `chrome://extensions`. Select the `dist` directory when prompted with the file upload interface.
+
+When you open the DevTools on a webpage, you should have a new tab visible marked `reviz`.

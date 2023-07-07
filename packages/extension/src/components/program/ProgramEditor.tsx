@@ -1,11 +1,11 @@
-import * as React from "react";
-import { EditorView, basicSetup } from "codemirror";
-import { javascript } from "@codemirror/lang-javascript";
+import * as React from 'react';
+import { EditorView, basicSetup } from 'codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 
-import Heading from "../shared/Heading";
-import { formatProgram } from "../../utils/formatters";
-import type { Data } from "../../types/data";
-import type { RenderMessage } from "../../types/message";
+import Heading from '../shared/Heading';
+import { formatProgram } from '../../utils/formatters';
+import type { Data } from '../../types/data';
+import type { RenderMessage } from '../../types/message';
 
 interface Props {
   program: string;
@@ -34,17 +34,17 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
 
   React.useEffect(() => {
     const listener = (event: MessageEvent<RenderMessage>): void => {
-      if (event.data.name !== "render") {
+      if (event.data.name !== 'render') {
         return;
       }
 
       setOutput(event.data.plot);
     };
 
-    window.addEventListener("message", listener);
+    window.addEventListener('message', listener);
 
     return () => {
-      window.removeEventListener("message", listener);
+      window.removeEventListener('message', listener);
     };
   }, [setOutput]);
 
@@ -53,11 +53,11 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
     if (iframeRef.current && data) {
       iframeRef.current.contentWindow?.postMessage(
         {
-          name: "execute",
-          program: editor.current?.state.doc.toString() ?? "",
+          name: 'execute',
+          program: editor.current?.state.doc.toString() ?? '',
           data: data.data,
         },
-        "*"
+        '*'
       );
     }
   }, [data]);
@@ -93,7 +93,7 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
       )}
       <iframe
         ref={iframeRef}
-        src="/sandbox.html"
+        src="/sandbox/sandbox.html"
         className="hidden"
         width={0}
         height={0}

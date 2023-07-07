@@ -1,20 +1,20 @@
-import { RevizOutput } from "../../../compiler/dist/types/src";
+import type { RevizOutput } from '@reviz/compiler';
 
-import type { Data } from "./data";
+import type { Data } from './data';
 
 export interface ExecuteMessage {
-  name: "execute";
+  name: 'execute';
   data: Data;
   program: string;
 }
 
 export interface RenderMessage {
-  name: "render";
+  name: 'render';
   plot: string;
 }
 
 export interface AnalyzeMessage extends RevizOutput {
-  name: "analyze";
+  name: 'analyze';
   nodeName: string;
   classNames: string;
 }

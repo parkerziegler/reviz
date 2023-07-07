@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 
-import Heading from "../shared/Heading";
+import Heading from '../shared/Heading';
 
 interface Props {
   output: string;
@@ -12,7 +12,7 @@ const ProgramOutput: React.FC<Props> = ({ output }) => {
       <Heading className="mb-4 self-start">Program Output</Heading>
       <div
         dangerouslySetInnerHTML={{ __html: output }}
-        className="-mx-3 -mb-2 overflow-auto text-black"
+        className="-mx-3 -mb-2 h-full overflow-auto text-black"
       />
     </div>
   );
