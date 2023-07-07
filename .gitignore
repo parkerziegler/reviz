@@ -28,3 +28,7 @@ coverage
 *.log
 *.out
 *.synctex.gz
+
+# Logs
+npm-debug.log*
+lerna-debug.log*

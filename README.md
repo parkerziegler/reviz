@@ -11,36 +11,44 @@
   </strong>
   <br />
   <br />
-  <a href="https://npmjs.com/package/@plait-lab/reviz">
-    <img alt="NPM Version" src="https://img.shields.io/npm/v/@plait-lab/reviz.svg" />
-  </a>
-  <br />
-  <br />
 </div>
 
-`reviz` is a lightweight engine for reverse engineering data visualizations from the DOM. Its core goal is to assist in rapid visualization sketching and prototyping by automatically generating partial programs written using [Observable Plot](https://observablehq.com/@observablehq/plot) from input `svg` subtrees.
+`reviz` is a lightweight engine for reverse engineering data visualizations from the DOM. Its core goal is to assist in rapid visualization sketching and prototyping by automatically generating partial programs written using [Observable Plot](https://observablehq.com/@observablehq/plot) from input `svg` subtrees. `reviz` can be used directly through the core library, [`@reviz/compiler`](./packages/compiler/README.md), or the Chrome extension, [`@reviz/extension`](./packages/extension/README.md).
 
 For a hands-on, interactive introduction to `reviz`, check out [the `Hello reviz!` notebook on Observable](https://observablehq.com/@parkerziegler/hello-reviz).
 
+To get familiar with the various packages in this codebase, check out their respective READMEs.
+
+- [`@reviz/compiler`]('./packages/compiler/README.md) – The core library and compiler.
+- [`@reviz/examples`]('./packages/examples/README.md) – The [examples site](https://reviz.vercel.app).
+- [`@reviz/extension`]('./packages/extension/README.md) – The Chrome extension.
+- [`@reviz/ui`]('./packages/ui/README.md) – Shared UI components used across the `reviz` ecosystem.
+
 ## Installation
 
+### Compiler
+
 ```sh
-yarn add @plait-lab/reviz
+npm install @reviz/compiler
 ```
+
+### Extension
+
+🚧 Under Construction 🚧
 
 ## API
 
 The `reviz` API is very small; in fact, it consists of only a single function, `analyzeVisualization`!
 
 ```js
-import { analyzeVisualization } from '@plait-lab/reviz';
+import { analyzeVisualization } from '@reviz/compiler';
 
 const viz = document.querySelector('#my-viz');
 
 const { spec, program } = analyzeVisualization(viz);
 ```
 
-#### `analyzeVisualization`
+### `analyzeVisualization`
 
 ```ts
 export declare const analyzeVisualization: (root: SVGSVGElement) => {
@@ -55,7 +63,7 @@ export declare const analyzeVisualization: (root: SVGSVGElement) => {
 
 `program` refers to the _partial_ Observable Plot program that `reviz` generates. These programs are intentionally _incomplete_ and contain "holes" represented by the string `'??'`. The presence of a hole indicates that the value for a particular attribute (e.g. the `r` attribute of a bubble chart or the `fill` attribute of a stacked bar chart) should be mapped to a column in a user's input dataset rather than kept static across all data elements. After filling in holes with column names from your input dataset, you'll have a complete visualization program ready to run in the browser!
 
-### An example
+### By Example
 
 Let's look at an example to see how `reviz` works in practice. We'll use [this visualization](https://www.nytimes.com/interactive/2021/04/17/us/vaccine-hesitancy-politics.html) from the New York Times:
 
@@ -64,7 +72,6 @@ Let's look at an example to see how `reviz` works in practice. We'll use [this v
     src="https://raw.githubusercontent.com/parkerziegler/reviz/main/assets/nyt-example.png"
     alt="A scatterplot visualization from the New York Times"
     width="500"
-    style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
   />
 </div>
 
@@ -91,7 +98,7 @@ const plot = Plot.plot({
 });
 ```
 
-Notice that `fill`, `stroke`, `x` and `y` are all inferred to be holes (indicated by`'??'`) that must be mapped to columns of an input dataset. Conversely, attributes like `fillOpacity` and `strokeWidth` are automatically inferred because they are found to be consistent across all mark elements. We can also see that `reviz` has inferred that the visualization is using a [categorical color scale](https://observablehq.com/@observablehq/plot-scales#cell-75) and automatically configures the scale for us.
+Notice that `fill`, `stroke`, `x` and `y` are all inferred to be holes (indicated by`'??'`) that must be mapped to columns of an input dataset. Conversely, attributes like `fillOpacity` and `strokeWidth` are automatically inferred because they are found to be consistent across all mark elements. We can also see that `reviz` has inferred that the visualization is using a [categorical color scale](https://observablehq.com/plot/features/scales#color-scales) and automatically configures the scale for us.
 
 We can now apply this partial program to a new dataset. Let's use [this delightful dataset about penguins](https://observablehq.com/@observablehq/plot-exploration-penguins) from @Fil's Plot Exploration notebook. We can choose input columns from this dataset to "fill in" the holes like so:
 
@@ -127,13 +134,12 @@ The result that we get is a new visualization that takes the _appearance_ of the
     src="https://raw.githubusercontent.com/parkerziegler/reviz/main/assets/penguin-example.png"
     alt="A scatterplot visualization of penguins."
     width="500"
-    style="border-radius: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04)"
   />
 </div>
 
 In this way, `reviz` allows end users to quickly experiment with _seeing_ their data in the form of a visualization they encounter anywhere in the wild.
 
-To see more examples of the partial programs `reviz` generates, check out [our example site](https://reviz.vercel.app). To go into depth into how `reviz` works, consider reading [our paper](/paper/reviz.pdf).
+To see more examples of the partial programs `reviz` generates, check out [our examples site](https://reviz.vercel.app). To understand how `reviz` works at a deeper level, consider reading [our paper](/paper/reviz.pdf).
 
 ### Supported Visualization Types
 

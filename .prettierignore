@@ -1,0 +1,8 @@
+# Build
+dist
+
+# Next
+.next
+
+# Node
+package-lock.json

@@ -1,4 +1,11 @@
+# Build
 dist
+
+# ESLint
 .eslintrc.js
-next.config.js
+
+# Vite
+vite.config.ts
+
+# Tailwind
 tailwind.config.js

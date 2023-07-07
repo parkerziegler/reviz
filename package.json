@@ -1,29 +1,19 @@
 {
-  "name": "@plait-lab/reviz",
-  "version": "0.4.1",
+  "name": "@reviz/monorepo",
+  "version": "0.0.0",
   "description": "An engine for reverse engineering data visualizations from the DOM.",
-  "main": "dist/reviz.js",
-  "module": "dist/reviz.esm.js",
-  "types": "dist/types/index.d.ts",
-  "sideEffects": false,
-  "contributors": [
-    {
-      "name": "Parker Ziegler",
-      "email": "peziegler@berkeley.edu",
-      "url": "https://parkie-doo.sh/"
-    },
-    {
-      "name": "Logan Caraco",
-      "email": "logan_caraco@berkeley.edu"
-    }
-  ],
+  "private": true,
+  "author": {
+    "name": "Parker Ziegler",
+    "email": "peziegler@cs.berkeley.edu"
+  },
   "license": "MIT",
+  "homepage": "https://github.com/parkerziegler/reviz#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/parkerziegler/reviz.git"
   },
   "bugs": "https://github.com/parkerziegler/reviz/issues",
-  "homepage": "https://github.com/parkerziegler/reviz#readme",
   "keywords": [
     "data visualization",
     "reverse engineering",
@@ -31,86 +21,26 @@
     "observable plot",
     "typescript"
   ],
-  "scripts": {
-    "build": "yarn check:ts && yarn emit:types && yarn build:esm:dev && yarn build:esm:prod && yarn build:cjs:dev && yarn build:cjs:prod",
-    "build:esm:dev": "esbuild src/index.ts --bundle --sourcemap --format=esm --outfile=dist/reviz.esm.js",
-    "build:esm:prod": "esbuild src/index.ts --bundle --minify --format=esm --outfile=dist/reviz.esm.min.js",
-    "build:cjs:dev": "esbuild src/index.ts --bundle --sourcemap --format=cjs --outfile=dist/reviz.js",
-    "build:cjs:prod": "esbuild src/index.ts --bundle --minify --outfile=dist/reviz.min.js",
-    "check:ts": "tsc --noEmit",
-    "clean": "rimraf ./dist ./node_modules/.cache",
-    "coverage": "jest --collectCoverage",
-    "emit:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
-    "format": "prettier --write **/*.{ts,tsx} **/*.json",
-    "lint": "eslint 'src/**/*.ts'",
-    "preversion": "yarn clean && yarn check:ts && yarn build",
-    "test": "jest"
-  },
-  "files": [
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE",
-    "dist/",
-    "!dist/types/tsconfig.tsbuildinfo"
+  "workspaces": [
+    "packages/*"
   ],
-  "dependencies": {
-    "lodash.camelcase": "^4.3.0",
-    "lodash.groupby": "^4.6.0",
-    "lodash.orderby": "^4.6.0"
-  },
   "devDependencies": {
-    "@observablehq/plot": "^0.6.6",
-    "@sucrase/jest-plugin": "^2.2.0",
-    "@types/jest": "^27.0.3",
-    "@types/lodash.camelcase": "^4.3.6",
-    "@types/lodash.chunk": "^4.2.7",
-    "@types/lodash.groupby": "^4.6.6",
-    "@types/lodash.orderby": "^4.6.6",
-    "@types/node": "^16.11.6",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "@typescript-eslint/parser": "^5.1.0",
-    "esbuild": "^0.13.8",
-    "eslint": "^8.0.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.2",
-    "jest": "^27.4.5",
-    "lodash.chunk": "^4.2.0",
-    "prettier": "^2.4.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.4.4"
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.43.0",
+    "eslint-config-next": "^13.4.7",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "lerna": "^7.1.1",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.3.0"
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "overrides": [
-      {
-        "files": [
-          "**/*.css"
-        ],
-        "options": {
-          "singleQuote": false
-        }
-      }
-    ]
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-typescript"
-    ]
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "@sucrase/jest-plugin"
-    },
-    "moduleNameMapper": {
-      "@observablehq/plot": "<rootDir>/node_modules/@observablehq/plot/dist/plot.umd.min.js",
-      "d3": "<rootDir>/node_modules/d3/dist/d3.min.js"
-    },
-    "testMatch": [
-      "<rootDir>/__tests__/*.spec.ts"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ]
+  "scripts": {
+    "build": "lerna run build",
+    "format": "prettier --write .",
+    "lint": "eslint --ext .ts,.tsx .",
+    "lint:fix": "eslint --ext .ts,.tsx . --fix"
   }
 }
