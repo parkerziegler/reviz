@@ -3,9 +3,9 @@ import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 
 import Heading from '../shared/Heading';
-import { formatProgram } from '../../utils/formatters';
 import type { Data } from '../../types/data';
 import type { RenderMessage } from '../../types/message';
+import { formatProgram } from '../../utils/formatters';
 
 interface Props {
   program: string;

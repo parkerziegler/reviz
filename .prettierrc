@@ -3,15 +3,11 @@
   "trailingComma": "es5",
   "overrides": [
     {
-      "files": [
-        "**/*.css"
-      ],
+      "files": ["**/*.css"],
       "options": {
         "singleQuote": false
       }
     }
   ],
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

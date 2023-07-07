@@ -1,9 +1,9 @@
-import { analyzeVisualization } from "@reviz/compiler";
+import { analyzeVisualization } from '@reviz/compiler';
 
-import type { AnalyzeMessage } from "../src/types/message";
+import type { AnalyzeMessage } from '../src/types/message';
 
 // The class name to apply to an element when hovered.
-const MOUSE_VISITED_CLASSNAME = "mouse-visited";
+const MOUSE_VISITED_CLASSNAME = 'mouse-visited';
 
 /**
  * Adds a class to an SVG element on mouseenter to visually indicate selection.
@@ -41,11 +41,11 @@ function onClick(event: MouseEvent): void {
     const el = event.target as SVGSVGElement;
 
     const nodeName = el.nodeName;
-    const classNames = el.getAttribute("class") ?? "";
+    const classNames = el.getAttribute('class') ?? '';
     const { spec, program } = analyzeVisualization(el);
 
     await chrome.runtime.sendMessage<AnalyzeMessage>({
-      name: "analyze",
+      name: 'analyze',
       nodeName,
       classNames,
       spec,
@@ -59,7 +59,7 @@ function onClick(event: MouseEvent): void {
     })
     .catch((err: Error) => {
       console.error(
-        "Failed to send reviz spec and program to DevTools panel. Original Error: " +
+        'Failed to send reviz spec and program to DevTools panel. Original Error: ' +
           err.message
       );
     });
@@ -70,10 +70,10 @@ function onClick(event: MouseEvent): void {
  * the inspected document.
  */
 function activateInspector(): void {
-  document.querySelectorAll("svg").forEach((el) => {
-    el.addEventListener("mouseenter", onMouseEnter);
-    el.addEventListener("mouseleave", onMouseLeave);
-    el.addEventListener("click", onClick);
+  document.querySelectorAll('svg').forEach((el) => {
+    el.addEventListener('mouseenter', onMouseEnter);
+    el.addEventListener('mouseleave', onMouseLeave);
+    el.addEventListener('click', onClick);
   });
 }
 
@@ -82,10 +82,10 @@ function activateInspector(): void {
  * the inspected document.
  */
 function deactivateInspector(): void {
-  document.querySelectorAll("svg").forEach((el) => {
-    el.removeEventListener("mouseenter", onMouseEnter);
-    el.removeEventListener("mouseleave", onMouseLeave);
-    el.removeEventListener("click", onClick);
+  document.querySelectorAll('svg').forEach((el) => {
+    el.removeEventListener('mouseenter', onMouseEnter);
+    el.removeEventListener('mouseleave', onMouseLeave);
+    el.removeEventListener('click', onClick);
   });
 }
 

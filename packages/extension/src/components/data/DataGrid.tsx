@@ -1,11 +1,11 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   useReactTable,
   flexRender,
   getCoreRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
-import type { Data } from "../../types/data";
+import type { Data } from '../../types/data';
 
 interface Props {
   data: Data;

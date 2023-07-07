@@ -1,4 +1,4 @@
-import cs from "classnames";
+import cs from 'classnames';
 
 interface Props {
   className?: string;
@@ -11,7 +11,7 @@ const Heading: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <h2
       className={cs(
-        "border-b border-dotted border-b-primary text-sm",
+        'border-b-primary border-b border-dotted text-sm',
         className
       )}
     >

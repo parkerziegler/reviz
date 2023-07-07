@@ -11,7 +11,7 @@ chrome.runtime.onConnect.addListener((port) => {
   }): void => {
     // The original connection event doesn't include the tabId of the DevTools
     // page, so we need to send it explicitly.
-    if (message.name === "init") {
+    if (message.name === 'init') {
       connections[message.tabId] = port;
       return;
     }
@@ -44,9 +44,9 @@ chrome.runtime.onMessage.addListener((request, sender) => {
     if (tabId && tabId in connections) {
       connections[tabId].postMessage(request);
     } else {
-      console.warn("Tab not found in connection list.");
+      console.warn('Tab not found in connection list.');
     }
   } else {
-    console.warn("sender.tab not defined.");
+    console.warn('sender.tab not defined.');
   }
 });

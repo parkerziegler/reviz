@@ -1,8 +1,8 @@
-import Heading from "../shared/Heading";
-import type { Data } from "../../types/data";
+import Heading from '../shared/Heading';
+import type { Data } from '../../types/data';
 
-import DataGrid from "./DataGrid";
-import DataUpload from "./DataUpload";
+import DataGrid from './DataGrid';
+import DataUpload from './DataUpload';
 
 interface Props {
   data?: Data;

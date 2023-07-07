@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 interface Props {
   fallback: (message: string) => React.ReactNode;
@@ -15,7 +15,7 @@ class ExtensionErrorBoundary extends React.Component<
 > {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, message: "" };
+    this.state = { hasError: false, message: '' };
   }
 
   static getDerivedStateFromError(error: Error): State {

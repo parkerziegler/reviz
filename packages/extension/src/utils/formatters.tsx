@@ -1,7 +1,7 @@
-import prettier from "prettier/standalone";
-import babel from "prettier/parser-babel";
+import prettier from 'prettier/standalone';
+import babel from 'prettier/parser-babel';
 
-import ColorValue from "../components/spec/ColorValue";
+import ColorValue from '../components/spec/ColorValue';
 
 /**
  * Formats a value or array of values to a friendlier format for display.
@@ -26,7 +26,7 @@ export function formatOneOrMoreValues(
         <span>[</span>
         {intersperse(
           values.map((value) => formatValue(property, value)),
-          ", "
+          ', '
         )}
         <span>]</span>
       </div>
@@ -54,8 +54,8 @@ function formatValue(
   value: string | number
 ): React.ReactNode {
   switch (property) {
-    case "fill":
-    case "stroke":
+    case 'fill':
+    case 'stroke':
       return <ColorValue color={value as string} />;
     default:
       return value;
@@ -92,7 +92,7 @@ function intersperse<T>(arr: T[], sep: T): T[] {
  * @returns – The period-separated string of classNames.
  */
 export function formatClassNames(classNames: string): string {
-  return "." + classNames.split(" ").join(".");
+  return '.' + classNames.split(' ').join('.');
 }
 
 /**
@@ -103,7 +103,7 @@ export function formatClassNames(classNames: string): string {
  */
 export function formatProgram(program: string): string {
   return prettier.format(program, {
-    parser: "babel",
+    parser: 'babel',
     plugins: [babel],
   });
 }
@@ -111,7 +111,7 @@ export function formatProgram(program: string): string {
 export function formatExecutableProgram(program: string): string {
   return formatProgram(
     program
-      .replace("const plot = ", "function plot(Plot, data) { return ")
-      .concat("}")
+      .replace('const plot = ', 'function plot(Plot, data) { return ')
+      .concat('}')
   );
 }

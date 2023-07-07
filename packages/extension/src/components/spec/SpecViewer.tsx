@@ -1,11 +1,11 @@
-import * as React from "react";
-import type { RevizOutput } from "@reviz/compiler";
+import * as React from 'react';
+import type { RevizOutput } from '@reviz/compiler';
 
-import { formatOneOrMoreValues } from "../../utils/formatters";
-import Heading from "../shared/Heading";
+import { formatOneOrMoreValues } from '../../utils/formatters';
+import Heading from '../shared/Heading';
 
 interface Props {
-  spec?: RevizOutput["spec"];
+  spec?: RevizOutput['spec'];
 }
 
 const SpecViewer: React.FC<Props> = ({ spec }) => {

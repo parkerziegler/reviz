@@ -1,8 +1,8 @@
-import * as React from "react";
-import cs from "classnames";
+import * as React from 'react';
+import cs from 'classnames';
 
-import type { VisualizationState } from "../../App";
-import { formatClassNames } from "../../utils/formatters";
+import type { VisualizationState } from '../../App';
+import { formatClassNames } from '../../utils/formatters';
 
 const MousePointer = (
   <svg
@@ -21,7 +21,7 @@ const MousePointer = (
   </svg>
 );
 
-type Props = Pick<VisualizationState, "nodeName" | "classNames">;
+type Props = Pick<VisualizationState, 'nodeName' | 'classNames'>;
 
 const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
   const [isElementSelectActive, setElementSelectActive] = React.useState(false);
@@ -29,11 +29,11 @@ const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
   function toggleElementSelectActive(): void {
     setElementSelectActive((prevElementSelectActive) => {
       if (prevElementSelectActive) {
-        chrome.devtools.inspectedWindow.eval("deactivateInspector()", {
+        chrome.devtools.inspectedWindow.eval('deactivateInspector()', {
           useContentScriptContext: true,
         });
       } else {
-        chrome.devtools.inspectedWindow.eval("activateInspector()", {
+        chrome.devtools.inspectedWindow.eval('activateInspector()', {
           useContentScriptContext: true,
         });
       }
@@ -47,14 +47,14 @@ const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
       <button
         onClick={toggleElementSelectActive}
         className={cs(
-          "border-r border-r-slate-500 px-3 py-2 transition-opacity hover:opacity-75",
-          isElementSelectActive ? "text-blue-400" : "text-white"
+          'border-r border-r-slate-500 px-3 py-2 transition-opacity hover:opacity-75',
+          isElementSelectActive ? 'text-blue-400' : 'text-white'
         )}
       >
         {MousePointer}
       </button>
       {nodeName ? (
-        <p className="flex truncate px-3 py-2 text-primary">
+        <p className="text-primary flex truncate px-3 py-2">
           <code className="truncate rounded bg-blue-50 px-1 py-0.5">
             <span className="text-secondary">{nodeName}</span>
             {classNames ? <span>{formatClassNames(classNames)}</span> : null}
@@ -62,10 +62,10 @@ const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
         </p>
       ) : (
         <p className="px-3 py-2">
-          Select an{" "}
-          <code className="rounded bg-blue-50 px-1 py-0.5 text-primary">
+          Select an{' '}
+          <code className="text-primary rounded bg-blue-50 px-1 py-0.5">
             svg
-          </code>{" "}
+          </code>{' '}
           element to inspect.
         </p>
       )}

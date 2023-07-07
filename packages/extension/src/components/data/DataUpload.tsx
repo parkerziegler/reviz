@@ -1,7 +1,7 @@
-import * as React from "react";
-import { csvParseRows } from "d3-dsv";
+import * as React from 'react';
+import { csvParseRows } from 'd3-dsv';
 
-import type { Data } from "../../types/data";
+import type { Data } from '../../types/data';
 
 interface Props {
   setData: (data: Data) => void;
@@ -17,21 +17,21 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
         reader.onload = (theFile): void => {
           if (
             theFile.target?.result &&
-            typeof theFile.target.result === "string"
+            typeof theFile.target.result === 'string'
           ) {
             switch (type) {
-              case "application/json":
+              case 'application/json':
                 setData({
-                  type: "json",
+                  type: 'json',
                   // We're assuming JSON data is passed as an array of objects.
                   data: JSON.parse(theFile.target.result) as ArrayLike<object>,
                 });
                 break;
-              case "text/csv": {
+              case 'text/csv': {
                 let cols: string[] = [];
 
                 setData({
-                  type: "csv",
+                  type: 'csv',
                   data: csvParseRows(theFile.target.result, (d, i) => {
                     // Treat the first row as the column names.
                     if (i === 0) {
@@ -75,8 +75,8 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
         <line x1="12" y1="3" x2="12" y2="15"></line>
       </svg>
       <p className="mt-2 text-sm">
-        Upload a{" "}
-        <label className="relative cursor-pointer border-b border-dotted border-primary text-primary">
+        Upload a{' '}
+        <label className="border-primary text-primary relative cursor-pointer border-b border-dotted">
           <input
             type="file"
             accept=".csv, .json"
@@ -84,9 +84,9 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
             onChange={onChange}
           />
           CSV
-        </label>{" "}
-        or{" "}
-        <label className="relative cursor-pointer border-b border-dotted border-primary text-primary">
+        </label>{' '}
+        or{' '}
+        <label className="border-primary text-primary relative cursor-pointer border-b border-dotted">
           <input
             type="file"
             accept=".csv, .json"
@@ -94,7 +94,7 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
             onChange={onChange}
           />
           JSON
-        </label>{" "}
+        </label>{' '}
         file.
       </p>
     </div>

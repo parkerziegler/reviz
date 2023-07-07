@@ -19,4 +19,4 @@ This package contains the source for shared UI components across the examples si
 
 ## Local Development
 
-To make additions or edits to components, ensure you have [dependencies installed](../../CONTRIBUTING.md#local-development). After making changes, run `npm run build` to produce the built components. Finally, run `npm install` in the root directory to ensure that the `@reviz/examples` and `@reviz/extension` have the latest local build.
+To make additions or edits to components, ensure you have [dependencies installed](../../CONTRIBUTING.md#local-development). After making changes, run `npm run build` to produce the built components. Finally, run `npm install` in the root directory to ensure that the `@reviz/examples` and `@reviz/extension` packages have the latest local build.
