@@ -21,6 +21,10 @@
     @apply flex flex-col justify-start;
   }
 
+  .stack-sm > * + * {
+    @apply mt-4;
+  }
+
   .stack-base > * + * {
     @apply mt-8;
   }
