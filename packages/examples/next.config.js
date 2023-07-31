@@ -6,4 +6,5 @@
 module.exports = {
   reactStrictMode: true,
   productionBrowserSourceMaps: true,
+  transpilePackages: ['@reviz/compiler', '@reviz/ui'],
 };
