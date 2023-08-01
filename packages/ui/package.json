@@ -1,7 +1,7 @@
 {
   "name": "@reviz/ui",
   "private": true,
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Shared React components for the reviz ecosystem.",
   "author": {
     "name": "Parker Ziegler",
