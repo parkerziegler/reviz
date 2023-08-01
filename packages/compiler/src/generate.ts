@@ -77,7 +77,7 @@ export const generate = (spec: VizSpec): string => {
     `marks: ${marks}`,
   ].filter(Boolean);
 
-  return `const plot = Plot.plot({
+  return `Plot.plot({
     ${intersperse(members, ', ')}
   })`;
 };

@@ -108,10 +108,14 @@ export function formatProgram(program: string): string {
   });
 }
 
+/**
+ * Format an Observable Plot program string to be executed as a program.
+ *
+ * @param program – The program string to format.
+ * @returns – The formatted, executable program string.
+ */
 export function formatExecutableProgram(program: string): string {
-  return formatProgram(
-    program
-      .replace('const plot = ', 'function plot(Plot, data) { return ')
-      .concat('}')
-  );
+  return formatProgram(`function plot(Plot, data) {
+    return ${program}
+  }`);
 }

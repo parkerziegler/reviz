@@ -26,7 +26,7 @@ describe('generate', () => {
         spec.type = type;
 
         const expectedProgram = `
-          const plot = Plot.plot({
+          Plot.plot({
             marks: [
               Plot.barY(data, {
                 x: '??',
@@ -54,7 +54,7 @@ describe('generate', () => {
         spec.fill = spec.stroke = colors;
 
         const expectedProgram = `
-          const plot = Plot.plot({
+          Plot.plot({
             color: { type: 'categorical', range: ${JSON.stringify(
               colors,
               null,
@@ -93,7 +93,7 @@ describe('generate', () => {
       };
 
       const expectedProgram = `
-        const plot = Plot.plot({
+        Plot.plot({
           marks: [
             Plot.barY(data, Plot.binX({ y: 'count' }, {
               x: '??',
@@ -130,7 +130,7 @@ describe('generate', () => {
 
     it('should generate a program for a Scatterplot from the reviz IR', () => {
       const expectedProgram = `
-      const plot = Plot.plot({
+      Plot.plot({
         marks: [
           Plot.dot(data, {
             x: '??',
@@ -157,7 +157,7 @@ describe('generate', () => {
       spec.fill = spec.stroke = colors;
 
       const expectedProgram = `
-      const plot = Plot.plot({
+      Plot.plot({
         color: { type: 'categorical', range: ${JSON.stringify(
           colors,
           null,
@@ -206,7 +206,7 @@ describe('generate', () => {
     it(`should generate a program for a BubbleChart from the reviz IR, mapping
     the marks "r" property to a hole`, () => {
       const expectedProgram = `
-      const plot = Plot.plot({
+      Plot.plot({
         r: { range: [0, ${Math.max(...radii)}] },
         marks: [
           Plot.dot(data, {
@@ -234,7 +234,7 @@ describe('generate', () => {
       spec.fill = spec.stroke = colors;
 
       const expectedProgram = `
-      const plot = Plot.plot({
+      Plot.plot({
         color: { type: 'categorical', range: ${JSON.stringify(
           colors,
           null,
@@ -279,7 +279,7 @@ describe('generate', () => {
 
     it('should generate a program for a StripPlot from the reviz IR', () => {
       const expectedProgram = `
-      const plot = Plot.plot({
+      Plot.plot({
         marks: [
           Plot.dotX(data, {
             x: '??',
@@ -306,7 +306,7 @@ describe('generate', () => {
       spec.fill = spec.stroke = colors;
 
       const expectedProgram = `
-      const plot = Plot.plot({
+      Plot.plot({
         color: { type: 'categorical', range: ${JSON.stringify(
           colors,
           null,

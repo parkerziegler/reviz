@@ -78,7 +78,7 @@ Let's look at an example to see how `reviz` works in practice. We'll use [this v
 If we point `reviz` at the root `svg` `Element` of this visualization, it generates the following (partial) program:
 
 ```js
-const plot = Plot.plot({
+Plot.plot({
   color: {
     scale: 'categorical',
     range: ['#C67371', '#ccc', '#709DDE', '#A7B9D3', '#C23734'],
@@ -103,7 +103,7 @@ Notice that `fill`, `stroke`, `x` and `y` are all inferred to be holes (indicate
 We can now apply this partial program to a new dataset. Let's use [this delightful dataset about penguins](https://observablehq.com/@observablehq/plot-exploration-penguins) from @Fil's Plot Exploration notebook. We can choose input columns from this dataset to "fill in" the holes like so:
 
 ```diff
-const plot = Plot.plot({
+Plot.plot({
   color: {
     scale: 'categorical',
     range: ['#C67371', '#ccc', '#709DDE', '#A7B9D3', '#C23734'],
