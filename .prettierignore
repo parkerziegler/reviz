@@ -4,5 +4,5 @@ dist
 # Next
 .next
 
-# Node
-package-lock.json
+# Yarn
+.yarn

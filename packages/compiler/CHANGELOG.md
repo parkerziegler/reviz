@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.5.0]
 
 This release includes a large migration to a monorepo. As part of this migration, `reviz` is now distributed on NPM as `@reviz/compiler`.
+
 ### Minor Changes
 
 - ⚠️ ✨ Rename the package to `@reviz/compiler` as part of the monorepo migration.
