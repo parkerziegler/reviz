@@ -42,7 +42,7 @@
     "format": "prettier --write .",
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --ext .ts,.tsx . --fix",
-    "publish": "lerna publish --no-private --npm-client-args='--access public'",
+    "publish": "lerna publish from-git --no-private --npm-client-args='--access public'",
     "version": "lerna version"
   },
   "packageManager": "yarn@1.22.19"
