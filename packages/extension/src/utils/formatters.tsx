@@ -96,6 +96,30 @@ export function formatClassNames(classNames: string): string {
 }
 
 /**
+ * Inject the dimensions of the slot for the program output into the generated
+ * Plot program.
+ *
+ * @example
+ * // returns "Plot.plot({ width: 100, height: 100, ... })"
+ * injectDimensions("Plot.plot({ ... })", { width: 100, height: 100 })
+ * @param program – The program string to inject visualization dimensions into.
+ * @param dimensions – The dimensions of the slot for the program output.
+ * @returns – The program string with visualization dimensions injected.
+ */
+export function injectDimensions(
+  program: string,
+  dimensions: { width: number; height: number }
+): string {
+  const searchString = 'Plot.plot({';
+  const insertionPoint = searchString.length;
+
+  return `${program.slice(0, insertionPoint)}
+  width: ${dimensions.width},
+  height: ${dimensions.height},
+  ${program.slice(insertionPoint)}`;
+}
+
+/**
  * Format a program string using Prettier and Babel's JavaScript parser.
  *
  * @param program – The program string to format.
@@ -114,8 +138,11 @@ export function formatProgram(program: string): string {
  * @param program – The program string to format.
  * @returns – The formatted, executable program string.
  */
-export function formatExecutableProgram(program: string): string {
+export function formatExecutableProgram(
+  program: string,
+  dimensions: { width: number; height: number }
+): string {
   return formatProgram(`function plot(Plot, data) {
-    return ${program}
+    return ${injectDimensions(program, dimensions)}
   }`);
 }

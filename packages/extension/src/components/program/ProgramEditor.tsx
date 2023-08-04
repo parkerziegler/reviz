@@ -11,9 +11,18 @@ interface Props {
   program: string;
   data?: Data;
   setOutput: (output: string) => void;
+  dimensions: {
+    width: number;
+    height: number;
+  };
 }
 
-const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
+const ProgramEditor: React.FC<Props> = ({
+  program,
+  data,
+  setOutput,
+  dimensions,
+}) => {
   const editorRef = React.useRef<HTMLDivElement>(null);
   const editor = React.useRef<EditorView>();
 
@@ -56,11 +65,12 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
           name: 'execute',
           program: editor.current?.state.doc.toString() ?? '',
           data: data.data,
+          dimensions,
         },
         '*'
       );
     }
-  }, [data]);
+  }, [data, dimensions]);
 
   return (
     <div className="relative flex shrink-0 basis-1/3 flex-col overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">

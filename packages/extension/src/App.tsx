@@ -32,6 +32,7 @@ const App: React.FC = () => {
     });
   const [data, setData] = React.useState<Data>();
   const [output, setOutput] = React.useState<string>('');
+  const outputRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     // Establish a long-lived connection to the service worker.
@@ -94,11 +95,17 @@ const App: React.FC = () => {
             value="visualize"
             className="tab-content flex grow flex-col overflow-hidden lg:flex-row"
           >
-            <ProgramOutput output={output} />
+            <ProgramOutput output={output} ref={outputRef} />
             <ProgramEditor
               program={program}
               data={data}
               setOutput={setOutput}
+              dimensions={
+                outputRef.current?.getBoundingClientRect() ?? {
+                  width: 0,
+                  height: 0,
+                }
+              }
             />
             <DataPanel data={data} setData={setData} />
           </Tabs.Content>
