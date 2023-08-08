@@ -2,13 +2,10 @@ import * as React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 
 import ExtensionErrorBoundary from './components/ExtensionErrorBoundary';
-import DataPanel from './components/data/DataPanel';
 import ElementSelect from './components/interaction/ElementSelect';
-import ProgramEditor from './components/program/ProgramEditor';
-import ProgramOutput from './components/program/ProgramOutput';
+import Retargeter from './components/output/Retargeter';
 import ProgramViewer from './components/program/ProgramViewer';
 import SpecViewer from './components/spec/SpecViewer';
-import type { Data } from './types/data';
 import type { AnalyzeMessage } from './types/message';
 
 // Here we use a mapped type to make the spec property optional.
@@ -30,9 +27,6 @@ const App: React.FC = () => {
       nodeName: '',
       classNames: '',
     });
-  const [data, setData] = React.useState<Data>();
-  const [output, setOutput] = React.useState<string>('');
-  const outputRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     // Establish a long-lived connection to the service worker.
@@ -54,6 +48,10 @@ const App: React.FC = () => {
       const { name: _name, ...viz } = message;
       setViz(viz);
     });
+
+    return () => {
+      serviceWorkerConnection.disconnect();
+    };
   }, []);
 
   return (
@@ -95,19 +93,7 @@ const App: React.FC = () => {
             value="visualize"
             className="tab-content flex grow flex-col overflow-hidden lg:flex-row"
           >
-            <ProgramOutput output={output} ref={outputRef} />
-            <ProgramEditor
-              program={program}
-              data={data}
-              setOutput={setOutput}
-              dimensions={
-                outputRef.current?.getBoundingClientRect() ?? {
-                  width: 0,
-                  height: 0,
-                }
-              }
-            />
-            <DataPanel data={data} setData={setData} />
+            <Retargeter program={program} />
           </Tabs.Content>
         </Tabs.Root>
       </ExtensionErrorBoundary>

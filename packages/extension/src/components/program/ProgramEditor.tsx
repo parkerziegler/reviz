@@ -6,6 +6,7 @@ import Heading from '../shared/Heading';
 import type { Data } from '../../types/data';
 import type { RenderMessage } from '../../types/message';
 import { formatProgram } from '../../utils/formatters';
+import { usePrevious } from '../../hooks/usePrevious';
 
 interface Props {
   program: string;
@@ -25,7 +26,9 @@ const ProgramEditor: React.FC<Props> = ({
 }) => {
   const editorRef = React.useRef<HTMLDivElement>(null);
   const editor = React.useRef<EditorView>();
+  const prevDimensions = usePrevious(dimensions);
 
+  // Initialize the editor.
   React.useEffect(() => {
     if (editorRef.current) {
       editor.current = new EditorView({
@@ -41,6 +44,7 @@ const ProgramEditor: React.FC<Props> = ({
     };
   }, [program]);
 
+  // Establish a listener for the render message sent from the sandboxed iframe.
   React.useEffect(() => {
     const listener = (event: MessageEvent<RenderMessage>): void => {
       if (event.data.name !== 'render') {
@@ -71,6 +75,21 @@ const ProgramEditor: React.FC<Props> = ({
       );
     }
   }, [data, dimensions]);
+
+  // Re-execute the program when the dimensions change.
+  React.useEffect(() => {
+    if (iframeRef.current && data && dimensions !== prevDimensions) {
+      iframeRef.current.contentWindow?.postMessage(
+        {
+          name: 'execute',
+          program: editor.current?.state.doc.toString() ?? '',
+          data: data.data,
+          dimensions,
+        },
+        '*'
+      );
+    }
+  }, [data, dimensions, prevDimensions]);
 
   return (
     <div className="relative flex shrink-0 basis-1/3 flex-col overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">

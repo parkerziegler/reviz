@@ -21,4 +21,6 @@ const ProgramOutput = React.forwardRef<HTMLDivElement, Props>(
   }
 );
 
+ProgramOutput.displayName = 'ProgramOutput';
+
 export default ProgramOutput;
