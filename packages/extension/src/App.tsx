@@ -2,13 +2,10 @@ import * as React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 
 import ExtensionErrorBoundary from './components/ExtensionErrorBoundary';
-import DataPanel from './components/data/DataPanel';
 import ElementSelect from './components/interaction/ElementSelect';
-import ProgramEditor from './components/program/ProgramEditor';
-import ProgramOutput from './components/program/ProgramOutput';
 import ProgramViewer from './components/program/ProgramViewer';
+import Retargeter from './components/retarget/Retargeter';
 import SpecViewer from './components/spec/SpecViewer';
-import type { Data } from './types/data';
 import type { AnalyzeMessage } from './types/message';
 
 // Here we use a mapped type to make the spec property optional.
@@ -30,8 +27,6 @@ const App: React.FC = () => {
       nodeName: '',
       classNames: '',
     });
-  const [data, setData] = React.useState<Data>();
-  const [output, setOutput] = React.useState<string>('');
 
   React.useEffect(() => {
     // Establish a long-lived connection to the service worker.
@@ -53,6 +48,10 @@ const App: React.FC = () => {
       const { name: _name, ...viz } = message;
       setViz(viz);
     });
+
+    return () => {
+      serviceWorkerConnection.disconnect();
+    };
   }, []);
 
   return (
@@ -94,13 +93,7 @@ const App: React.FC = () => {
             value="visualize"
             className="tab-content flex grow flex-col overflow-hidden lg:flex-row"
           >
-            <ProgramOutput output={output} />
-            <ProgramEditor
-              program={program}
-              data={data}
-              setOutput={setOutput}
-            />
-            <DataPanel data={data} setData={setData} />
+            <Retargeter program={program} />
           </Tabs.Content>
         </Tabs.Root>
       </ExtensionErrorBoundary>

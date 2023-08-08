@@ -1854,7 +1854,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reviz/compiler@^0.4.1, @reviz/compiler@workspace:packages/compiler":
+"@reviz/compiler@^0.5.0, @reviz/compiler@workspace:packages/compiler":
   version: 0.0.0-use.local
   resolution: "@reviz/compiler@workspace:packages/compiler"
   dependencies:
@@ -1882,8 +1882,8 @@ __metadata:
   resolution: "@reviz/examples@workspace:packages/examples"
   dependencies:
     "@observablehq/plot": ^0.6.9
-    "@reviz/compiler": ^0.4.1
-    "@reviz/ui": ^0.4.1
+    "@reviz/compiler": ^0.5.0
+    "@reviz/ui": ^0.5.0
     "@types/d3": ^7.4.0
     "@types/lodash.groupby": ^4.6.7
     "@types/node": ^18.16.1
@@ -1910,8 +1910,8 @@ __metadata:
     "@codemirror/lang-javascript": ^6.1.9
     "@observablehq/plot": ^0.6.9
     "@radix-ui/react-tabs": ^1.0.4
-    "@reviz/compiler": ^0.4.1
-    "@reviz/ui": ^0.4.1
+    "@reviz/compiler": ^0.5.0
+    "@reviz/ui": ^0.5.0
     "@tanstack/react-table": ^8.9.3
     "@types/chrome": ^0.0.239
     "@types/d3-dsv": ^3.0.1
@@ -1943,14 +1943,13 @@ __metadata:
     eslint-config-prettier: ^8.8.0
     eslint-plugin-import: ^2.27.5
     eslint-plugin-jest: ^27.2.2
-    eslint-plugin-react-hooks: ^4.6.0
     lerna: ^7.1.1
     prettier: ^2.8.8
     prettier-plugin-tailwindcss: ^0.3.0
   languageName: unknown
   linkType: soft
 
-"@reviz/ui@^0.4.1, @reviz/ui@workspace:packages/ui":
+"@reviz/ui@^0.5.0, @reviz/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@reviz/ui@workspace:packages/ui"
   dependencies:
@@ -5244,15 +5243,6 @@ __metadata:
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
   checksum: 20e334e60bf5e56cf9f760598411847525c3ff826e6ae7757c8efdc60b33d47a97ddbe1b94ce95956ea9f7bbef37995b19c716be50bd44e6a1e789cba08b6224
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-react-hooks@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "eslint-plugin-react-hooks@npm:4.6.0"
-  peerDependencies:
-    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
-  checksum: 23001801f14c1d16bf0a837ca7970d9dd94e7b560384b41db378b49b6e32dc43d6e2790de1bd737a652a86f81a08d6a91f402525061b47719328f586a57e86c3
   languageName: node
   linkType: hard
 

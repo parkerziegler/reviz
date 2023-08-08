@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { csvParseRows } from 'd3-dsv';
+import { csvParseRows, autoType } from 'd3-dsv';
 
 import type { Data } from '../../types/data';
 
@@ -39,8 +39,14 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
                       return;
                     }
 
+                    const typedRow = autoType(d);
+
                     return cols.reduce((acc, col, i) => {
-                      acc[col] = d[i];
+                      // @types/d3 is dreadfully wrong here. d is a string[] and
+                      // after calling autoType we still have an array, just of
+                      // mixed types. Accessing individual values by index is fine.
+                      acc[col] = (typedRow as unknown[])[i];
+
                       return acc;
                     }, {} as Record<string, unknown>);
                   }),

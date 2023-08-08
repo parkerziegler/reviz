@@ -6,6 +6,10 @@ export interface ExecuteMessage {
   name: 'execute';
   data: Data;
   program: string;
+  dimensions: {
+    width: number;
+    height: number;
+  };
 }
 
 export interface RenderMessage {

@@ -6,17 +6,31 @@ import Heading from '../shared/Heading';
 import type { Data } from '../../types/data';
 import type { RenderMessage } from '../../types/message';
 import { formatProgram } from '../../utils/formatters';
+import { usePrevious } from '../../hooks/usePrevious';
 
 interface Props {
   program: string;
   data?: Data;
-  setOutput: (output: string) => void;
+  setRetargetdVisualization: (retargetedVisualization: string) => void;
+  dimensions: {
+    width: number;
+    height: number;
+  };
 }
 
-const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
+const ProgramEditor: React.FC<Props> = ({
+  program,
+  data,
+  setRetargetdVisualization,
+  dimensions,
+}) => {
   const editorRef = React.useRef<HTMLDivElement>(null);
-  const editor = React.useRef<EditorView>();
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
 
+  const editor = React.useRef<EditorView>();
+  const prevDimensions = usePrevious(dimensions);
+
+  // Initialize the editor.
   React.useEffect(() => {
     if (editorRef.current) {
       editor.current = new EditorView({
@@ -32,13 +46,14 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
     };
   }, [program]);
 
+  // Establish a listener for the render message sent from the sandboxed iframe.
   React.useEffect(() => {
     const listener = (event: MessageEvent<RenderMessage>): void => {
       if (event.data.name !== 'render') {
         return;
       }
 
-      setOutput(event.data.plot);
+      setRetargetdVisualization(event.data.plot);
     };
 
     window.addEventListener('message', listener);
@@ -46,9 +61,10 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
     return () => {
       window.removeEventListener('message', listener);
     };
-  }, [setOutput]);
+  }, [setRetargetdVisualization]);
 
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  // Set up a callback to send the program, data, and retargeted visualization
+  // dimensions to the sandboxed iframe to execute the Plot program.
   const onExecute = React.useCallback(() => {
     if (iframeRef.current && data) {
       iframeRef.current.contentWindow?.postMessage(
@@ -56,11 +72,27 @@ const ProgramEditor: React.FC<Props> = ({ program, data, setOutput }) => {
           name: 'execute',
           program: editor.current?.state.doc.toString() ?? '',
           data: data.data,
+          dimensions,
         },
         '*'
       );
     }
-  }, [data]);
+  }, [data, dimensions]);
+
+  // Re-execute the program when the dimensions change.
+  React.useEffect(() => {
+    if (iframeRef.current && data && dimensions !== prevDimensions) {
+      iframeRef.current.contentWindow?.postMessage(
+        {
+          name: 'execute',
+          program: editor.current?.state.doc.toString() ?? '',
+          data: data.data,
+          dimensions,
+        },
+        '*'
+      );
+    }
+  }, [data, dimensions, prevDimensions]);
 
   return (
     <div className="relative flex shrink-0 basis-1/3 flex-col overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">
