@@ -2,8 +2,9 @@ import * as React from 'react';
 
 import DataPanel from '../data/DataPanel';
 import ProgramEditor from '../program/ProgramEditor';
-import ProgramOutput from '../program/ProgramOutput';
 import type { Data } from '../../types/data';
+
+import RetargetedVisualization from './RetargetedVisualization';
 
 interface Props {
   program: string;
@@ -11,7 +12,8 @@ interface Props {
 
 const Retargeter: React.FC<Props> = ({ program }) => {
   const [data, setData] = React.useState<Data>();
-  const [output, setOutput] = React.useState<string>('');
+  const [retargetedVisualization, setRetargetdVisualization] =
+    React.useState<string>('');
 
   const outputRef = React.useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = React.useState<{
@@ -22,7 +24,7 @@ const Retargeter: React.FC<Props> = ({ program }) => {
     height: 0,
   });
 
-  // Set the initial dimensions of the output visualization.
+  // Set the initial dimensions of the retargeted visualization.
   React.useLayoutEffect(() => {
     if (outputRef.current) {
       const { width, height } = outputRef.current.getBoundingClientRect();
@@ -31,7 +33,8 @@ const Retargeter: React.FC<Props> = ({ program }) => {
   }, []);
 
   React.useEffect(() => {
-    // Establish a ResizeObserver to update the output dimensions.
+    // Establish a ResizeObserver to update the retargeted visualization
+    // dimensions.
     const ro = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
       setDimensions({ width, height });
@@ -48,11 +51,14 @@ const Retargeter: React.FC<Props> = ({ program }) => {
 
   return (
     <>
-      <ProgramOutput output={output} ref={outputRef} />
+      <RetargetedVisualization
+        retargetedVisualization={retargetedVisualization}
+        ref={outputRef}
+      />
       <ProgramEditor
         program={program}
         data={data}
-        setOutput={setOutput}
+        setRetargetdVisualization={setRetargetdVisualization}
         dimensions={dimensions}
       />
       <DataPanel data={data} setData={setData} />

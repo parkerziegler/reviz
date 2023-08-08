@@ -3,8 +3,8 @@ import * as Tabs from '@radix-ui/react-tabs';
 
 import ExtensionErrorBoundary from './components/ExtensionErrorBoundary';
 import ElementSelect from './components/interaction/ElementSelect';
-import Retargeter from './components/output/Retargeter';
 import ProgramViewer from './components/program/ProgramViewer';
+import Retargeter from './components/retarget/Retargeter';
 import SpecViewer from './components/spec/SpecViewer';
 import type { AnalyzeMessage } from './types/message';
 

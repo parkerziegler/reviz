@@ -11,7 +11,7 @@ import { usePrevious } from '../../hooks/usePrevious';
 interface Props {
   program: string;
   data?: Data;
-  setOutput: (output: string) => void;
+  setRetargetdVisualization: (retargetedVisualization: string) => void;
   dimensions: {
     width: number;
     height: number;
@@ -21,7 +21,7 @@ interface Props {
 const ProgramEditor: React.FC<Props> = ({
   program,
   data,
-  setOutput,
+  setRetargetdVisualization,
   dimensions,
 }) => {
   const editorRef = React.useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ const ProgramEditor: React.FC<Props> = ({
         return;
       }
 
-      setOutput(event.data.plot);
+      setRetargetdVisualization(event.data.plot);
     };
 
     window.addEventListener('message', listener);
@@ -59,7 +59,7 @@ const ProgramEditor: React.FC<Props> = ({
     return () => {
       window.removeEventListener('message', listener);
     };
-  }, [setOutput]);
+  }, [setRetargetdVisualization]);
 
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const onExecute = React.useCallback(() => {

@@ -96,15 +96,15 @@ export function formatClassNames(classNames: string): string {
 }
 
 /**
- * Inject the dimensions of the slot for the program output into the generated
- * Plot program.
+ * Inject the dimensions of the retargetd visualization into the generated Plot
+ * program.
  *
  * @example
  * // returns "Plot.plot({ width: 100, height: 100, ... })"
  * injectDimensions("Plot.plot({ ... })", { width: 100, height: 100 })
  * @param program – The program string to inject visualization dimensions into.
- * @param dimensions – The dimensions of the slot for the program output.
- * @returns – The program string with visualization dimensions injected.
+ * @param dimensions – The dimensions of the retargeted visualization.
+ * @returns – The program string with visualization dimensions included.
  */
 export function injectDimensions(
   program: string,
