@@ -14,8 +14,6 @@ const Retargeter: React.FC<Props> = ({ program }) => {
   const [data, setData] = React.useState<Data>();
   const [retargetedVisualization, setRetargetdVisualization] =
     React.useState<string>('');
-
-  const outputRef = React.useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = React.useState<{
     width: number;
     height: number;
@@ -24,10 +22,13 @@ const Retargeter: React.FC<Props> = ({ program }) => {
     height: 0,
   });
 
+  const retargetedVisualizationRef = React.useRef<HTMLDivElement>(null);
+
   // Set the initial dimensions of the retargeted visualization.
   React.useLayoutEffect(() => {
-    if (outputRef.current) {
-      const { width, height } = outputRef.current.getBoundingClientRect();
+    if (retargetedVisualizationRef.current) {
+      const { width, height } =
+        retargetedVisualizationRef.current.getBoundingClientRect();
       setDimensions({ width, height });
     }
   }, []);
@@ -40,8 +41,8 @@ const Retargeter: React.FC<Props> = ({ program }) => {
       setDimensions({ width, height });
     });
 
-    if (outputRef.current) {
-      ro.observe(outputRef.current);
+    if (retargetedVisualizationRef.current) {
+      ro.observe(retargetedVisualizationRef.current);
     }
 
     return () => {
@@ -53,7 +54,7 @@ const Retargeter: React.FC<Props> = ({ program }) => {
     <>
       <RetargetedVisualization
         retargetedVisualization={retargetedVisualization}
-        ref={outputRef}
+        ref={retargetedVisualizationRef}
       />
       <ProgramEditor
         program={program}

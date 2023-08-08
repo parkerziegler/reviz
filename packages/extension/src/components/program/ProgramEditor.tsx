@@ -25,6 +25,8 @@ const ProgramEditor: React.FC<Props> = ({
   dimensions,
 }) => {
   const editorRef = React.useRef<HTMLDivElement>(null);
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+
   const editor = React.useRef<EditorView>();
   const prevDimensions = usePrevious(dimensions);
 
@@ -61,7 +63,8 @@ const ProgramEditor: React.FC<Props> = ({
     };
   }, [setRetargetdVisualization]);
 
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  // Set up a callback to send the program, data, and retargeted visualization
+  // dimensions to the sandboxed iframe to execute the Plot program.
   const onExecute = React.useCallback(() => {
     if (iframeRef.current && data) {
       iframeRef.current.contentWindow?.postMessage(
