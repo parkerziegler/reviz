@@ -7,9 +7,16 @@ interface Props {
   theme: 'dark' | 'light';
   name: string;
   preClassName?: string;
+  style?: React.CSSProperties;
 }
 
-const CodePane: React.FC<Props> = ({ code, theme, name, preClassName }) => {
+const CodePane: React.FC<Props> = ({
+  code,
+  theme,
+  name,
+  preClassName,
+  style: styleOverride,
+}) => {
   return (
     <Highlight
       code={code}
@@ -23,7 +30,10 @@ const CodePane: React.FC<Props> = ({ code, theme, name, preClassName }) => {
         getLineProps,
         getTokenProps,
       }): React.ReactElement => (
-        <pre className={cs(preClassName, className)} style={style}>
+        <pre
+          className={cs(preClassName, className)}
+          style={{ ...style, ...styleOverride }}
+        >
           {tokens.map((line, lineIdx) => (
             <div
               {...getLineProps({ line, key: `${name}-row-${lineIdx}` })}

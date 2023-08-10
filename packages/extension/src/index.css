@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Code Mirror */
-.cm-editor {
-  @apply h-full;
-}
-
 /* File Input */
 input[type="file"],
 input[type="file"]::-webkit-file-upload-button {

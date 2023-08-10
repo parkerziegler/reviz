@@ -6,6 +6,7 @@ export default {
       colors: {
         primary: '#419af7',
         secondary: '#8638e5',
+        ['editor-fg']: '#d7deea',
       },
     },
   },

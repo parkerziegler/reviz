@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { syntaxHighlighting } from '@codemirror/language';
 
 import Heading from '../shared/Heading';
 import type { Data } from '../../types/data';
 import type { RenderMessage } from '../../types/message';
 import { formatProgram } from '../../utils/formatters';
 import { usePrevious } from '../../hooks/usePrevious';
+
+import { syntaxTheme, editorTheme } from './theme';
 
 interface Props {
   program: string;
@@ -34,7 +37,12 @@ const ProgramEditor: React.FC<Props> = ({
   React.useEffect(() => {
     if (editorRef.current) {
       editor.current = new EditorView({
-        extensions: [basicSetup, javascript()],
+        extensions: [
+          basicSetup,
+          editorTheme,
+          javascript(),
+          syntaxHighlighting(syntaxTheme),
+        ],
         parent: editorRef.current,
         doc: formatProgram(program),
       });
@@ -100,7 +108,7 @@ const ProgramEditor: React.FC<Props> = ({
       {program ? (
         <div
           ref={editorRef}
-          className="relative -mx-3 -mb-2 h-full overflow-auto bg-white text-xs text-black"
+          className="text-editor-fg relative -mx-3 -mb-2 h-full overflow-auto bg-slate-900 text-xs"
         >
           <button
             onClick={onExecute}
