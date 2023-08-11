@@ -6,6 +6,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 
 import ElementSelectPrompt from '../interaction/ElementSelectPrompt';
 import Heading from '../shared/Heading';
+import TooltipMessage from '../shared/TooltipMessage';
 import { usePrevious } from '../../hooks/usePrevious';
 import type { Data } from '../../types/data';
 import type { RenderMessage } from '../../types/message';
@@ -141,9 +142,7 @@ const ProgramEditor: React.FC<Props> = ({
               </Tooltip.Trigger>
               <Tooltip.Portal>
                 <Tooltip.Content className="tooltip-content" side="left">
-                  <p className="text-primary rounded bg-blue-50 px-2 py-1 font-mono shadow-md">
-                    Run program
-                  </p>
+                  <TooltipMessage>Run program</TooltipMessage>
                   <Tooltip.Arrow className="fill-blue-50" />
                 </Tooltip.Content>
               </Tooltip.Portal>

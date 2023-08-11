@@ -3,6 +3,7 @@ import cs from 'classnames';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 import type { VisualizationState } from '../../App';
+import TooltipMessage from '../shared/TooltipMessage';
 import { formatClassNames } from '../../utils/formatters';
 
 import ElementSelectPrompt from './ElementSelectPrompt';
@@ -66,9 +67,9 @@ const ElementSelect: React.FC<Props> = ({ nodeName, classNames }) => {
           </Tooltip.Trigger>
           <Tooltip.Portal>
             <Tooltip.Content className="tooltip-content" side="bottom">
-              <p className="text-primary rounded bg-blue-50 px-2 py-1 font-mono shadow-md">
+              <TooltipMessage>
                 {isElementSelectActive ? 'Disable' : 'Enable'} SVG selector
-              </p>
+              </TooltipMessage>
               <Tooltip.Arrow className="fill-blue-50" />
             </Tooltip.Content>
           </Tooltip.Portal>
