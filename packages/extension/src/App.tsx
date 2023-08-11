@@ -67,7 +67,7 @@ const App: React.FC = () => {
         >
           <div className="flex border-b border-b-slate-500">
             <ElementSelect nodeName={nodeName} classNames={classNames} />
-            <Tabs.List className="flex shrink-0">
+            <Tabs.List className="flex shrink-0 font-mono">
               <Tabs.Trigger
                 className="tab-trigger border-r border-slate-500 px-3 py-2 text-sm"
                 value="analyze"
@@ -84,7 +84,7 @@ const App: React.FC = () => {
           </div>
           <Tabs.Content
             value="analyze"
-            className="tab-content flex grow flex-col lg:flex-row"
+            className="tab-content flex grow flex-col overflow-hidden lg:flex-row"
           >
             <SpecViewer spec={spec} />
             <ProgramViewer program={program} />

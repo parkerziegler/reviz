@@ -53,12 +53,14 @@ export const editorTheme = EditorView.theme(
     '.cm-gutters': {
       backgroundColor: '#0f172a',
       color: '#506377',
+      paddingRight: '6px',
     },
     '.cm-activeLineGutter': {
-      backgroundColor: '#24395a',
+      backgroundColor: 'transparent',
+      color: '#d6deeb',
     },
     '.cm-activeLine': {
-      backgroundColor: '#24395a',
+      backgroundColor: 'transparent',
     },
     '.cm-selectionBackground, ::selection': {
       backgroundColor: '#24395a',
@@ -67,6 +69,9 @@ export const editorTheme = EditorView.theme(
       {
         backgroundColor: '#24395a',
       },
+    '&.cm-focused .cm-cursor': {
+      borderLeftColor: '#d6deeb',
+    },
   },
   { dark: true }
 );

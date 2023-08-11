@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CodePane } from '@reviz/ui';
 
+import ElementSelectPrompt from '../interaction/ElementSelectPrompt';
 import Heading from '../shared/Heading';
 import { formatProgram } from '../../utils/formatters';
 
@@ -21,7 +22,7 @@ const ProgramViewer: React.FC<Props> = ({ program }) => {
           style={{ backgroundColor: '#0f172a' }}
         />
       ) : (
-        <p>Waiting for visualization selection...</p>
+        <ElementSelectPrompt />
       )}
     </div>
   );
