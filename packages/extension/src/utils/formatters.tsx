@@ -22,13 +22,13 @@ export function formatOneOrMoreValues(
 ): React.ReactNode {
   if (Array.isArray(values) && values.length > 1) {
     return (
-      <div className="flex items-center overflow-auto">
-        <span>[</span>
+      <div className="stack-h flex-wrap items-center">
+        {'['}
         {intersperse(
           values.map((value) => formatValue(property, value)),
           ', '
         )}
-        <span>]</span>
+        {']'}
       </div>
     );
   } else {

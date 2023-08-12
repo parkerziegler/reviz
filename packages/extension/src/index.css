@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Code Mirror */
-.cm-editor {
-  @apply h-full;
-}
-
 /* File Input */
 input[type="file"],
 input[type="file"]::-webkit-file-upload-button {
@@ -16,56 +11,28 @@ input[type="file"]::-webkit-file-upload-button {
 @layer utilities {
   /* Block Stack */
   .stack {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    @apply flex flex-col justify-start;
   }
 
   .stack > * {
     margin-block: 0;
   }
 
-  .stack-xs > * + * {
-    margin-block-start: 0.5rem;
-  }
-
-  .stack-sm > * + * {
+  .stack > * + * {
     margin-block-start: 1rem;
-  }
-
-  .stack-md > * + * {
-    margin-block-start: 1.5rem;
-  }
-
-  .stack-lg > * + * {
-    margin-block-start: 2rem;
   }
 
   /* Inline Stack */
   .stack-h {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+    @apply flex justify-start;
   }
 
   .stack-h > * {
     margin-inline: 0;
   }
 
-  .stack-h-xs > * + * {
-    margin-inline-start: 0.5rem;
-  }
-
-  .stack-h-sm > * + * {
-    margin-inline-start: 1rem;
-  }
-
-  .stack-h-md > * + * {
-    margin-inline-start: 1.5rem;
-  }
-
-  .stack-h-lg > * + * {
-    margin-inline-start: 2rem;
+  .stack-h > * + * {
+    margin-inline-start: 0.25rem;
   }
 }
 
@@ -97,5 +64,40 @@ input[type="file"]::-webkit-file-upload-button {
 
   .data-grid tr:first-child td {
     @apply border-t-0;
+  }
+
+  .tooltip-content {
+    @apply select-none;
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+
+  .tooltip-content[data-state="delayed-open"][data-side="left"] {
+    animation-name: slideRightAndFade;
+  }
+
+  .tooltip-content[data-state="delayed-open"][data-side="bottom"] {
+    animation-name: slideUpAndFade;
+  }
+
+  @keyframes slideRightAndFade {
+    from {
+      @apply -translate-x-0.5 opacity-0;
+    }
+
+    to {
+      @apply translate-x-0 opacity-100;
+    }
+  }
+
+  @keyframes slideUpAndFade {
+    from {
+      @apply translate-y-0.5 opacity-0;
+    }
+
+    to {
+      @apply translate-y-0 opacity-100;
+    }
   }
 }
