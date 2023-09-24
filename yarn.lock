@@ -1761,10 +1761,10 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
-"@types/chrome@^0.0.239":
-  version "0.0.239"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.239.tgz#aa78dffec5ef292bf687ee46c6dce1bceff3c47b"
-  integrity sha512-s/v0pAdpjqfYdwYPDIRiIQDyXfaLi5u+OyHW2NexhqoTm/KZVqKqS1isK11DVu/iUrAUULtbfKtzLKt3+kHgXQ==
+"@types/chrome@^0.0.246":
+  version "0.0.246"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.246.tgz#412ee1b162a67d1cfebe413887b9aa0c28998ef1"
+  integrity sha512-MxGxEomGxsJiL9xe/7ZwVgwdn8XVKWbPvxpVQl3nWOjrS0Ce63JsfzxUc4aU3GvRcUPYsfufHmJ17BFyKxeA4g==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
