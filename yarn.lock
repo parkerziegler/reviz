@@ -1266,9 +1266,9 @@
   integrity sha512-yHZ5FAcx54rVc31R0yIpniepkHMPwaxG23l8E/ZYbL1iPwE/Wc1HeUzUvxUuSXtguRp7ihcRhaUEPkcSl2EAVw==
 
 "@observablehq/plot@^0.6.9":
-  version "0.6.10"
-  resolved "https://registry.yarnpkg.com/@observablehq/plot/-/plot-0.6.10.tgz#48bdc2f8d9fd5e161d43ba3e2191633cef9a6c01"
-  integrity sha512-LmPoYAh8oCP6GmjFTUPbmxwDm62516kbeSJsXu05GcTILzT9hsh4ssZiXg61ufPm+n8f/5L7UtZHghR+XtcJHQ==
+  version "0.6.11"
+  resolved "https://registry.yarnpkg.com/@observablehq/plot/-/plot-0.6.11.tgz#160c6a40575743374c9361303e94920d9d42c813"
+  integrity sha512-7f43OizjVcno6/lZ+IC/bIceud9ZYJa7PCnZTjHCf3utcaGXgLqC1qxpYLzNZTnVHpKTFfqoPY/jOuFC/kSWgA==
   dependencies:
     d3 "^7.8.0"
     interval-tree-1d "^1.0.0"
