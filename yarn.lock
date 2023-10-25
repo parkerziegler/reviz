@@ -1824,19 +1824,19 @@
     "@types/d3-selection" "*"
 
 "@types/d3-dsv@*", "@types/d3-dsv@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@types/d3-dsv/-/d3-dsv-3.0.1.tgz#c51a3505cee42653454b74a00f8713dc3548c362"
-  integrity sha512-76pBHCMTvPLt44wFOieouXcGXWOF0AJCceUvaFkxSZEu4VDUdv93JfpMa6VGNFs01FHfuP4a5Ou68eRG1KBfTw==
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/d3-dsv/-/d3-dsv-3.0.5.tgz#c12df56be81d0b457d167842fa87276d0d6eb880"
+  integrity sha512-73WZR3QFOaSRVz9iOrebTbTnbo7xjcgS/i0Cq5zy0jMXPO3v/JbkTD3Zqii1eYE6v4EJ78g5VP407rm+p8fdlA==
 
 "@types/d3-ease@*":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-ease/-/d3-ease-3.0.0.tgz#c29926f8b596f9dadaeca062a32a45365681eae0"
-  integrity sha512-aMo4eaAOijJjA6uU+GIeW018dvy9+oH5Y2VPPzjjfxevvGQ/oRDs+tfYC9b50Q4BygRR8yE2QCLsrT0WtAVseA==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/d3-ease/-/d3-ease-3.0.1.tgz#ef386d2f28602dba82206888047f97f7f7f7558a"
+  integrity sha512-VZofjpEt8HWv3nxUAosj5o/+4JflnJ7Bbv07k17VO3T2WRuzGdZeookfaF60iVh5RdhVG49LE5w6LIshVUC6rg==
 
 "@types/d3-fetch@*":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/d3-fetch/-/d3-fetch-3.0.2.tgz#fe1f335243e07c9bd520c9a71756fed8330c54b1"
-  integrity sha512-gllwYWozWfbep16N9fByNBDTkJW/SyhH6SGRlXloR7WdtAaBui4plTP+gbUgiEot7vGw/ZZop1yDZlgXXSuzjA==
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/d3-fetch/-/d3-fetch-3.0.5.tgz#0bec3763a04d199ad8bce2756b6f6818ee188b32"
+  integrity sha512-Rc8pb6H0RRLpAV2hEXduykUgcDUOhjSLTLmCIeo6ejzgs4SaITh/EteMb3p5Env3Hqjsqw0fCksyqopHHzMkMg==
   dependencies:
     "@types/d3-dsv" "*"
 
