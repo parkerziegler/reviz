@@ -38,6 +38,23 @@ const ProgramEditor: React.FC<Props> = ({
 
   const [edited, setEdited] = React.useState(false);
 
+  // Set up a callback to send the program, data, and retargeted visualization
+  // dimensions to the sandboxed iframe to execute the Plot program.
+  const onExecute = React.useCallback(() => {
+    if (iframeRef.current && data) {
+      iframeRef.current.contentWindow?.postMessage(
+        {
+          name: 'execute',
+          program: editor.current?.state.doc.toString() ?? '',
+          data: data.data,
+          dimensions,
+        },
+        '*'
+      );
+      setEdited(false);
+    }
+  }, [data, dimensions]);
+
   // Initialize the editor.
   React.useEffect(() => {
     if (editorRef.current) {
@@ -52,6 +69,17 @@ const ProgramEditor: React.FC<Props> = ({
               setEdited(true);
             }
           }),
+          EditorView.domEventHandlers({
+            keydown: (event) => {
+              if (
+                (event.metaKey || event.ctrlKey) &&
+                (event.key === 'Enter' || event.key === 's')
+              ) {
+                event.preventDefault();
+                onExecute();
+              }
+            },
+          }),
         ],
         parent: editorRef.current,
         doc: formatProgram(program),
@@ -62,7 +90,7 @@ const ProgramEditor: React.FC<Props> = ({
       editor.current?.destroy();
       editor.current = undefined;
     };
-  }, [program]);
+  }, [program, onExecute]);
 
   // Establish a listener for the render message sent from the sandboxed iframe.
   React.useEffect(() => {
@@ -81,23 +109,6 @@ const ProgramEditor: React.FC<Props> = ({
     };
   }, [setRetargetdVisualization]);
 
-  // Set up a callback to send the program, data, and retargeted visualization
-  // dimensions to the sandboxed iframe to execute the Plot program.
-  const onExecute = React.useCallback(() => {
-    if (iframeRef.current && data) {
-      iframeRef.current.contentWindow?.postMessage(
-        {
-          name: 'execute',
-          program: editor.current?.state.doc.toString() ?? '',
-          data: data.data,
-          dimensions,
-        },
-        '*'
-      );
-      setEdited(false);
-    }
-  }, [data, dimensions]);
-
   // Re-execute the program when the dimensions change.
   React.useEffect(() => {
     if (iframeRef.current && data && dimensions !== prevDimensions) {
@@ -112,6 +123,16 @@ const ProgramEditor: React.FC<Props> = ({
       );
     }
   }, [data, dimensions, prevDimensions]);
+
+  const metaCtrl = React.useMemo(() => {
+    const userAgent = window.navigator.userAgent;
+
+    if (userAgent.includes('Mac')) {
+      return '⌘';
+    } else {
+      return '^';
+    }
+  }, []);
 
   return (
     <div className="relative flex shrink-0 basis-1/3 flex-col overflow-hidden border-b border-slate-500 px-3 py-2 lg:border-b-0 lg:border-r">
@@ -142,7 +163,9 @@ const ProgramEditor: React.FC<Props> = ({
               </Tooltip.Trigger>
               <Tooltip.Portal>
                 <Tooltip.Content className="tooltip-content" side="left">
-                  <TooltipMessage>Run program</TooltipMessage>
+                  <TooltipMessage>
+                    Run program ({`${metaCtrl}+S / ${metaCtrl}+⏎`})
+                  </TooltipMessage>
                   <Tooltip.Arrow className="fill-blue-50" />
                 </Tooltip.Content>
               </Tooltip.Portal>
