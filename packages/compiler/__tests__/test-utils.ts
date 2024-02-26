@@ -1,6 +1,10 @@
 import chunk from 'lodash.chunk';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-ignore
 import prettier from 'prettier/standalone';
+// @ts-ignore
 import babel from 'prettier/parser-babel';
+/* eslint-enable @typescript-eslint/ban-ts-comment */
 
 /**
  * Generate a random character from A-Z using ASCII codes.
