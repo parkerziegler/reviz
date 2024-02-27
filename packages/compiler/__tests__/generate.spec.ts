@@ -1,7 +1,7 @@
 import { generate } from '../src/generate';
 import type { VizSpec } from '../src/ir';
 
-import { formatProgram, getRandInt } from './test-utils';
+import { normalizeProgram, getRandInt } from './test-utils';
 
 describe('generate', () => {
   describe('BarChart and StackedBarChart', () => {
@@ -42,7 +42,9 @@ describe('generate', () => {
 
         const program = generate(spec);
 
-        expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+        expect(normalizeProgram(program)).toBe(
+          normalizeProgram(expectedProgram)
+        );
       }
     );
 
@@ -75,7 +77,9 @@ describe('generate', () => {
 
         const program = generate(spec);
 
-        expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+        expect(normalizeProgram(program)).toBe(
+          normalizeProgram(expectedProgram)
+        );
       }
     );
   });
@@ -108,7 +112,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
   });
 
@@ -147,7 +151,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
 
     it(`should generate a program for a Scatterplot from the reviz IR, creating
@@ -179,7 +183,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
   });
 
@@ -224,7 +228,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
 
     it(`should generate a program for a BubbleChart from the reviz IR, creating
@@ -257,7 +261,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
   });
 
@@ -296,7 +300,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
 
     it(`should generate a program for a StripPlot from the reviz IR, creating
@@ -328,7 +332,7 @@ describe('generate', () => {
 
       const program = generate(spec);
 
-      expect(formatProgram(program)).toBe(formatProgram(expectedProgram));
+      expect(normalizeProgram(program)).toBe(normalizeProgram(expectedProgram));
     });
   });
 });

@@ -268,11 +268,14 @@ const determineVizType = (vizAttrs: VizAttrs): VizType => {
 export const buildVizSpec = (vizAttrs: VizAttrs): VizSpec => {
   const vizType = determineVizType(vizAttrs);
 
-  const presAttrs = PRES_ATTR_NAMES.reduce((acc, attr) => {
-    acc[attr] = Array.from(vizAttrs.presAttrs.get(attr) ?? []);
+  const presAttrs = PRES_ATTR_NAMES.reduce(
+    (acc, attr) => {
+      acc[attr] = Array.from(vizAttrs.presAttrs.get(attr) ?? []);
 
-    return acc;
-  }, {} as Record<keyof PresAttrs, string[]>);
+      return acc;
+    },
+    {} as Record<keyof PresAttrs, string[]>
+  );
 
   switch (vizType) {
     case 'Scatterplot':

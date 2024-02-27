@@ -3,7 +3,6 @@ import { CodePane } from '@reviz/ui';
 
 import ElementSelectPrompt from '../interaction/ElementSelectPrompt';
 import Heading from '../shared/Heading';
-import { formatProgram } from '../../utils/formatters';
 
 interface Props {
   program: string;
@@ -15,7 +14,7 @@ const ProgramViewer: React.FC<Props> = ({ program }) => {
       <Heading className="mb-4 self-start">Program</Heading>
       {program ? (
         <CodePane
-          code={formatProgram(program)}
+          code={program}
           theme="dark"
           preClassName="-mx-3 -mb-2 flex-1 overflow-auto px-3 py-2 text-xs"
           name="Program"

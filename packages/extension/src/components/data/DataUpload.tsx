@@ -162,14 +162,17 @@ const DataUpload: React.FC<Props> = ({ setData }) => {
 
                     const typedRow = autoType(d);
 
-                    return cols.reduce((acc, col, i) => {
-                      // @types/d3 is dreadfully wrong here. d is a string[] and
-                      // after calling autoType we still have an array, just of
-                      // mixed types. Accessing individual values by index is fine.
-                      acc[col] = (typedRow as unknown[])[i];
+                    return cols.reduce(
+                      (acc, col, i) => {
+                        // @types/d3 is dreadfully wrong here. d is a string[] and
+                        // after calling autoType we still have an array, just of
+                        // mixed types. Accessing individual values by index is fine.
+                        acc[col] = (typedRow as unknown[])[i];
 
-                      return acc;
-                    }, {} as Record<string, unknown>);
+                        return acc;
+                      },
+                      {} as Record<string, unknown>
+                    );
                   }),
                 });
                 break;
