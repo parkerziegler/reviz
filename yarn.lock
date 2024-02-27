@@ -2403,9 +2403,9 @@
     "@types/lodash" "*"
 
 "@types/lodash.chunk@^4.2.7":
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/@types/lodash.chunk/-/lodash.chunk-4.2.8.tgz#12212b6053cf00831b9152ab7eb9e97e9a90d739"
-  integrity sha512-wSUIKYp9PMko5SjZIbdoy7mRiEXAVXWFS3kFQu5wDl6+DtFBJ5OvtD62kJIJ+rH3ELPLijUr2gV3EVT+iqO1og==
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@types/lodash.chunk/-/lodash.chunk-4.2.9.tgz#60da44c404dfa8b01b426034c1183e5eb9b09727"
+  integrity sha512-Z9VtFUSnmT0No/QymqfG9AGbfOA4O5qB/uyP89xeZBqDAsKsB4gQFTqt7d0pHjbsTwtQ4yZObQVHuKlSOhIJ5Q==
   dependencies:
     "@types/lodash" "*"
 
