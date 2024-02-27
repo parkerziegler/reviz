@@ -1,5 +1,6 @@
-import prettier from 'prettier/standalone';
-import babel from 'prettier/parser-babel';
+import * as prettier from 'prettier';
+import babel from 'prettier/plugins/babel';
+import estree from 'prettier/plugins/estree';
 
 import ColorValue from '../components/spec/ColorValue';
 
@@ -120,29 +121,22 @@ export function injectDimensions(
 }
 
 /**
- * Format a program string using Prettier and Babel's JavaScript parser.
- *
- * @param program – The program string to format.
- * @returns – The formatted program string.
- */
-export function formatProgram(program: string): string {
-  return prettier.format(program, {
-    parser: 'babel',
-    plugins: [babel],
-  });
-}
-
-/**
  * Format an Observable Plot program string to be executed as a program.
  *
  * @param program – The program string to format.
  * @returns – The formatted, executable program string.
  */
-export function formatExecutableProgram(
+export async function formatExecutableProgram(
   program: string,
   dimensions: { width: number; height: number }
-): string {
-  return formatProgram(`function plot(Plot, data) {
+): Promise<string> {
+  return prettier.format(
+    `function plot(Plot, data) {
     return ${injectDimensions(program, dimensions)}
-  }`);
+  }`,
+    {
+      parser: 'babel',
+      plugins: [babel, estree],
+    }
+  );
 }

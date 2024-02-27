@@ -10,7 +10,6 @@ import TooltipMessage from '../shared/TooltipMessage';
 import { usePrevious } from '../../hooks/usePrevious';
 import type { Data } from '../../types/data';
 import type { RenderMessage } from '../../types/message';
-import { formatProgram } from '../../utils/formatters';
 
 import { syntaxTheme, editorTheme } from './theme';
 
@@ -82,7 +81,7 @@ const ProgramEditor: React.FC<Props> = ({
           }),
         ],
         parent: editorRef.current,
-        doc: formatProgram(program),
+        doc: program,
       });
     }
 

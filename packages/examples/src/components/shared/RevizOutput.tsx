@@ -1,8 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import prettier from 'prettier/standalone';
-import babel from 'prettier/parser-babel';
+import * as prettier from 'prettier';
+import babel from 'prettier/plugins/babel';
+import estree from 'prettier/plugins/estree';
 import { analyzeVisualization } from '@reviz/compiler';
 
 import CodePane from './CodePane';
@@ -25,14 +26,22 @@ const RevizOutput: React.FC = () => {
     const entries = performance.getEntriesByName('compile');
     const result = entries.map((entry) => entry.duration);
 
-    setVizSpec(JSON.stringify(spec, null, 2));
-    setVizProgram(
-      prettier.format(program, {
+    prettier
+      .format(program, {
         parser: 'babel',
-        plugins: [babel],
+        plugins: [babel, estree],
       })
-    );
-    setPerf(result[0]);
+      .then((formattedProgram) => {
+        setVizSpec(JSON.stringify(spec, null, 2));
+        setVizProgram(formattedProgram);
+        setPerf(result[0]);
+      })
+      .catch((error) => {
+        console.error(error);
+        setVizSpec(JSON.stringify(spec, null, 2));
+        setVizProgram('');
+        setPerf(result[0]);
+      });
   }, []);
 
   return (

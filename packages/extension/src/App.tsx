@@ -1,5 +1,8 @@
 import * as React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
+import * as prettier from 'prettier';
+import babel from 'prettier/plugins/babel';
+import estree from 'prettier/plugins/estree';
 
 import ExtensionErrorBoundary from './components/ExtensionErrorBoundary';
 import ElementSelect from './components/interaction/ElementSelect';
@@ -45,8 +48,30 @@ const App: React.FC = () => {
         return;
       }
 
-      const { name: _name, ...viz } = message;
-      setViz(viz);
+      const { spec, program, nodeName, classNames } = message;
+
+      prettier
+        .format(program, {
+          parser: 'babel',
+          plugins: [babel, estree],
+        })
+        .then((formattedProgram) => {
+          setViz({
+            spec,
+            program: formattedProgram,
+            nodeName,
+            classNames,
+          });
+        })
+        .catch((err) => {
+          console.error('Failed to format the program. Original Error: ', err);
+          setViz({
+            spec,
+            program,
+            nodeName,
+            classNames,
+          });
+        });
     });
 
     return () => {
