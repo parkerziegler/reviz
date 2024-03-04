@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp manifest.json public/reviz.png scripts/inspect.css dist",
+    "build": "tsc && vite build && cp manifest.json public/reviz-128.png public/reviz-48.png public/reviz-32.png public/reviz-16.png scripts/inspect.css dist",
     "preview": "vite preview"
   },
   "dependencies": {
