@@ -101,3 +101,7 @@ input[type="file"]::-webkit-file-upload-button {
     }
   }
 }
+
+.plot-d6a7b5 {
+  @apply text-white;
+}
