@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import * as prettier from 'prettier';
+import { format } from 'prettier/standalone';
 import babel from 'prettier/plugins/babel';
 import estree from 'prettier/plugins/estree';
 import { analyzeVisualization } from '@reviz/compiler';
@@ -26,11 +26,10 @@ const RevizOutput: React.FC = () => {
     const entries = performance.getEntriesByName('compile');
     const result = entries.map((entry) => entry.duration);
 
-    prettier
-      .format(program, {
-        parser: 'babel',
-        plugins: [babel, estree],
-      })
+    format(program, {
+      parser: 'babel',
+      plugins: [babel, estree],
+    })
       .then((formattedProgram) => {
         setVizSpec(JSON.stringify(spec, null, 2));
         setVizProgram(formattedProgram);
