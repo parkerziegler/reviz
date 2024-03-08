@@ -163,6 +163,15 @@ importers:
       '@codemirror/lang-javascript':
         specifier: ^6.1.9
         version: 6.2.2
+      '@codemirror/language':
+        specifier: ^6.10.1
+        version: 6.10.1
+      '@codemirror/view':
+        specifier: ^6.25.1
+        version: 6.25.1
+      '@lezer/highlight':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@observablehq/plot':
         specifier: ^0.6.9
         version: 0.6.13
