@@ -1,23 +1,46 @@
 {
   "manifest_version": 3,
   "name": "reviz",
+  "author": {
+    "email": "parkerellisziegler@gmail.com"
+  },
   "description": "Adds tools for reverse engineering data visualizations to Chrome Developer tools.",
   "version": "0.5.0",
   "devtools_page": "devtools/devtools.html",
   "action": {
-    "default_icon": "reviz.png"
+    "default_icon": {
+      "16": "reviz-16.png",
+      "32": "reviz-32.png",
+      "48": "reviz-128.png",
+      "128": "reviz-128.png"
+    }
+  },
+  "icons": {
+    "16": "reviz-16.png",
+    "32": "reviz-32.png",
+    "48": "reviz-128.png",
+    "128": "reviz-128.png"
   },
   "content_scripts": [
     {
-      "matches": ["https://*/*", "http://*/*"],
-      "js": ["inspect.js"],
-      "css": ["inspect.css"]
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "js": [
+        "inspect.js"
+      ],
+      "css": [
+        "inspect.css"
+      ]
     }
   ],
   "background": {
     "service_worker": "service-worker.js"
   },
   "sandbox": {
-    "pages": ["sandbox/sandbox.html"]
+    "pages": [
+      "sandbox/sandbox.html"
+    ]
   }
 }
