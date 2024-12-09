@@ -43,5 +43,5 @@
     "lint:fix": "eslint --ext .ts,.tsx . --fix",
     "version": "lerna version"
   },
-  "packageManager": "yarn@1.22.21"
+  "packageManager": "yarn@1.22.22"
 }
